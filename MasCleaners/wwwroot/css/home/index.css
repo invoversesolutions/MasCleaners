@@ -1,0 +1,678 @@
+﻿/* =========================================================
+   MAS CLEANERS
+   HOME PAGE
+   ========================================================= */
+
+
+/* =========================================================
+   CONTAINER
+   ========================================================= */
+
+.mas-container {
+    width: min( calc(100% - 40px), 1220px );
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.mas-hero {
+    position: relative;
+    /*
+       Taller hero section.
+       Adjust this number if you want it even taller.
+    */
+    height: 680px;
+    overflow: hidden;
+    background: #102d43;
+}
+
+.mas-hero-track {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.mas-hero-slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+    .mas-hero-slide.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+/* =========================================================
+   HERO CONTENT SLIDE-IN ANIMATION
+========================================================= */
+
+.mas-hero-category,
+.mas-hero-content h1,
+.mas-hero-content p,
+.mas-hero-button {
+    opacity: 0;
+    transform: translateY(55px);
+}
+
+
+/* When slide becomes active */
+
+.mas-hero-slide.active .mas-hero-category {
+    animation: heroTextUp 0.8s ease forwards;
+    animation-delay: 0.15s;
+}
+
+.mas-hero-slide.active .mas-hero-content h1 {
+    animation: heroTextUp 0.9s ease forwards;
+    animation-delay: 0.25s;
+}
+
+.mas-hero-slide.active .mas-hero-content p {
+    animation: heroTextUp 0.8s ease forwards;
+    animation-delay: 0.38s;
+}
+
+.mas-hero-slide.active .mas-hero-button {
+    animation: heroTextUp 0.8s ease forwards;
+    animation-delay: 0.50s;
+}
+
+
+/* =========================================================
+   TEXT ENTERING FROM BELOW
+========================================================= */
+
+@keyframes heroTextUp {
+
+    0% {
+        opacity: 0;
+        transform: translateY(55px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.mas-hero-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.04);
+    transition: transform 6s ease;
+}
+
+.mas-hero-slide.active .mas-hero-image {
+    transform: scale(1);
+}
+
+.mas-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient( 90deg, rgba(7, 31, 49, 0.72), rgba(7, 31, 49, 0.38), rgba(7, 31, 49, 0.20) );
+}
+
+.mas-hero-content {
+    position: absolute;
+    top: 52%;
+    left: 50%;
+    width: min( calc(100% - 40px), 900px );
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: white;
+}
+
+.mas-hero-category {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 15px;
+    padding: 7px 13px;
+    border-radius: 50px;
+    background: rgba(255,255,255,0.10);
+    color: rgba(255,255,255,0.82);
+    font-size: 14px;
+    backdrop-filter: blur(4px);
+}
+
+    .mas-hero-category i {
+        color: #f5c85b;
+    }
+
+.mas-hero-content h1 {
+    margin: 0;
+    color: white;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(55px, 7vw, 92px);
+    font-weight: 400;
+    line-height: 0.95;
+    letter-spacing: -3px;
+}
+
+.mas-hero-content p {
+    max-width: 600px;
+    margin: 22px auto 25px;
+    color: rgba(255,255,255,0.82);
+    font-size: 17px;
+}
+
+.mas-hero-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 12px 20px;
+    border-radius: 10px;
+    background: var(--mas-primary);
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background var(--mas-transition), transform var(--mas-transition);
+}
+
+    .mas-hero-button:hover {
+        color: white;
+        background: var(--mas-primary-dark);
+        transform: translateY(-2px);
+    }
+
+
+/* =========================================================
+   HERO ARROWS
+   ========================================================= */
+
+.hero-arrow {
+    position: absolute;
+    top: 50%;
+    width: 40px;
+    height: 40px;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.20);
+    color: white;
+    cursor: pointer;
+    backdrop-filter: blur(5px);
+    transition: background var(--mas-transition), transform var(--mas-transition);
+}
+
+    .hero-arrow:hover {
+        background: rgba(255,255,255,0.35);
+        transform: translateY(-50%) scale(1.05);
+    }
+
+.hero-arrow-left {
+    left: 15px;
+}
+
+.hero-arrow-right {
+    right: 15px;
+}
+
+
+/* =========================================================
+   HERO INDICATORS
+   ========================================================= */
+
+.hero-indicators {
+    position: absolute;
+    bottom: 22px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.hero-indicator {
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    border: 0;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.55);
+    cursor: pointer;
+    transition: width var(--mas-transition), background var(--mas-transition);
+}
+
+    .hero-indicator.active {
+        width: 22px;
+        background: var(--mas-primary);
+    }
+
+
+/* =========================================================
+   TRUST BAR
+   ========================================================= */
+
+.mas-trust-bar {
+    background: var(--mas-primary);
+    color: white;
+}
+
+.mas-trust-inner {
+    width: min( calc(100% - 40px), 850px );
+    min-height: 52px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 28px;
+}
+
+.mas-trust-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+    .mas-trust-item i {
+        font-size: 14px;
+    }
+
+
+/* =========================================================
+   SERVICE SEARCH
+   ========================================================= */
+
+.mas-service-search-section {
+    padding: 32px 20px;
+    background: #f6f8fa;
+    border-bottom: 1px solid var(--mas-border);
+}
+
+.mas-service-search {
+    position: relative;
+    width: min( 100%, 640px );
+    margin: auto;
+}
+
+    .mas-service-search i {
+        position: absolute;
+        left: 18px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #61758e;
+        font-size: 19px;
+    }
+
+    .mas-service-search input {
+        width: 100%;
+        height: 50px;
+        padding: 0 20px 0 48px;
+        border: 1px solid #dfe4e8;
+        border-radius: 14px;
+        outline: none;
+        background: white;
+        color: var(--mas-dark);
+        font-size: 14px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+        transition: border-color var(--mas-transition), box-shadow var(--mas-transition);
+    }
+
+        .mas-service-search input:focus {
+            border-color: var(--mas-primary);
+            box-shadow: 0 0 0 3px rgba(15,157,148,0.10);
+        }
+
+        .mas-service-search input::placeholder {
+            color: #8491a1;
+        }
+
+
+/* =========================================================
+   SERVICES SECTION
+   ========================================================= */
+
+.mas-services-section {
+    padding: 65px 0 30px;
+    background: white;
+}
+
+.mas-section-heading {
+    margin-bottom: 38px;
+}
+
+    .mas-section-heading h2 {
+        margin: 0 0 6px;
+        color: #092b4c;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 40px;
+        font-weight: 700;
+    }
+
+    .mas-section-heading p {
+        margin: 0;
+        color: #56708e;
+        font-size: 15px;
+    }
+
+
+/* =========================================================
+   SERVICE CARD
+   ========================================================= */
+
+.service-card {
+    height: 100%;
+    overflow: hidden;
+    border: 1px solid #dce2e7;
+    border-radius: 16px;
+    background: #f8fafb;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+    .service-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 30px rgba(9,43,76,0.10);
+    }
+
+
+/* =========================================================
+   SERVICE IMAGE
+   ========================================================= */
+
+.service-image-wrapper {
+    position: relative;
+    height: 194px;
+    overflow: hidden;
+}
+
+.service-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.service-card:hover .service-image {
+    transform: scale(1.04);
+}
+
+.service-popular {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    padding: 5px 11px;
+    border-radius: 20px;
+    background: var(--mas-primary);
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   SERVICE BODY
+   ========================================================= */
+
+.service-body {
+    padding: 19px 20px 18px;
+}
+
+.service-title-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 9px;
+}
+
+    .service-title-row h3 {
+        margin: 0;
+        color: #092b4c;
+        font-size: 16px;
+        font-weight: 650;
+    }
+
+.service-icon {
+    color: var(--mas-primary);
+    font-size: 20px;
+}
+
+.service-body > p {
+    min-height: 49px;
+    margin: 0;
+    color: #59728e;
+    font-size: 13.5px;
+    line-height: 1.7;
+}
+
+.service-divider {
+    height: 1px;
+    margin: 14px 0;
+    background: #dfe4e8;
+}
+
+
+/* =========================================================
+   SERVICE FOOTER
+   ========================================================= */
+
+.service-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.service-price {
+    display: flex;
+    flex-direction: column;
+}
+
+    .service-price strong {
+        color: #092b4c;
+        font-size: 14px;
+    }
+
+    .service-price span {
+        margin-top: 3px;
+        color: #718197;
+        font-size: 11px;
+    }
+
+.service-book-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 96px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: var(--mas-primary);
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+    transition: background var(--mas-transition), transform var(--mas-transition);
+}
+
+    .service-book-button:hover {
+        color: white;
+        background: var(--mas-primary-dark);
+        transform: translateY(-1px);
+    }
+
+
+/* =========================================================
+   NO RESULTS
+   ========================================================= */
+
+.services-no-results {
+    padding: 60px 20px;
+    text-align: center;
+}
+
+    .services-no-results i {
+        color: var(--mas-primary);
+        font-size: 35px;
+    }
+
+    .services-no-results h3 {
+        margin: 12px 0 5px;
+        color: var(--mas-dark);
+        font-size: 20px;
+    }
+
+    .services-no-results p {
+        margin: 0;
+        color: var(--mas-muted);
+    }
+/* =========================================================
+   HERO ACTION BUTTONS
+========================================================= */
+
+.mas-hero-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 30px;
+}
+
+
+/* =========================================================
+   PRIMARY CTA
+========================================================= */
+
+.mas-hero-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 58px;
+    padding: 0 30px;
+    border-radius: 10px;
+    background: #0f9d94;
+    color: #ffffff;
+    font-size: 17px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: transform 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+}
+
+    .mas-hero-button i {
+        font-size: 20px;
+    }
+
+
+    /* Hover */
+
+    .mas-hero-button:hover {
+        color: #ffffff;
+        background: #078b83;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+
+
+/* =========================================================
+   SECONDARY BUTTON
+========================================================= */
+
+.mas-hero-button-secondary {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(8px);
+}
+
+    .mas-hero-button-secondary:hover {
+        background: #ffffff;
+        color: #0f9d94;
+    }
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+    .mas-hero {
+        height: 470px;
+    }
+
+    .mas-hero-content h1 {
+        font-size: 58px;
+        letter-spacing: -2px;
+    }
+
+    .mas-hero-content p {
+        font-size: 15px;
+    }
+
+    .mas-trust-inner {
+        padding: 14px 0;
+        gap: 12px 22px;
+    }
+
+    .mas-trust-item {
+        font-size: 12px;
+    }
+
+    .mas-services-section {
+        padding-top: 45px;
+    }
+
+    .mas-section-heading h2 {
+        font-size: 34px;
+    }
+}
+
+
+@media (max-width: 576px) {
+
+    .mas-container {
+        width: min( calc(100% - 30px), 1220px );
+    }
+
+    .mas-hero {
+        height: 440px;
+    }
+
+    .mas-hero-content h1 {
+        font-size: 48px;
+    }
+
+    .mas-hero-category {
+        font-size: 12px;
+    }
+
+    .hero-arrow {
+        width: 36px;
+        height: 36px;
+    }
+
+    .hero-arrow-left {
+        left: 10px;
+    }
+
+    .hero-arrow-right {
+        right: 10px;
+    }
+
+    .mas-trust-inner {
+        justify-content: flex-start;
+    }
+
+    .mas-service-search-section {
+        padding: 22px 15px;
+    }
+
+    .mas-services-section {
+        padding-top: 40px;
+    }
+
+    .service-image-wrapper {
+        height: 210px;
+    }
+}

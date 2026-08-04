@@ -1,0 +1,170 @@
+﻿@{
+    ViewData["Title"] = "Contact Us";
+}
+
+<link rel="stylesheet"
+      href="~/css/home/contact.css"
+      asp-append-version="true" />
+
+<div class="contact-page">
+
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+
+    <section class="contact-hero">
+
+        <div class="contact-hero-content">
+
+            <span>
+                <i class="bi bi-chat-dots"></i>
+                Get In Touch
+            </span>
+
+            <h1>
+                Let's make your
+                space <strong>fresh.</strong>
+            </h1>
+
+            <p>
+                Have a question, need a quote, or ready to
+                book a cleaning? Our team is ready to help.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         CONTACT INFORMATION
+    ====================================================== -->
+
+    <section class="contact-section">
+
+        <div class="contact-container">
+
+            <div class="contact-grid">
+
+
+                <!-- PHONE -->
+
+                <a href="tel:+27614908391"
+                   class="contact-card">
+
+                    <div class="contact-icon">
+                        <i class="bi bi-telephone"></i>
+                    </div>
+
+                    <div>
+
+                        <span>Call Us</span>
+
+                        <h3>
+                            +27 61 490 8391
+                        </h3>
+
+                        <p>
+                            Speak to our team directly.
+                        </p>
+
+                    </div>
+
+                </a>
+
+
+                <!-- EMAIL -->
+
+                <a href="mailto:info@mascleaners.co.za"
+                   class="contact-card">
+
+                    <div class="contact-icon">
+                        <i class="bi bi-envelope"></i>
+                    </div>
+
+                    <div>
+
+                        <span>Email Us</span>
+
+                        <h3>
+                            info@mascleaners.co.za
+                        </h3>
+
+                        <p>
+                            Send us your enquiry anytime.
+                        </p>
+
+                    </div>
+
+                </a>
+
+
+                <!-- LOCATION -->
+
+                <div class="contact-card">
+
+                    <div class="contact-icon">
+                        <i class="bi bi-geo-alt"></i>
+                    </div>
+
+                    <div>
+
+                        <span>Service Area</span>
+
+                        <h3>
+                            Free State
+                        </h3>
+
+                        <p>
+                            Strong presence in Welkom
+                            and Bloemfontein.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 CONTACT CTA
+            ================================================== -->
+
+            <div class="contact-book">
+
+                <div>
+
+                    <span>
+                        Need a cleaning service?
+                    </span>
+
+                    <h2>
+                        Book your cleaning today.
+                    </h2>
+
+                    <p>
+                        Choose your service, select a preferred
+                        date and time, and let MAS Cleaners take
+                        care of the rest.
+                    </p>
+
+                </div>
+
+                <a asp-controller="Booking"
+                   asp-action="Index"
+                   class="contact-book-button">
+
+                    <i class="bi bi-calendar3"></i>
+
+                    Book a Cleaning
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>

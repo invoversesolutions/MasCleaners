@@ -1,0 +1,540 @@
+﻿@{
+    ViewData["Title"] = "Home";
+}
+
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/home/index.css"
+          asp-append-version="true" />
+}
+
+
+<!-- =========================================================
+     HERO
+========================================================== -->
+
+<section class="mas-hero">
+
+    <div class="mas-hero-track" id="heroTrack">
+
+        <!-- SLIDE 1 -->
+
+        <div class="mas-hero-slide active">
+
+            <img src="~/images/hero-1.jpg"
+                 alt="Professional residential cleaning"
+                 class="mas-hero-image" />
+
+            <div class="mas-hero-overlay"></div>
+
+            <div class="mas-hero-content">
+
+                <span class="mas-hero-category">
+                    <i class="bi bi-stars"></i>
+                    Residential Cleaning
+                </span>
+
+                <h1>
+                    Clean Space.
+                </h1>
+
+                <p>
+                    Fresh homes. Fresh spaces.
+                    Fresh beginnings.
+                </p>
+
+             <div class="mas-hero-actions">
+
+                    <!-- PRIMARY BUTTON -->
+                    <a asp-controller="Booking"
+                       asp-action="Index"
+                       class="mas-hero-button">
+                        <i class="bi bi-calendar3"></i>
+                        Book a Cleaning
+                    </a>
+
+                    <!-- SECONDARY BUTTON -->
+                    <a asp-controller="Home"
+                       asp-action="Services"
+                       class="mas-hero-button mas-hero-button-secondary">
+                        <i class="bi bi-stars"></i>
+                        View Services
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- SLIDE 2 -->
+
+        <div class="mas-hero-slide">
+
+            <img src="~/images/hero-2.jpg"
+                 alt="Professional deep cleaning"
+                 class="mas-hero-image" />
+
+            <div class="mas-hero-overlay"></div>
+
+            <div class="mas-hero-content">
+
+                <span class="mas-hero-category">
+                    <i class="bi bi-stars"></i>
+                    Deep Cleaning
+                </span>
+
+                <h1>
+                    Deep Clean.
+                </h1>
+
+                <p>
+                    We don't just clean.
+                    We transform spaces.
+                </p>
+
+                   <div class="mas-hero-actions">
+
+                    <!-- PRIMARY BUTTON -->
+                    <a asp-controller="Booking"
+                       asp-action="Index"
+                       class="mas-hero-button">
+                        <i class="bi bi-calendar3"></i>
+                        Book a Cleaning
+                    </a>
+
+                    <!-- SECONDARY BUTTON -->
+                    <a asp-controller="Home"
+                       asp-action="Services"
+                       class="mas-hero-button mas-hero-button-secondary">
+                        <i class="bi bi-stars"></i>
+                        View Services
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- SLIDE 3 -->
+
+        <div class="mas-hero-slide">
+
+            <img src="~/images/hero-3.jpg"
+                 alt="Commercial cleaning service"
+                 class="mas-hero-image" />
+
+            <div class="mas-hero-overlay"></div>
+
+            <div class="mas-hero-content">
+
+                <span class="mas-hero-category">
+                    <i class="bi bi-building"></i>
+                    Commercial & Office
+                </span>
+
+                <h1>
+                    Fresh Business.
+                </h1>
+
+                <p>
+                    Professional cleaning
+                    for professional spaces.
+                </p>
+
+                <div class="mas-hero-actions">
+
+                    <!-- PRIMARY BUTTON -->
+                    <a asp-controller="Booking"
+                       asp-action="Index"
+                       class="mas-hero-button">
+                        <i class="bi bi-calendar3"></i>
+                        Book a Cleaning
+                    </a>
+
+                    <!-- SECONDARY BUTTON -->
+                    <a asp-controller="Home"
+                       asp-action="Services"
+                       class="mas-hero-button mas-hero-button-secondary">
+                        <i class="bi bi-stars"></i>
+                        View Services
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- PREVIOUS -->
+
+    <button class="hero-arrow hero-arrow-left"
+            type="button"
+            id="heroPrevious"
+            aria-label="Previous slide">
+
+        <i class="bi bi-chevron-left"></i>
+
+    </button>
+
+
+    <!-- NEXT -->
+
+    <button class="hero-arrow hero-arrow-right"
+            type="button"
+            id="heroNext"
+            aria-label="Next slide">
+
+        <i class="bi bi-chevron-right"></i>
+
+    </button>
+
+
+    <!-- INDICATORS -->
+
+    <div class="hero-indicators">
+
+        <button type="button"
+                class="hero-indicator active"
+                data-slide="0"
+                aria-label="Go to slide 1">
+        </button>
+
+        <button type="button"
+                class="hero-indicator"
+                data-slide="1"
+                aria-label="Go to slide 2">
+        </button>
+
+        <button type="button"
+                class="hero-indicator"
+                data-slide="2"
+                aria-label="Go to slide 3">
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     TRUST BAR
+========================================================== -->
+
+<section class="mas-trust-bar">
+
+    <div class="mas-trust-inner">
+
+        <div class="mas-trust-item">
+            <i class="bi bi-check2"></i>
+            Fully Insured
+        </div>
+
+        <div class="mas-trust-item">
+            <i class="bi bi-check2"></i>
+            Same-Day Bookings
+        </div>
+
+        <div class="mas-trust-item">
+            <i class="bi bi-check2"></i>
+            4.9★ Rated
+        </div>
+
+        <div class="mas-trust-item">
+            <i class="bi bi-check2"></i>
+            Online Payment
+        </div>
+
+        <div class="mas-trust-item">
+            <i class="bi bi-check2"></i>
+            Instant Confirmation
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     SERVICE SEARCH
+========================================================== -->
+
+<section class="mas-service-search-section">
+
+    <div class="mas-service-search">
+
+        <i class="bi bi-search"></i>
+
+        <input type="search"
+               id="serviceSearch"
+               placeholder="Search services — 'mattress', 'couch', 'post-event', 'eco'..."
+               autocomplete="off" />
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     SERVICES
+========================================================== -->
+
+<section class="mas-services-section">
+
+    <div class="mas-container">
+
+        <div class="mas-section-heading">
+
+            <h2>
+                Our Services
+            </h2>
+
+            <p>
+                13 professional cleaning options
+                — pay securely online when you book.
+            </p>
+
+        </div>
+
+
+        <div class="row g-4" id="servicesGrid">
+
+
+            <!-- SERVICE 1 -->
+
+            <div class="col-lg-4 col-md-6 service-item"
+                 data-search="residential home house cleaning kitchen bathroom bedroom living">
+
+                <article class="service-card">
+
+                    <div class="service-image-wrapper">
+
+                        <img src="~/images/residential.jpg"
+                             alt="Residential Cleaning"
+                             class="service-image" />
+
+                        <span class="service-popular">
+                            Most Popular
+                        </span>
+
+                    </div>
+
+                    <div class="service-body">
+
+                        <div class="service-title-row">
+
+                            <i class="bi bi-house-door service-icon"></i>
+
+                            <h3>
+                                Residential Cleaning
+                            </h3>
+
+                        </div>
+
+                        <p>
+                            Complete home cleaning —
+                            kitchens, bathrooms,
+                            bedrooms, living areas.
+                        </p>
+
+                        <div class="service-divider"></div>
+
+                        <div class="service-footer">
+
+                            <div class="service-price">
+
+                                <strong>
+                                    From R89
+                                </strong>
+
+                                <span>
+                                    2–4 hrs
+                                </span>
+
+                            </div>
+
+                            <a asp-controller="Booking"
+                               asp-action="Booking"
+                               class="service-book-button">
+
+                                Book Now
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+            </div>
+
+
+            <!-- SERVICE 2 -->
+
+            <div class="col-lg-4 col-md-6 service-item"
+                 data-search="deep clean scrub appliances grout thorough">
+
+                <article class="service-card">
+
+                    <div class="service-image-wrapper">
+
+                        <img src="~/images/deep-clean.jpg"
+                             alt="Deep Cleaning"
+                             class="service-image" />
+
+                    </div>
+
+                    <div class="service-body">
+
+                        <div class="service-title-row">
+
+                            <i class="bi bi-stars service-icon"></i>
+
+                            <h3>
+                                Deep Clean
+                            </h3>
+
+                        </div>
+
+                        <p>
+                            Thorough scrub of every surface —
+                            baseboards, inside appliances,
+                            grout lines.
+                        </p>
+
+                        <div class="service-divider"></div>
+
+                        <div class="service-footer">
+
+                            <div class="service-price">
+
+                                <strong>
+                                    From R149
+                                </strong>
+
+                                <span>
+                                    4–6 hrs
+                                </span>
+
+                            </div>
+
+                            <a asp-controller="Booking"
+                               asp-action="Booking"
+                               class="service-book-button">
+
+                                Book Now
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+            </div>
+
+
+            <!-- SERVICE 3 -->
+
+            <div class="col-lg-4 col-md-6 service-item"
+                 data-search="commercial office retail business daily weekly monthly">
+
+                <article class="service-card">
+
+                    <div class="service-image-wrapper">
+
+                        <img src="~/images/commercial.jpg"
+                             alt="Commercial and Office Cleaning"
+                             class="service-image" />
+
+                    </div>
+
+                    <div class="service-body">
+
+                        <div class="service-title-row">
+
+                            <i class="bi bi-building service-icon"></i>
+
+                            <h3>
+                                Commercial / Office
+                            </h3>
+
+                        </div>
+
+                        <p>
+                            Scheduled office and retail cleaning —
+                            daily, weekly, or monthly contracts.
+                        </p>
+
+                        <div class="service-divider"></div>
+
+                        <div class="service-footer">
+
+                            <div class="service-price">
+
+                                <strong>
+                                    From R199
+                                </strong>
+
+                                <span>
+                                    Custom
+                                </span>
+
+                            </div>
+
+                            <a asp-controller="Booking"
+                               asp-action="Booking"
+                               class="service-book-button">
+
+                                Book Now
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+            </div>
+
+
+         </div>
+
+
+        <!-- NO RESULTS -->
+
+        <div id="noServices"
+             class="services-no-results"
+             style="display:none;">
+
+            <i class="bi bi-search"></i>
+
+            <h3>
+                No services found
+            </h3>
+
+            <p>
+                Try another search term.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+@section Scripts {
+    <script src="~/js/home/index.js"
+            asp-append-version="true"></script>
+}

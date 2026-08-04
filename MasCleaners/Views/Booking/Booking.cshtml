@@ -1,0 +1,366 @@
+﻿@{
+    ViewData["Title"] = "Book a Cleaning";
+}
+
+<link rel="stylesheet" href="~/css/booking/booking.css" asp-append-version="true" />
+
+<div class="booking-page">
+
+    <!-- =========================================================
+         BOOKING STEPS
+    ========================================================== -->
+
+    <div class="booking-steps">
+
+        <div class="booking-step active">
+            <span class="step-number">1</span>
+            <span class="step-label">Details</span>
+        </div>
+
+        <span class="step-line"></span>
+
+        <div class="booking-step">
+            <span class="step-number">2</span>
+            <span class="step-label">Payment</span>
+        </div>
+
+        <span class="step-line"></span>
+
+        <div class="booking-step">
+            <span class="step-number">3</span>
+            <span class="step-label">Confirmed</span>
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         PAGE HEADER
+    ========================================================== -->
+
+    <div class="booking-header">
+
+        <h1>Book a Cleaning</h1>
+
+        <p>
+            Fill in your details, then pay securely online to confirm your booking.
+        </p>
+
+    </div>
+
+
+    <!-- =========================================================
+         BOOKING FORM
+    ========================================================== -->
+
+    <div class="booking-card">
+
+        <form id="bookingForm">
+
+            <!-- =================================================
+                 CUSTOMER DETAILS
+            ================================================== -->
+
+            <div class="booking-form-grid">
+
+                <!-- FULL NAME -->
+
+                <div class="booking-field">
+
+                    <label for="fullName">
+                        Full Name
+                        <span>*</span>
+                    </label>
+
+                    <div class="booking-input-wrapper">
+
+                        <i class="bi bi-person"></i>
+
+                        <input type="text"
+                               id="fullName"
+                               name="FullName"
+                               placeholder="Sarah Mitchell"
+                               required />
+
+                    </div>
+
+                </div>
+
+
+                <!-- EMAIL -->
+
+                <div class="booking-field">
+
+                    <label for="email">
+                        Email Address
+                        <span>*</span>
+                    </label>
+
+                    <div class="booking-input-wrapper">
+
+                        <i class="bi bi-envelope"></i>
+
+                        <input type="email"
+                               id="email"
+                               name="Email"
+                               placeholder="sarah@email.com"
+                               required />
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 PHONE
+            ================================================== -->
+
+            <div class="booking-field">
+
+                <label for="phone">
+                    Phone Number
+                    <span>*</span>
+                </label>
+
+                <div class="booking-input-wrapper">
+
+                    <i class="bi bi-telephone"></i>
+
+                    <input type="tel"
+                           id="phone"
+                           name="Phone"
+                           placeholder="061 490 8391"
+                           required />
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 SERVICE ADDRESS
+            ================================================== -->
+
+            <div class="booking-field">
+
+                <label for="address">
+                    Service Address
+                    <span>*</span>
+                </label>
+
+                <div class="booking-input-wrapper">
+
+                    <i class="bi bi-geo-alt"></i>
+
+                    <input type="text"
+                           id="address"
+                           name="ServiceAddress"
+                           placeholder="12 Main Road, Johannesburg, 2001"
+                           required />
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 SERVICE TYPE
+            ================================================== -->
+
+            <div class="booking-field">
+
+                <label for="serviceType">
+                    Service Type
+                    <span>*</span>
+                </label>
+
+                <div class="booking-input-wrapper">
+
+                    <i class="bi bi-stars"></i>
+
+                    <select id="serviceType"
+                            name="ServiceType"
+                            required>
+
+                        <option value="" selected disabled>
+                            Select a cleaning service
+                        </option>
+
+                        <option value="Residential Cleaning">
+                            Residential Cleaning — From R89
+                        </option>
+
+                        <option value="Deep Cleaning">
+                            Deep Cleaning — From R149
+                        </option>
+
+                        <option value="Commercial Cleaning">
+                            Commercial / Office — From R199
+                        </option>
+
+                        <option value="Post-Event Cleaning">
+                            Post-Event Cleaning
+                        </option>
+
+                        <option value="Move-In / Move-Out Cleaning">
+                            Move-In / Move-Out Cleaning
+                        </option>
+
+                        <option value="Mattress Cleaning">
+                            Mattress Cleaning
+                        </option>
+
+                        <option value="Couch Cleaning">
+                            Couch Cleaning
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 DATE + TIME
+            ================================================== -->
+
+            <div class="booking-form-grid">
+
+                <!-- DATE -->
+
+                <div class="booking-field">
+
+                    <label for="preferredDate">
+                        Preferred Date
+                        <span>*</span>
+                    </label>
+
+                    <div class="booking-input-wrapper">
+
+                        <i class="bi bi-calendar3"></i>
+
+                        <input type="date"
+                               id="preferredDate"
+                               name="PreferredDate"
+                               required />
+
+                    </div>
+
+                </div>
+
+
+                <!-- TIME -->
+
+                <div class="booking-field">
+
+                    <label for="preferredTime">
+                        Preferred Time
+                        <span>*</span>
+                    </label>
+
+                    <div class="booking-input-wrapper">
+
+                        <i class="bi bi-clock"></i>
+
+                        <select id="preferredTime"
+                                name="PreferredTime"
+                                required>
+
+                            <option value="" selected disabled>
+                                Select a time
+                            </option>
+
+                            <option value="07:00">07:00 AM</option>
+                            <option value="08:00">08:00 AM</option>
+                            <option value="09:00">09:00 AM</option>
+                            <option value="10:00">10:00 AM</option>
+                            <option value="11:00">11:00 AM</option>
+                            <option value="12:00">12:00 PM</option>
+                            <option value="13:00">01:00 PM</option>
+                            <option value="14:00">02:00 PM</option>
+                            <option value="15:00">03:00 PM</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 SPECIAL INSTRUCTIONS
+            ================================================== -->
+
+            <div class="booking-field">
+
+                <label for="specialInstructions">
+                    Special Instructions
+                </label>
+
+                <div class="booking-textarea-wrapper">
+
+                    <i class="bi bi-chat-left-text"></i>
+
+                    <textarea id="specialInstructions"
+                              name="SpecialInstructions"
+                              rows="4"
+                              placeholder="Pets, access codes, areas to focus on..."></textarea>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 BOOKING SUMMARY
+            ================================================== -->
+
+            <div class="booking-info">
+
+                <div class="booking-info-icon">
+                    <i class="bi bi-shield-check"></i>
+                </div>
+
+                <div>
+
+                    <strong>Secure Booking</strong>
+
+                    <p>
+                        Your booking details are kept secure.
+                        Payment will be handled on the next step.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 SUBMIT
+            ================================================== -->
+
+            <button type="submit"
+                    class="booking-submit">
+
+                Continue to Payment
+
+                <i class="bi bi-arrow-right"></i>
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+@section Scripts {
+
+    <script src="~/js/booking/booking.js" asp-append-version="true"></script>
+
+}

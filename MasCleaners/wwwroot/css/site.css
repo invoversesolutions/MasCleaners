@@ -1,0 +1,259 @@
+/* =========================================================
+   MAS CLEANERS
+   GLOBAL STYLES
+   ========================================================= */
+
+:root {
+    --mas-primary: #0f9d94;
+    --mas-primary-dark: #07877f;
+    --mas-primary-light: #e8f8f6;
+    --mas-dark: #092b4c;
+    --mas-text: #526b88;
+    --mas-muted: #7d8da1;
+    --mas-white: #ffffff;
+    --mas-light: #f6f8fa;
+    --mas-border: #e1e6eb;
+    --mas-radius: 16px;
+    --mas-container: 1220px;
+    --mas-transition: 0.25s ease;
+}
+
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: var(--mas-text);
+    background: var(--mas-white);
+    -webkit-font-smoothing: antialiased;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button,
+input,
+textarea,
+select {
+    font: inherit;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.site-header {
+    position: relative;
+    z-index: 1000;
+}
+
+.mas-navbar {
+    height: 64px;
+    background: var(--mas-white);
+    border-bottom: 1px solid #e8ebee;
+}
+
+.mas-navbar-inner {
+    width: min( calc(100% - 40px), var(--mas-container) );
+    height: 100%;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+/* =========================================================
+   BRAND
+   ========================================================= */
+
+.mas-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 220px;
+}
+
+.mas-logo {
+    width: 34px;
+    height: 42px;
+    object-fit: contain;
+}
+
+.mas-brand-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+}
+
+.mas-brand-name {
+    color: #172b43;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.mas-brand-tagline {
+    margin-top: 4px;
+    color: var(--mas-primary);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+}
+
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+
+.mas-navigation {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.mas-nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 15px;
+    border: 1px solid transparent;
+    border-radius: 11px;
+    color: #61738b;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background var(--mas-transition), color var(--mas-transition), border-color var(--mas-transition);
+}
+
+    .mas-nav-link:hover {
+        color: var(--mas-primary);
+        background: var(--mas-primary-light);
+    }
+
+    .mas-nav-link.active {
+        color: white;
+        background: var(--mas-primary);
+        box-shadow: 0 4px 10px rgba(15, 157, 148, 0.18);
+    }
+
+.nav-icon {
+    display: inline-flex;
+    font-size: 15px;
+}
+
+
+/* =========================================================
+   MOBILE MENU BUTTON
+   ========================================================= */
+
+.mas-mobile-toggle {
+    display: none;
+    width: 42px;
+    height: 42px;
+    padding: 9px;
+    border: 1px solid var(--mas-border);
+    border-radius: 10px;
+    background: white;
+    cursor: pointer;
+}
+
+    .mas-mobile-toggle span {
+        display: block;
+        width: 100%;
+        height: 2px;
+        margin: 5px 0;
+        background: var(--mas-dark);
+    }
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.mas-footer {
+    margin-top: 80px;
+    padding: 35px 0;
+    background: #092b4c;
+    color: white;
+}
+
+.mas-footer-inner {
+    width: min( calc(100% - 40px), var(--mas-container) );
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+}
+
+.mas-footer strong {
+    font-size: 18px;
+}
+
+.mas-footer p {
+    margin: 5px 0 0;
+    color: rgba(255,255,255,0.7);
+    font-size: 13px;
+}
+
+.mas-footer-copy {
+    color: rgba(255,255,255,0.65);
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+    .mas-navbar {
+        height: 62px;
+    }
+
+    .mas-navigation {
+        display: none;
+    }
+
+    .mas-mobile-toggle {
+        display: block;
+    }
+
+    .mas-brand {
+        min-width: auto;
+    }
+
+    .mas-brand-name {
+        font-size: 18px;
+    }
+
+    .mas-footer-inner {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
