@@ -75,6 +75,7 @@ select {
     height: 64px;
     background: var(--mas-white);
     border-bottom: 1px solid #e8ebee;
+
 }
 
 .mas-navbar-inner {
@@ -84,6 +85,7 @@ select {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    position: relative;
 }
 
 
@@ -225,35 +227,109 @@ select {
     font-size: 13px;
 }
 
+/*=========================================
+    MOBILE NAVIGATION
+==========================================*/
 
-/* =========================================================
-   RESPONSIVE
-   ========================================================= */
+@media (max-width:991px) {
 
-@media (max-width: 768px) {
-
-    .mas-navbar {
-        height: 62px;
+/*    .mas-mobile-toggle {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 5px;
+        width: 45px;
+        height: 45px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        z-index: 1100;
     }
+
+
+        .mas-mobile-toggle span {
+            display: block;
+            width: 26px;
+            height: 3px;
+            background-color: var(--mas-dark);
+            border-radius: 100px;
+            transition: .35s;
+        }*/
+    .mas-mobile-toggle {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+        width: 46px;
+        height: 46px;
+        background: #ffffff;
+        border: 1px solid #dfe6eb;
+        border-radius: 12px;
+        cursor: pointer;
+        padding: 0;
+    }
+
+        .mas-mobile-toggle span {
+            display: block;
+            width: 22px;
+            height: 3px;
+            background-color: #0f9d94 !important;
+            border-radius: 999px;
+            transition: all .3s ease;
+        }
 
     .mas-navigation {
-        display: none;
-    }
-
-    .mas-mobile-toggle {
-        display: block;
-    }
-
-    .mas-brand {
-        min-width: auto;
-    }
-
-    .mas-brand-name {
-        font-size: 18px;
-    }
-
-    .mas-footer-inner {
+        position: fixed;
+        top: 80px; /* Just below the navbar */
+        right: -350px;
+        width: 300px;
+        background: #ffffff;
+        display: flex;
         flex-direction: column;
-        align-items: flex-start;
+        gap: 8px;
+        padding: 20px;
+        border-radius: 18px 0 0 18px;
+        box-shadow: -10px 10px 30px rgba(0,0,0,.15);
+        transition: right .35s ease;
+        z-index: 1050;
+    }
+
+        /* Slide In */
+
+        .mas-navigation.active {
+            right: 15px;
+        }
+
+    .mas-nav-link {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        padding: 14px 18px;
+        border-radius: 12px;
+        transition: .3s;
+    }
+
+        .mas-nav-link:hover {
+            background: #f3f7f9;
+        }
+
+        .mas-nav-link:hover {
+            background: #f5f7fa;
+        }
+
+    /* Hamburger Animation */
+
+    .mas-mobile-toggle.active span:nth-child(1) {
+        transform: rotate(45deg) translateY(11px);
+    }
+
+    .mas-mobile-toggle.active span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .mas-mobile-toggle.active span:nth-child(3) {
+        transform: rotate(-45deg) translateY(-11px);
     }
 }
