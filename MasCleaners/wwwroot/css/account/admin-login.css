@@ -1,0 +1,481 @@
+﻿/* =========================================================
+   MAS CLEANERS
+   ADMIN LOGIN
+   ========================================================= */
+
+:root {
+    --mas-primary: #0f9d94;
+    --mas-primary-dark: #07877f;
+    --mas-dark: #092b4c;
+    --mas-text: #526b88;
+    --mas-muted: #7d8da1;
+    --mas-white: #ffffff;
+    --mas-border: #dfe5ea;
+}
+
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+
+body {
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #ffffff;
+    color: var(--mas-dark);
+}
+
+
+/* =========================================================
+   MAIN LOGIN PAGE
+   ========================================================= */
+
+.mas-login-page {
+    min-height: 100vh;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+
+/* =========================================================
+   LEFT VISUAL
+   ========================================================= */
+
+.mas-login-visual {
+    position: relative;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+
+.mas-login-background {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+/* Dark overlay */
+
+.mas-login-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(9, 43, 76, 0.72);
+}
+
+
+/* =========================================================
+   LEFT CONTENT
+   ========================================================= */
+
+.mas-login-visual-content {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    padding: 70px 8% 65px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+
+/* =========================================================
+   BRAND
+   ========================================================= */
+
+.mas-login-brand {
+    max-width: 570px;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+
+    .mas-login-brand h1 {
+        margin: 0 0 22px;
+        color: #ffffff;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(52px, 5vw, 78px);
+        line-height: 0.98;
+        font-weight: 700;
+        letter-spacing: -2px;
+    }
+
+
+        .mas-login-brand h1 span {
+            display: block;
+            color: var(--mas-primary);
+        }
+
+
+    .mas-login-brand p {
+        max-width: 570px;
+        margin: 0;
+        color: rgba(255,255,255,0.78);
+        font-size: 20px;
+        line-height: 1.6;
+    }
+
+
+/* =========================================================
+   SECURITY
+   ========================================================= */
+
+.mas-login-security {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: rgba(255,255,255,0.78);
+    font-size: 15px;
+}
+
+
+    .mas-login-security i {
+        color: var(--mas-primary);
+        font-size: 22px;
+    }
+
+
+/* =========================================================
+   RIGHT SIDE
+   ========================================================= */
+
+.mas-login-form-section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    padding: 50px;
+}
+
+
+/* =========================================================
+   FORM WRAPPER
+   ========================================================= */
+
+.mas-login-form-wrapper {
+    width: 100%;
+    max-width: 560px;
+}
+
+
+/* =========================================================
+   HEADING
+   ========================================================= */
+
+.mas-login-heading {
+    margin-bottom: 42px;
+}
+
+
+    .mas-login-heading h2 {
+        margin: 0 0 10px;
+        color: #092b4c;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 38px;
+        line-height: 1.2;
+        font-weight: 700;
+    }
+
+
+    .mas-login-heading p {
+        margin: 0;
+        color: var(--mas-text);
+        font-size: 16px;
+        line-height: 1.6;
+    }
+
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.mas-login-form {
+    width: 100%;
+}
+
+
+.mas-form-group {
+    margin-bottom: 28px;
+}
+
+
+    .mas-form-group label {
+        display: block;
+        margin-bottom: 9px;
+        color: #071f39;
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+
+/* =========================================================
+   INPUT
+   ========================================================= */
+
+.mas-input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+
+.mas-login-input {
+    width: 100%;
+    height: 58px;
+    padding: 0 18px;
+    border: 1px solid var(--mas-border);
+    border-radius: 15px;
+    outline: none;
+    background: #f9fafb;
+    color: var(--mas-dark);
+    font-size: 15px;
+    transition: border-color .25s ease, box-shadow .25s ease, background .25s ease;
+}
+
+
+    .mas-login-input::placeholder {
+        color: #8b9bb0;
+    }
+
+
+    .mas-login-input:focus {
+        background: #ffffff;
+        border-color: var(--mas-primary);
+        box-shadow: 0 0 0 3px rgba(15,157,148,0.10);
+    }
+
+
+/* =========================================================
+   PASSWORD TOGGLE
+   ========================================================= */
+
+.mas-password-toggle {
+    position: absolute;
+    top: 50%;
+    right: 16px;
+    transform: translateY(-50%);
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: #71849b;
+    cursor: pointer;
+}
+
+
+    .mas-password-toggle:hover {
+        color: var(--mas-primary);
+    }
+
+
+    .mas-password-toggle i {
+        font-size: 18px;
+    }
+
+
+/* =========================================================
+   ERROR
+   ========================================================= */
+
+.mas-login-error {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-top: -10px;
+    margin-bottom: 20px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: #fff2f2;
+    color: #c0392b;
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   SIGN IN BUTTON
+   ========================================================= */
+
+.mas-login-button {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 8px;
+    border: none;
+    border-radius: 15px;
+    background: var(--mas-primary);
+    color: #ffffff;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 8px 18px rgba(15,157,148,0.20);
+    transition: background .25s ease, transform .25s ease, box-shadow .25s ease;
+}
+
+
+    .mas-login-button:hover {
+        background: var(--mas-primary-dark);
+        transform: translateY(-1px);
+        box-shadow: 0 10px 22px rgba(15,157,148,0.25);
+    }
+
+
+    .mas-login-button:active {
+        transform: translateY(0);
+    }
+
+
+    .mas-login-button i {
+        font-size: 18px;
+    }
+
+
+/* =========================================================
+   BACK LINK
+   ========================================================= */
+
+.mas-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 30px;
+    color: #526b88;
+    font-size: 15px;
+    font-weight: 600;
+    transition: color .25s ease;
+}
+
+
+    .mas-back-link:hover {
+        color: var(--mas-primary);
+    }
+
+
+    .mas-back-link i {
+        font-size: 13px;
+    }
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 991px) {
+
+    .mas-login-page {
+        grid-template-columns: 1fr;
+    }
+
+
+    .mas-login-visual {
+        min-height: 360px;
+    }
+
+
+    .mas-login-visual-content {
+        padding: 45px 40px;
+    }
+
+
+    .mas-login-brand {
+        margin: 0;
+    }
+
+
+        .mas-login-brand h1 {
+            font-size: 52px;
+        }
+
+
+    .mas-login-form-section {
+        min-height: auto;
+        padding: 60px 40px;
+    }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 576px) {
+
+    .mas-login-visual {
+        min-height: 320px;
+    }
+
+
+    .mas-login-visual-content {
+        padding: 35px 25px;
+    }
+
+
+    .mas-login-brand h1 {
+        font-size: 43px;
+        letter-spacing: -1px;
+    }
+
+
+    .mas-login-brand p {
+        font-size: 16px;
+    }
+
+
+    .mas-login-security {
+        font-size: 13px;
+    }
+
+
+    .mas-login-form-section {
+        padding: 45px 22px;
+    }
+
+
+    .mas-login-heading {
+        margin-bottom: 32px;
+    }
+
+
+        .mas-login-heading h2 {
+            font-size: 32px;
+        }
+
+
+    .mas-form-group {
+        margin-bottom: 23px;
+    }
+
+
+    .mas-login-input {
+        height: 55px;
+    }
+
+
+    .mas-login-button {
+        height: 57px;
+    }
+}
