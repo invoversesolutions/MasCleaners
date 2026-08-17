@@ -1,0 +1,399 @@
+﻿@model IEnumerable<MasCleaners.Models.ServiceCategory>
+
+@{
+    ViewData["Title"] = "Service Categories";
+    Layout = "_LayoutAdmin";
+}
+<!-- Local Styles -->
+<link rel="stylesheet" href="/css/category/index.css" asp-append-version="true" />
+
+<div class="admin-page">
+
+    <!-- =========================================================
+         PAGE HEADER
+    ========================================================== -->
+
+    <div class="admin-page-header">
+
+        <div>
+            <div class="admin-breadcrumb">
+                <i class="bi bi-grid"></i>
+                Service Catalogue
+                <span>/</span>
+                Categories
+            </div>
+
+            <h1>
+                Service Categories
+            </h1>
+
+            <p>
+                Manage the categories used to organize your cleaning services.
+            </p>
+        </div>
+
+        <div class="admin-page-actions">
+
+            <a asp-action="Create"
+               class="admin-primary-button">
+
+                <i class="bi bi-plus-lg"></i>
+
+                Add Category
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         ALERTS
+    ========================================================== -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="admin-alert admin-alert-success">
+
+            <i class="bi bi-check-circle-fill"></i>
+
+            <span>
+                @TempData["SuccessMessage"]
+            </span>
+
+            <button type="button"
+                    class="admin-alert-close"
+                    onclick="this.parentElement.remove();">
+
+                <i class="bi bi-x"></i>
+
+            </button>
+
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="admin-alert admin-alert-danger">
+
+            <i class="bi bi-exclamation-circle-fill"></i>
+
+            <span>
+                @TempData["ErrorMessage"]
+            </span>
+
+            <button type="button"
+                    class="admin-alert-close"
+                    onclick="this.parentElement.remove();">
+
+                <i class="bi bi-x"></i>
+
+            </button>
+
+        </div>
+    }
+
+
+    <!-- =========================================================
+         SUMMARY
+    ========================================================== -->
+
+    <div class="admin-summary-grid">
+
+        <div class="admin-summary-card">
+
+            <div class="admin-summary-icon">
+                <i class="bi bi-grid"></i>
+            </div>
+
+            <div>
+
+                <span class="admin-summary-label">
+                    Total Categories
+                </span>
+
+                <strong>
+                    @(Model?.Count() ?? 0)
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="admin-summary-card">
+
+            <div class="admin-summary-icon active">
+                <i class="bi bi-check-circle"></i>
+            </div>
+
+            <div>
+
+                <span class="admin-summary-label">
+                    Active Categories
+                </span>
+
+                <strong>
+                    @(Model?.Count(x => x.IsActive) ?? 0)
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="admin-summary-card">
+
+            <div class="admin-summary-icon inactive">
+                <i class="bi bi-pause-circle"></i>
+            </div>
+
+            <div>
+
+                <span class="admin-summary-label">
+                    Inactive Categories
+                </span>
+
+                <strong>
+                    @(Model?.Count(x => !x.IsActive) ?? 0)
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         CATEGORY TABLE
+    ========================================================== -->
+
+    <div class="admin-card">
+
+        <div class="admin-card-header">
+
+            <div>
+
+                <h3>
+                    All Categories
+                </h3>
+
+                <p>
+                    Manage your cleaning service categories below.
+                </p>
+
+            </div>
+
+            <div class="admin-card-header-icon">
+
+                <i class="bi bi-tags"></i>
+
+            </div>
+
+        </div>
+
+
+        @if (Model != null && Model.Any())
+        {
+            <div class="admin-table-wrapper">
+
+                <table class="admin-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Category
+                            </th>
+
+                            <th>
+                                Description
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Created
+                            </th>
+
+                            <th class="text-end">
+                                Actions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var category in Model)
+                        {
+                            <tr>
+
+                                <!-- CATEGORY -->
+
+                                <td>
+
+                                    <div class="category-name">
+
+                                        <div class="category-icon">
+
+                                            <i class="@category.Icon"></i>
+
+                                        </div>
+
+                                        <div>
+
+                                            <strong>
+                                                @category.Name
+                                            </strong>
+
+                                            <span>
+                                                ID: #@category.Id
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- DESCRIPTION -->
+
+                                <td>
+
+                                    @if (!string.IsNullOrWhiteSpace(category.Description))
+                                    {
+                                        <span class="category-description">
+                                            @category.Description
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="category-empty">
+                                            No description
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <!-- STATUS -->
+
+                                <td>
+
+                                    @if (category.IsActive)
+                                    {
+                                        <span class="status-badge status-active">
+
+                                            <span class="status-dot"></span>
+
+                                            Active
+
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="status-badge status-inactive">
+
+                                            <span class="status-dot"></span>
+
+                                            Inactive
+
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <!-- CREATED -->
+
+                                <td>
+                                    
+                                    <span class="category-date">
+                                        @category.CreatedData
+                                    </span>
+
+                                </td>
+
+
+                                <!-- ACTIONS -->
+
+                                <td>
+
+                                    <div class="category-actions">
+
+                                        <a asp-action="Edit"
+                                           asp-route-id="@category.Id"
+                                           class="category-action edit"
+                                           title="Edit category">
+
+                                            <i class="bi bi-pencil"></i>
+
+                                        </a>
+
+                                        <a asp-action="Delete"
+                                           asp-route-id="@category.Id"
+                                           class="category-action delete"
+                                           title="Delete category">
+
+                                            <i class="bi bi-trash"></i>
+
+                                        </a>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+        else
+        {
+            <!-- =================================================
+                 EMPTY STATE
+            ================================================== -->
+
+            <div class="admin-empty-state">
+
+                <div class="admin-empty-icon">
+
+                    <i class="bi bi-grid"></i>
+
+                </div>
+
+                <h3>
+                    No categories yet
+                </h3>
+
+                <p>
+                    Create your first service category to start
+                    building the MAS Cleaners service catalogue.
+                </p>
+
+                <a asp-action="Create"
+                   class="admin-primary-button">
+
+                    <i class="bi bi-plus-lg"></i>
+
+                    Create First Category
+
+                </a>
+
+            </div>
+        }
+
+    </div>
+
+</div>

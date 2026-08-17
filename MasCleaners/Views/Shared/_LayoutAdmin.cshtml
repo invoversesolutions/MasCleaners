@@ -1,0 +1,431 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>
+        @ViewData["Title"] - MAS Cleaners Admin
+    </title>
+
+    <meta name="description"
+          content="MAS Cleaners Administration Panel." />
+
+    <link rel="icon"
+          type="image/jpeg"
+          href="~/images/mas-logo.jpeg" />
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
+    <!-- Global Styles -->
+    <link rel="stylesheet"
+          href="~/css/site.css"
+          asp-append-version="true" />
+
+    <!-- Project Styles -->
+    <link rel="stylesheet"
+          href="~/MasCleaners.styles.css"
+          asp-append-version="true" />
+
+    <!-- Admin Styles -->
+    <link rel="stylesheet"
+          href="~/css/admin.css"
+          asp-append-version="true" />
+
+    @await RenderSectionAsync("Styles", required: false)
+
+</head>
+
+
+<body class="admin-body">
+
+
+    <!-- =====================================================
+         ADMIN SIDEBAR
+    ====================================================== -->
+
+    <aside class="admin-sidebar"
+           id="adminSidebar">
+
+
+        <!-- Logo -->
+
+        <div class="admin-brand">
+
+            <a asp-controller="Admin"
+               asp-action="Index"
+               class="admin-brand-link">
+
+                <img src="~/images/mas-logo.jpeg"
+                     alt="MAS Cleaners Logo"
+                     class="admin-logo" />
+
+                <div class="admin-brand-text">
+
+                    <span class="admin-brand-name">
+                        MAS Cleaners
+                    </span>
+
+                    <span class="admin-brand-subtitle">
+                        Admin Panel
+                    </span>
+
+                </div>
+
+            </a>
+
+        </div>
+
+
+        <!-- Navigation -->
+
+        <nav class="admin-navigation">
+
+
+            <!-- Main -->
+
+            <div class="admin-nav-section">
+
+                <span class="admin-nav-title">
+                    MAIN
+                </span>
+
+
+                <a asp-controller="Admin"
+                   asp-action="Index"
+                   class="admin-nav-link">
+
+                    <span class="admin-nav-icon">
+                        <i class="bi bi-grid-1x2"></i>
+                    </span>
+
+                    <span>
+                        Dashboard
+                    </span>
+
+                </a>
+
+
+                <a asp-controller="Booking"
+                   asp-action="Admin"
+                   class="admin-nav-link">
+
+                    <span class="admin-nav-icon">
+                        <i class="bi bi-calendar3"></i>
+                    </span>
+
+                    <span>
+                        Bookings
+                    </span>
+
+                </a>
+
+            </div>
+
+
+            <!-- Service Catalogue -->
+
+            <div class="admin-nav-section">
+
+                <span class="admin-nav-title">
+                    SERVICE CATALOGUE
+                </span>
+
+
+                <a asp-controller="ServiceCategories"
+                   asp-action="Index"
+                   class="admin-nav-link">
+
+                    <span class="admin-nav-icon">
+                        <i class="bi bi-collection"></i>
+                    </span>
+
+                    <span>
+                        Categories
+                    </span>
+
+                </a>
+
+
+                <a asp-controller="Services"
+                   asp-action="Index"
+                   class="admin-nav-link">
+
+                    <span class="admin-nav-icon">
+                        <i class="bi bi-stars"></i>
+                    </span>
+
+                    <span>
+                        Services
+                    </span>
+
+                </a>
+
+
+                <a asp-controller="ServiceOptions"
+                   asp-action="Index"
+                   class="admin-nav-link">
+
+                    <span class="admin-nav-icon">
+                        <i class="bi bi-tags"></i>
+                    </span>
+
+                    <span>
+                        Service Options
+                    </span>
+
+                </a>
+
+
+                <a asp-controller="AddOns"
+                   asp-action="Index"
+                   class="admin-nav-link">
+
+                    <span class="admin-nav-icon">
+                        <i class="bi bi-plus-circle"></i>
+                    </span>
+
+                    <span>
+                        Add-ons
+                    </span>
+
+                </a>
+
+            </div>
+
+
+            <!-- Business -->
+
+            <div class="admin-nav-section">
+
+                <span class="admin-nav-title">
+                    BUSINESS
+                </span>
+
+
+                <a asp-controller="Ads"
+                   asp-action="Index"
+                   class="admin-nav-link">
+
+                    <span class="admin-nav-icon">
+                        <i class="bi bi-megaphone"></i>
+                    </span>
+
+                    <span>
+                        Ads Manager
+                    </span>
+
+                </a>
+
+            </div>
+
+
+        </nav>
+
+
+        <!-- Sidebar Bottom -->
+
+        <div class="admin-sidebar-bottom">
+
+
+            <a asp-controller="Home"
+               asp-action="Index"
+               class="admin-nav-link">
+
+                <span class="admin-nav-icon">
+                    <i class="bi bi-arrow-left"></i>
+                </span>
+
+                <span>
+                    Back to Website
+                </span>
+
+            </a>
+
+
+            <a asp-controller="Account"
+               asp-action="Logout"
+               class="admin-nav-link admin-logout">
+
+                <span class="admin-nav-icon">
+                    <i class="bi bi-box-arrow-right"></i>
+                </span>
+
+                <span>
+                    Logout
+                </span>
+
+            </a>
+
+
+        </div>
+
+
+    </aside>
+
+
+    <!-- =====================================================
+         MOBILE OVERLAY
+    ====================================================== -->
+
+    <div class="admin-overlay"
+         id="adminOverlay">
+    </div>
+
+
+    <!-- =====================================================
+         MAIN ADMIN AREA
+    ====================================================== -->
+
+    <div class="admin-main">
+
+
+        <!-- =================================================
+             TOP BAR
+        ================================================== -->
+
+        <header class="admin-topbar">
+
+
+            <div class="admin-topbar-left">
+
+                <!-- Mobile Menu -->
+
+                <button type="button"
+                        class="admin-menu-toggle"
+                        id="adminMenuToggle"
+                        aria-label="Open admin navigation">
+
+                    <i class="bi bi-list"></i>
+
+                </button>
+
+
+                <div>
+
+                    <span class="admin-page-label">
+                        MAS Cleaners
+                    </span>
+
+                    <span class="admin-page-divider">
+                        /
+                    </span>
+
+                    <span class="admin-page-current">
+                        @ViewData["Title"]
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="admin-topbar-right">
+
+
+                <!-- View Website -->
+
+                <a asp-controller="Home"
+                   asp-action="Index"
+                   class="admin-view-site">
+
+                    <i class="bi bi-globe2"></i>
+
+                    <span>
+                        View Website
+                    </span>
+
+                </a>
+
+
+                <!-- User -->
+
+                <div class="admin-user">
+
+                    <div class="admin-user-icon">
+
+                        <i class="bi bi-person"></i>
+
+                    </div>
+
+                    <div class="admin-user-details">
+
+                        <strong>
+                            Admin
+                        </strong>
+
+                        <span>
+                            Administrator
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </header>
+
+
+        <!-- =================================================
+             PAGE CONTENT
+        ================================================== -->
+
+        <main class="admin-content">
+
+            @RenderBody()
+
+        </main>
+
+
+        <!-- =================================================
+             FOOTER
+        ================================================== -->
+
+        <footer class="admin-footer">
+
+            <span>
+                &copy; @DateTime.Now.Year MAS Cleaners.
+                All rights reserved.
+            </span>
+
+            <span>
+                From Mess to Fresh.
+            </span>
+
+        </footer>
+
+
+    </div>
+
+
+    <!-- =====================================================
+         SCRIPTS
+    ====================================================== -->
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="~/js/site.js"
+            asp-append-version="true"></script>
+
+    <script src="~/js/admin.js"
+            asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+
+</html>

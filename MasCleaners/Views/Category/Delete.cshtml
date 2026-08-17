@@ -1,0 +1,217 @@
+﻿@model MasCleaners.Models.ServiceCategory
+
+@{
+    ViewData["Title"] = "Delete Category";
+    Layout = "_LayoutAdmin";
+}
+
+<!-- Local Styles -->
+<link rel="stylesheet" href="/css/category/delete.css" asp-append-version="true" />
+
+
+
+<div class="category-delete-page">
+
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
+
+    <div class="category-delete-header">
+
+        <div>
+            <span class="category-delete-eyebrow">
+                SERVICE CATALOGUE
+            </span>
+
+            <h1>
+                Delete Category
+            </h1>
+
+            <p>
+                Review the category before permanently removing it.
+            </p>
+        </div>
+
+        <a asp-action="Index"
+           class="category-back-button">
+
+            <i class="bi bi-arrow-left"></i>
+
+            Back to Categories
+
+        </a>
+
+    </div>
+
+
+    <!-- =====================================================
+         DELETE CARD
+    ====================================================== -->
+
+    <div class="category-delete-card">
+
+        <!-- Warning -->
+
+        <div class="category-delete-alert">
+
+            <div class="category-delete-alert-icon">
+
+                <i class="bi bi-exclamation-triangle"></i>
+
+            </div>
+
+            <div>
+
+                <strong>
+                    You're about to delete this category
+                </strong>
+
+                <p>
+                    This action cannot be undone. Make sure you are
+                    deleting the correct service category before continuing.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- Category -->
+
+        <div class="category-delete-main">
+
+            <div class="category-delete-category">
+
+                <div class="category-delete-icon">
+
+                    <i class="bi @(string.IsNullOrWhiteSpace(Model.Icon)
+                        ? "bi-grid"
+                        : Model.Icon)">
+                    </i>
+
+                </div>
+
+                <div class="category-delete-name">
+
+                    <span>
+                        CATEGORY
+                    </span>
+
+                    <h2>
+                        @Model.Name
+                    </h2>
+
+                    @if (!string.IsNullOrWhiteSpace(Model.Description))
+                    {
+                        <p>
+                            @Model.Description
+                        </p>
+                    }
+
+                </div>
+
+            </div>
+
+
+            <!-- Information -->
+
+            <div class="category-delete-info">
+
+                <div class="category-info-card">
+
+                    <div class="category-info-icon">
+                        <i class="bi bi-hash"></i>
+                    </div>
+
+                    <div>
+                        <span>Category ID</span>
+                        <strong>#@Model.Id</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="category-info-card">
+
+                    <div class="category-info-icon">
+                        <i class="bi bi-bar-chart"></i>
+                    </div>
+
+                    <div>
+                        <span>Display Order</span>
+                        <strong>@Model.DisplayOrder</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="category-info-card">
+
+                    <div class="category-info-icon">
+                        <i class="bi bi-circle-fill"></i>
+                    </div>
+
+                    <div>
+                        <span>Status</span>
+
+                        @if (Model.IsActive)
+                        {
+                            <strong class="category-active">
+                                Active
+                            </strong>
+                        }
+                        else
+                        {
+                            <strong class="category-inactive">
+                                Inactive
+                            </strong>
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Actions -->
+
+        <div class="category-delete-actions">
+
+            <a asp-action="Index"
+               class="category-cancel-button">
+
+                <i class="bi bi-x-lg"></i>
+
+                Cancel
+
+            </a>
+
+
+            <form asp-action="DeleteConfirmed"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+                <input type="hidden"
+                       name="id"
+                       value="@Model.Id" />
+
+                <button type="submit"
+                        class="category-confirm-delete">
+
+                    <i class="bi bi-trash3"></i>
+
+                    Delete Category
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

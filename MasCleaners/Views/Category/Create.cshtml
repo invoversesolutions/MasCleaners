@@ -1,0 +1,208 @@
+﻿@model MasCleaners.Models.ServiceCategory
+
+@{
+    ViewData["Title"] = "Create Category";
+    Layout = "_LayoutAdmin";
+}
+<!-- Local Styles -->
+<link rel="stylesheet" href="/css/category/create.css" asp-append-version="true" />
+<div class="category-page">
+
+    <!-- Page Header -->
+    <div class="category-page-header">
+
+        <div>
+            <div class="category-breadcrumb">
+                <a asp-controller="Category"
+                   asp-action="Index">
+                    Categories
+                </a>
+
+                <span>/</span>
+
+                <span>Create</span>
+            </div>
+
+            <h1>
+                Create Category
+            </h1>
+
+            <p>
+                Create a service category to organize your cleaning services.
+            </p>
+        </div>
+
+        <a asp-controller="Category"
+           asp-action="Index"
+           class="category-back-btn">
+
+            <i class="bi bi-arrow-left"></i>
+
+            Back to Categories
+
+        </a>
+
+    </div>
+
+
+    <!-- Form Card -->
+    <div class="category-form-card">
+
+        <div class="category-form-header">
+
+            <div class="category-form-icon">
+                <i class="bi bi-collection"></i>
+            </div>
+
+            <div>
+
+                <h3>
+                    Category Information
+                </h3>
+
+                <p>
+                    Enter the details for this service category.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <form asp-action="Create"
+              method="post"
+              class="category-form">
+
+            @Html.AntiForgeryToken()
+
+
+            <!-- Validation -->
+            <div asp-validation-summary="ModelOnly"
+                 class="category-validation">
+            </div>
+
+
+            <!-- Category Name -->
+            <div class="category-form-group">
+
+                <label asp-for="Name">
+                    Category Name
+                    <span>*</span>
+                </label>
+
+                <div class="category-input-wrapper">
+
+                    <i class="bi bi-tag"></i>
+
+                    <input asp-for="Name"
+                           class="category-input"
+                           placeholder="e.g. Residential Cleaning"
+                           autocomplete="off" />
+
+                </div>
+
+                <span asp-validation-for="Name"
+                      class="category-field-error">
+                </span>
+
+            </div>
+
+
+            <!-- Description -->
+            <div class="category-form-group">
+
+                <label asp-for="Description">
+                    Description
+                </label>
+
+                <div class="category-input-wrapper category-textarea-wrapper">
+
+                    <i class="bi bi-card-text"></i>
+
+                    <textarea asp-for="Description"
+                              class="category-input category-textarea"
+                              placeholder="Describe the services that belong to this category..."
+                              rows="5"></textarea>
+
+                </div>
+
+                <span asp-validation-for="Description"
+                      class="category-field-error">
+                </span>
+
+            </div>
+
+
+            <!-- Active -->
+            <div class="category-status-box">
+
+                <div class="category-status-content">
+
+                    <div class="category-status-icon">
+                        <i class="bi bi-check-circle"></i>
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Active Category
+                        </strong>
+
+                        <p>
+                            Allow this category to be used when creating services.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="form-check form-switch">
+
+                    <input asp-for="IsActive"
+                           class="form-check-input category-switch"
+                           type="checkbox" />
+
+                    <label asp-for="IsActive"
+                           class="form-check-label">
+                        Active
+                    </label>
+
+                </div>
+
+            </div>
+
+
+            <!-- Actions -->
+            <div class="category-form-actions">
+
+                <a asp-controller="Category"
+                   asp-action="Index"
+                   class="category-cancel-btn">
+
+                    Cancel
+
+                </a>
+
+                <button type="submit"
+                        class="category-submit-btn">
+
+                    <i class="bi bi-check-lg"></i>
+
+                    Create Category
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+}

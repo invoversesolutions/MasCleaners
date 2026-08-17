@@ -1,0 +1,303 @@
+﻿@model MasCleaners.Models.ServiceCategory
+
+@{
+    ViewData["Title"] = "Edit Category";
+    Layout = "_LayoutAdmin";
+}
+
+<!-- Local Styles -->
+<link rel="stylesheet" href="/css/category/edit.css" asp-append-version="true" />
+
+<div class="category-page">
+
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
+
+    <div class="category-page-header">
+
+        <div>
+            <div class="category-breadcrumb">
+                <a asp-controller="Category"
+                   asp-action="Index">
+                    Categories
+                </a>
+
+                <i class="bi bi-chevron-right"></i>
+
+                <span>Edit Category</span>
+            </div>
+
+            <h1>
+                Edit Category
+            </h1>
+
+            <p>
+                Update the details of this service category.
+            </p>
+        </div>
+
+        <div class="category-header-actions">
+
+            <a asp-controller="Category"
+               asp-action="Index"
+               class="category-back-button">
+
+                <i class="bi bi-arrow-left"></i>
+
+                Back to Categories
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         EDIT CARD
+    ====================================================== -->
+
+    <div class="category-form-card">
+
+        <div class="category-form-header">
+
+            <div class="category-form-icon">
+                <i class="bi bi-pencil-square"></i>
+            </div>
+
+            <div>
+                <h3>Edit Service Category</h3>
+
+                <p>
+                    Update the information below and save your changes.
+                </p>
+            </div>
+
+        </div>
+
+
+        <form asp-controller="Category"
+              asp-action="Edit"
+              method="post">
+
+            @Html.AntiForgeryToken()
+
+            <input type="hidden"
+                   asp-for="Id" />
+
+
+            <!-- Validation -->
+
+            <div asp-validation-summary="ModelOnly"
+                 class="category-validation">
+            </div>
+
+
+            <!-- =================================================
+                 CATEGORY NAME
+            ================================================== -->
+
+            <div class="category-form-group">
+
+                <label asp-for="Name">
+                    Category Name
+                    <span>*</span>
+                </label>
+
+                <div class="category-input-wrapper">
+
+                    <i class="bi bi-tag"></i>
+
+                    <input asp-for="Name"
+                           class="category-form-control"
+                           placeholder="e.g. Residential Cleaning" />
+
+                </div>
+
+                <span asp-validation-for="Name"
+                      class="category-field-error">
+                </span>
+
+            </div>
+
+
+            <!-- =================================================
+                 DESCRIPTION
+            ================================================== -->
+
+            <div class="category-form-group">
+
+                <label asp-for="Description">
+                    Description
+                    <span>*</span>
+                </label>
+
+                <div class="category-input-wrapper category-textarea-wrapper">
+
+                    <i class="bi bi-card-text"></i>
+
+                    <textarea asp-for="Description"
+                              class="category-form-control category-textarea"
+                              rows="5"
+                              placeholder="Describe the services included in this category..."></textarea>
+
+                </div>
+
+                <span asp-validation-for="Description"
+                      class="category-field-error">
+                </span>
+
+            </div>
+
+
+            <!-- =================================================
+                 ICON
+            ================================================== -->
+
+            <div class="category-form-group">
+
+                <label asp-for="Icon">
+                    Bootstrap Icon
+                </label>
+
+                <div class="category-input-wrapper">
+
+                    <i class="bi bi-image"></i>
+
+                    <input asp-for="Icon"
+                           class="category-form-control"
+                           placeholder="e.g. bi bi-house-heart" />
+
+                </div>
+
+                <small class="category-help">
+                    Enter the Bootstrap Icons class for this category.
+                    Example:
+                    <strong>bi bi-house-heart</strong>
+                </small>
+
+                <span asp-validation-for="Icon"
+                      class="category-field-error">
+                </span>
+
+            </div>
+
+
+            <!-- =================================================
+                 DISPLAY ORDER
+            ================================================== -->
+
+            <div class="category-form-group">
+
+                <label asp-for="DisplayOrder">
+                    Display Order
+                </label>
+
+                <div class="category-input-wrapper">
+
+                    <i class="bi bi-list-ol"></i>
+
+                    <input asp-for="DisplayOrder"
+                           type="number"
+                           min="0"
+                           class="category-form-control"
+                           placeholder="0" />
+
+                </div>
+
+                <small class="category-help">
+                    Lower numbers will appear first.
+                </small>
+
+                <span asp-validation-for="DisplayOrder"
+                      class="category-field-error">
+                </span>
+
+            </div>
+
+
+            <!-- =================================================
+                 ACTIVE STATUS
+            ================================================== -->
+
+            <div class="category-status-box">
+
+                <div class="category-status-info">
+
+                    <div class="category-status-icon">
+                        <i class="bi bi-toggle-on"></i>
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Category Status
+                        </strong>
+
+                        <span>
+                            Enable or disable this category.
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="category-switch">
+
+                    <input asp-for="IsActive"
+                           class="category-switch-input"
+                           type="checkbox"
+                           id="IsActive" />
+
+                    <label for="IsActive"
+                           class="category-switch-label">
+
+                        <span></span>
+
+                    </label>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 BUTTONS
+            ================================================== -->
+
+            <div class="category-form-actions">
+
+                <a asp-controller="Category"
+                   asp-action="Index"
+                   class="category-cancel-button">
+
+                    <i class="bi bi-x-lg"></i>
+
+                    Cancel
+
+                </a>
+
+                <button type="submit"
+                        class="category-save-button">
+
+                    <i class="bi bi-check-lg"></i>
+
+                    Save Changes
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+}

@@ -1,0 +1,397 @@
+﻿/* =========================================================
+   MAS CLEANERS
+   CATEGORY DELETE PAGE
+   ========================================================= */
+
+.category-delete-page {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   PAGE HEADER
+   ========================================================= */
+
+.category-delete-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 25px;
+    margin-bottom: 25px;
+}
+
+.category-delete-eyebrow {
+    display: block;
+    margin-bottom: 7px;
+    color: #0f9d94;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.4px;
+}
+
+.category-delete-header h1 {
+    margin: 0;
+    color: #092b4c;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.category-delete-header p {
+    margin: 7px 0 0;
+    color: #7d8da1;
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   BACK BUTTON
+   ========================================================= */
+
+.category-back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 42px;
+    padding: 10px 16px;
+    border: 1px solid #e1e6eb;
+    border-radius: 10px;
+    background: #ffffff;
+    color: #526b88;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: .25s ease;
+}
+
+    .category-back-button:hover {
+        color: #0f9d94;
+        border-color: #cfe9e6;
+        background: #f8fcfb;
+    }
+
+
+/* =========================================================
+   DELETE CARD
+   ========================================================= */
+
+.category-delete-card {
+    overflow: hidden;
+    background: #ffffff;
+    border: 1px solid #e1e6eb;
+    border-radius: 18px;
+    box-shadow: 0 10px 35px rgba(9, 43, 76, .06);
+}
+
+
+/* =========================================================
+   WARNING ALERT
+   ========================================================= */
+
+.category-delete-alert {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 22px 28px;
+    background: #fff8f7;
+    border-bottom: 1px solid #f3e1df;
+}
+
+.category-delete-alert-icon {
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: #fff0ee;
+    color: #d64550;
+    font-size: 18px;
+}
+
+.category-delete-alert strong {
+    display: block;
+    margin: 1px 0 5px;
+    color: #092b4c;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.category-delete-alert p {
+    max-width: 700px;
+    margin: 0;
+    color: #7d8da1;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   MAIN CONTENT
+   ========================================================= */
+
+.category-delete-main {
+    padding: 30px;
+}
+
+
+/* =========================================================
+   CATEGORY PREVIEW
+   ========================================================= */
+
+.category-delete-category {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 22px;
+    border: 1px solid #e8edef;
+    border-radius: 15px;
+    background: #fbfcfd;
+}
+
+.category-delete-icon {
+    width: 70px;
+    height: 70px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 17px;
+    background: #e8f8f6;
+    color: #0f9d94;
+    font-size: 28px;
+}
+
+.category-delete-name span {
+    display: block;
+    margin-bottom: 5px;
+    color: #9aa7b4;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+}
+
+.category-delete-name h2 {
+    margin: 0;
+    color: #092b4c;
+    font-size: 21px;
+    font-weight: 700;
+}
+
+.category-delete-name p {
+    max-width: 700px;
+    margin: 6px 0 0;
+    color: #7d8da1;
+    font-size: 13px;
+    line-height: 1.55;
+}
+
+
+/* =========================================================
+   INFORMATION CARDS
+   ========================================================= */
+
+.category-delete-info {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 18px;
+}
+
+.category-info-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    border: 1px solid #e8edef;
+    border-radius: 13px;
+    background: #ffffff;
+}
+
+.category-info-icon {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: #f3f7f9;
+    color: #0f9d94;
+    font-size: 14px;
+}
+
+.category-info-card span {
+    display: block;
+    margin-bottom: 3px;
+    color: #8a98a7;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.category-info-card strong {
+    color: #092b4c;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.category-info-card .category-active {
+    color: #0f9d94;
+}
+
+.category-info-card .category-inactive {
+    color: #d64550;
+}
+
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
+
+.category-delete-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 20px 30px;
+    background: #fbfcfd;
+    border-top: 1px solid #edf0f3;
+}
+
+    .category-delete-actions form {
+        margin: 0;
+    }
+
+
+/* =========================================================
+   CANCEL
+   ========================================================= */
+
+.category-cancel-button,
+.category-confirm-delete {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 43px;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    transition: .25s ease;
+}
+
+.category-cancel-button {
+    border: 1px solid #e1e6eb;
+    background: #ffffff;
+    color: #63758a;
+    text-decoration: none;
+}
+
+    .category-cancel-button:hover {
+        color: #092b4c;
+        background: #f5f7f9;
+    }
+
+
+/* =========================================================
+   DELETE BUTTON
+   ========================================================= */
+
+.category-confirm-delete {
+    border: 1px solid #d64550;
+    background: #d64550;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+    .category-confirm-delete:hover {
+        border-color: #bd3540;
+        background: #bd3540;
+        transform: translateY(-1px);
+        box-shadow: 0 5px 15px rgba(214, 69, 80, .18);
+    }
+
+    .category-confirm-delete:active {
+        transform: translateY(0);
+    }
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+    .category-delete-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+        .category-delete-header h1 {
+            font-size: 24px;
+        }
+
+    .category-delete-main {
+        padding: 22px;
+    }
+
+    .category-delete-info {
+        grid-template-columns: 1fr;
+    }
+
+    .category-delete-actions {
+        padding: 18px 22px;
+    }
+}
+
+
+@media (max-width: 576px) {
+
+    .category-delete-header {
+        margin-bottom: 20px;
+    }
+
+    .category-back-button {
+        width: 100%;
+    }
+
+    .category-delete-alert {
+        padding: 18px;
+    }
+
+    .category-delete-main {
+        padding: 18px;
+    }
+
+    .category-delete-category {
+        align-items: flex-start;
+        padding: 17px;
+    }
+
+    .category-delete-icon {
+        width: 55px;
+        height: 55px;
+        font-size: 22px;
+    }
+
+    .category-delete-name h2 {
+        font-size: 18px;
+    }
+
+    .category-delete-actions {
+        flex-direction: column-reverse;
+        align-items: stretch;
+    }
+
+        .category-delete-actions form {
+            width: 100%;
+        }
+
+    .category-cancel-button,
+    .category-confirm-delete {
+        width: 100%;
+    }
+}
