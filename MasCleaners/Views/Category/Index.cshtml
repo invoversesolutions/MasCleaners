@@ -327,7 +327,16 @@
                                 <td>
 
                                     <div class="category-actions">
+                                        <!-- VIEW -->
 
+                                        <a asp-action="Details"
+                                           asp-route-id="@category.Id"
+                                           class="category-action view"
+                                           title="View service">
+
+                                            <i class="bi bi-eye"></i>
+
+                                        </a>
                                         <a asp-action="Edit"
                                            asp-route-id="@category.Id"
                                            class="category-action edit"

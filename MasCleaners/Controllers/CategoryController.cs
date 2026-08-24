@@ -326,5 +326,46 @@ namespace MasCleaners.Controllers
                 return RedirectToAction(nameof(Index));
             }
         }
+
+        // =========================================================
+        // DETAILS
+        // =========================================================
+
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            try
+            {
+                _logger.LogInformation(
+                    "Loading service category {CategoryId} for viewing.",
+                    id);
+
+                var category =
+                    await _unitOfWork.ServiceCategory.GetAsync(p => p.Id == id);
+
+                if (category == null)
+                {
+                    _logger.LogWarning(
+                        "Service category {CategoryId} was not found.",
+                        id);
+
+                    return NotFound();
+                }
+
+                return View(category);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(
+                    ex,
+                    "Error loading service category {CategoryId}.",
+                    id);
+
+                TempData["ErrorMessage"] =
+                    "Unable to load the service.";
+
+                return RedirectToAction(nameof(Index));
+            }
+        }
     }
 }

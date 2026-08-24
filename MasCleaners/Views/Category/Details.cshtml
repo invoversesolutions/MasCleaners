@@ -1,0 +1,395 @@
+﻿@model MasCleaners.Models.ServiceCategory
+
+@{
+    ViewData["Title"] = "Service Details";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/category/details.css"
+          asp-append-version="true" />
+}
+
+<div class="category-details-page">
+
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
+
+    <div class="category-details-header">
+
+        <div>
+
+            <!-- BREADCRUMB -->
+
+            <div class="category-breadcrumb">
+
+                <a asp-controller="Category"
+                   asp-action="Index">
+
+                    Services
+
+                </a>
+
+                <i class="bi bi-chevron-right"></i>
+
+                <span>
+                    Service Details
+                </span>
+
+            </div>
+
+
+            <h1>
+                Service Details
+            </h1>
+
+            <p>
+                View the information and configuration of this service.
+            </p>
+
+        </div>
+
+
+        <!-- HEADER ACTIONS -->
+
+        <div class="category-details-header-actions">
+
+            <a asp-action="Index"
+               class="category-details-back">
+
+                <i class="bi bi-arrow-left"></i>
+
+                Back to Services
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         DETAILS CARD
+    ====================================================== -->
+
+    <div class="category-details-card">
+
+
+        <!-- =================================================
+             SERVICE HEADER
+        ================================================== -->
+
+        <div class="category-details-service">
+
+            <div class="category-details-icon">
+
+                <i class="bi @(string.IsNullOrWhiteSpace(Model.Icon)
+                                                       ? "bi-grid"
+                                                       : Model.Icon)">
+                </i>
+
+            </div>
+
+
+            <div class="category-details-title">
+
+                <span>
+                    SERVICE
+                </span>
+
+                <h2>
+                    @Model.Name
+                </h2>
+
+                @if (!string.IsNullOrWhiteSpace(Model.Description))
+                {
+                    <p>
+                        @Model.Description
+                    </p>
+                }
+
+            </div>
+
+
+            <!-- STATUS -->
+
+            <div class="category-details-status">
+
+                @if (Model.IsActive)
+                {
+                    <span class="details-status active">
+
+                        <i class="bi bi-check-circle-fill"></i>
+
+                        Active
+
+                    </span>
+                }
+                else
+                {
+                    <span class="details-status inactive">
+
+                        <i class="bi bi-x-circle-fill"></i>
+
+                        Inactive
+
+                    </span>
+                }
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             INFORMATION
+        ================================================== -->
+
+        <div class="category-details-section">
+
+            <div class="category-details-section-header">
+
+                <div>
+
+                    <span>
+                        INFORMATION
+                    </span>
+
+                    <h3>
+                        Service Configuration
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <div class="category-details-grid">
+
+
+                <!-- ID -->
+
+                <div class="category-detail-item">
+
+                    <div class="category-detail-icon">
+                        <i class="bi bi-hash"></i>
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Service ID
+                        </span>
+
+                        <strong>
+                            #@Model.Id
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- DISPLAY ORDER -->
+
+                <div class="category-detail-item">
+
+                    <div class="category-detail-icon">
+                        <i class="bi bi-sort-numeric-down"></i>
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Display Order
+                        </span>
+
+                        <strong>
+                            @Model.DisplayOrder
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                <div class="category-detail-item">
+
+                    <div class="category-detail-icon">
+                        <i class="bi bi-toggle-on"></i>
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Status
+                        </span>
+
+                        @if (Model.IsActive)
+                        {
+                            <strong class="detail-active">
+                                Active
+                            </strong>
+                        }
+                        else
+                        {
+                            <strong class="detail-inactive">
+                                Inactive
+                            </strong>
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <!-- ICON -->
+
+                <div class="category-detail-item">
+
+                    <div class="category-detail-icon">
+                        <i class="bi bi-palette"></i>
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Icon
+                        </span>
+
+                        <strong>
+                            @(string.IsNullOrWhiteSpace(Model.Icon)
+                                ? "Default"
+                                : Model.Icon)
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             DESCRIPTION
+        ================================================== -->
+
+        <div class="category-details-description">
+
+            <div class="category-description-icon">
+
+                <i class="bi bi-text-paragraph"></i>
+
+            </div>
+
+            <div>
+
+                <span>
+                    DESCRIPTION
+                </span>
+
+                @if (!string.IsNullOrWhiteSpace(Model.Description))
+                {
+                    <p>
+                        @Model.Description
+                    </p>
+                }
+                else
+                {
+                    <p class="no-description">
+                        No description has been added for this service.
+                    </p>
+                }
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             SERVICE OPTIONS
+        ================================================== -->
+
+        <div class="category-options-panel">
+
+            <div class="category-options-info">
+
+                <div class="category-options-icon">
+
+                    <i class="bi bi-sliders"></i>
+
+                </div>
+
+                <div>
+
+                    <span>
+                        SERVICE OPTIONS
+                    </span>
+
+                    <h3>
+                        Configure Service Options
+                    </h3>
+
+                    <p>
+                        Add and manage the options available for this service,
+                        including pricing and additional service configurations.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <a asp-controller="ServiceOption"
+               asp-action="Index"
+               asp-route-serviceCategoryId="@Model.Id"
+               class="category-options-button">
+
+                <i class="bi bi-sliders"></i>
+
+                Manage Service Options
+
+                <i class="bi bi-arrow-right"></i>
+
+            </a>
+
+        </div>
+
+
+        <!-- =================================================
+             ACTIONS
+        ================================================== -->
+
+        <div class="category-details-actions">
+
+            <a asp-action="Index"
+               class="category-details-cancel">
+
+                <i class="bi bi-arrow-left"></i>
+
+                Back
+
+            </a>
+
+
+            <a asp-action="Edit"
+               asp-route-id="@Model.Id"
+               class="category-details-edit">
+
+                <i class="bi bi-pencil"></i>
+
+                Edit Service
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
