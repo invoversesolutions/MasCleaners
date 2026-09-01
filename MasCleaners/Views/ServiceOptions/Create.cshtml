@@ -1,0 +1,353 @@
+﻿@model MasCleaners.Models.ServiceOption
+
+@{
+    ViewData["Title"] = "Create Service Option";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/serviceoptions/create.css"
+          asp-append-version="true" />
+}
+
+<div class="service-option-page">
+
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
+
+    <div class="service-option-page-header">
+
+        <div>
+
+            <div class="service-option-breadcrumb">
+
+                <a asp-controller="ServiceOptions"
+                   asp-action="Index">
+
+                    Service Options
+
+                </a>
+
+                <i class="bi bi-chevron-right"></i>
+
+                <span>Create</span>
+
+            </div>
+
+            <h1>
+                Create Service Option
+            </h1>
+
+            <p>
+                Add a new option to your service catalogue.
+            </p>
+
+        </div>
+
+
+        <div class="service-option-header-actions">
+
+            <a asp-controller="ServiceOptions"
+               asp-action="Index"
+               class="service-option-back-button">
+
+                <i class="bi bi-arrow-left"></i>
+
+                Back to Service Options
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         FORM CARD
+    ====================================================== -->
+
+    <div class="service-option-form-card">
+
+
+        <!-- FORM HEADER -->
+
+        <div class="service-option-form-header">
+
+            <div class="service-option-form-icon">
+
+                <i class="bi bi-sliders"></i>
+
+            </div>
+
+            <div>
+
+                <h3>
+                    Service Option Information
+                </h3>
+
+                <p>
+                    Configure the service, option name and fixed price.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             FORM
+        ================================================== -->
+
+        <form asp-controller="ServiceOptions"
+              asp-action="Create"
+              method="post">
+            <input asp-for="ServiceCategoryId" type="hidden" />
+
+            @Html.AntiForgeryToken()
+
+
+            <!-- VALIDATION -->
+
+            <div asp-validation-summary="ModelOnly"
+                 class="service-option-validation">
+            </div>
+
+
+        
+
+
+            <!-- =================================================
+                 OPTION NAME
+            ================================================== -->
+
+            <div class="service-option-form-group">
+
+                <label asp-for="Name">
+
+                    Option Name
+
+                    <span>*</span>
+
+                </label>
+
+                <div class="service-option-input-wrapper">
+
+                    <i class="bi bi-tag"></i>
+
+                    <input asp-for="Name"
+                           class="service-option-form-control"
+                           placeholder="e.g. Hatchback / Sedan" />
+
+                </div>
+
+                <small class="service-option-help">
+                    Give this option a clear name that customers can understand.
+                </small>
+
+                <span asp-validation-for="Name"
+                      class="service-option-field-error">
+                </span>
+
+            </div>
+
+
+            <!-- =================================================
+                 DESCRIPTION
+            ================================================== -->
+
+            <div class="service-option-form-group">
+
+                <label asp-for="Description">
+
+                    Description
+
+                </label>
+
+                <div class="service-option-input-wrapper service-option-textarea-wrapper">
+
+                    <i class="bi bi-card-text"></i>
+
+                    <textarea asp-for="Description"
+                              class="service-option-form-control service-option-textarea"
+                              rows="5"
+                              placeholder="Describe what is included in this service option..."></textarea>
+
+                </div>
+
+                <small class="service-option-help">
+                    Optional. Explain what the customer receives with this option.
+                </small>
+
+                <span asp-validation-for="Description"
+                      class="service-option-field-error">
+                </span>
+
+            </div>
+
+
+            <!-- =================================================
+                 PRICE
+            ================================================== -->
+
+            <div class="service-option-form-group">
+
+                <label asp-for="Price">
+
+                    Fixed Price
+
+                    <span>*</span>
+
+                </label>
+
+                <div class="service-option-price-wrapper">
+
+                    <span class="service-option-currency">
+                        R
+                    </span>
+
+                    <input asp-for="Price"
+                           type="number"
+                           step="0.01"
+                           min="0"
+                           class="service-option-form-control service-option-price-input"
+                           placeholder="120.00" />
+
+                </div>
+
+                <small class="service-option-help">
+                    Enter the fixed price that will be charged for this option.
+                </small>
+
+                <span asp-validation-for="Price"
+                      class="service-option-field-error">
+                </span>
+
+            </div>
+
+
+            <!-- =================================================
+                 DISPLAY ORDER
+            ================================================== -->
+
+            <div class="service-option-form-group">
+
+                <label asp-for="DisplayOrder">
+
+                    Display Order
+
+                </label>
+
+                <div class="service-option-input-wrapper">
+
+                    <i class="bi bi-list-ol"></i>
+
+                    <input asp-for="DisplayOrder"
+                           type="number"
+                           min="0"
+                           class="service-option-form-control"
+                           placeholder="0" />
+
+                </div>
+
+                <small class="service-option-help">
+                    Lower numbers will appear first.
+                </small>
+
+                <span asp-validation-for="DisplayOrder"
+                      class="service-option-field-error">
+                </span>
+
+            </div>
+
+
+            <!-- =================================================
+                 STATUS
+            ================================================== -->
+
+            <div class="service-option-status-box">
+
+                <div class="service-option-status-info">
+
+                    <div class="service-option-status-icon">
+
+                        <i class="bi bi-toggle-on"></i>
+
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Service Option Status
+                        </strong>
+
+                        <span>
+                            Enable or disable this option.
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="service-option-switch">
+
+                    <input asp-for="IsActive"
+                           class="service-option-switch-input"
+                           type="checkbox"
+                           id="IsActive"
+                           checked />
+
+                    <label for="IsActive"
+                           class="service-option-switch-label">
+
+                        <span></span>
+
+                    </label>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 ACTIONS
+            ================================================== -->
+
+            <div class="service-option-form-actions">
+
+                <a asp-controller="ServiceOptions"
+                   asp-action="Index"
+                   class="service-option-cancel-button">
+
+                    <i class="bi bi-x-lg"></i>
+
+                    Cancel
+
+                </a>
+
+
+                <button type="submit"
+                        class="service-option-save-button">
+
+                    <i class="bi bi-check-lg"></i>
+
+                    Create Service Option
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+}

@@ -15,7 +15,7 @@
         public int DisplayOrder { get; set; }
         public DateTime CreatedData { get; set; } = DateTime.Now;
 
-        public ICollection<Service> Services { get; set; }
-            = new List<Service>();
+        public ICollection<ServiceOption> ServiceOptions { get; set; }
+            = new List<ServiceOption>();
     }
 }

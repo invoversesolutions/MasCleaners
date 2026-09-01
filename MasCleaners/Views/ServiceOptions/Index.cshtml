@@ -1,0 +1,409 @@
+﻿@model IEnumerable<MasCleaners.Models.ServiceOption>
+
+@{
+    ViewData["Title"] = "Service Options";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/serviceoptions/index.css"
+          asp-append-version="true" />
+}
+
+<div class="service-options-page">
+
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
+
+    <div class="service-options-header">
+
+        <div>
+
+            <div class="service-options-breadcrumb">
+
+                <a asp-controller="Category"
+                   asp-action="Index">
+
+                    Services
+
+                </a>
+
+                <i class="bi bi-chevron-right"></i>
+
+                <span>Service Options</span>
+
+            </div>
+
+            <h1>
+                Service Options
+            </h1>
+
+            <p>
+                Manage the options, variations and additional pricing
+                available for your cleaning services.
+            </p>
+
+        </div>
+
+
+        <div class="service-options-header-actions">
+
+            <a asp-controller="Category"
+               asp-action="Index"
+               class="service-options-back">
+
+                <i class="bi bi-arrow-left"></i>
+
+                Back to Services
+
+            </a>
+
+            <a asp-action="Create"
+               asp-route-serviceCategoryId="@ViewBag.ServiceCategoryId"
+               class="service-options-create">
+
+                <i class="bi bi-plus-lg"></i>
+
+                Add Service Option
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         ALERTS
+    ====================================================== -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="service-options-alert success">
+
+            <i class="bi bi-check-circle-fill"></i>
+
+            <span>
+                @TempData["SuccessMessage"]
+            </span>
+
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="service-options-alert error">
+
+            <i class="bi bi-exclamation-circle-fill"></i>
+
+            <span>
+                @TempData["ErrorMessage"]
+            </span>
+
+        </div>
+    }
+
+
+    <!-- =====================================================
+         MAIN CARD
+    ====================================================== -->
+
+    <div class="service-options-card">
+
+        <!-- CARD HEADER -->
+
+        <div class="service-options-card-header">
+
+            <div>
+
+                <span class="service-options-eyebrow">
+                    SERVICE CATALOGUE
+                </span>
+
+                <h3>
+                    Available Service Options
+                </h3>
+
+            </div>
+
+            <div class="service-options-count">
+
+                <span>
+                    @Model.Count()
+                </span>
+
+                Options
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             TABLE
+        ================================================== -->
+        @if (Model.Any())
+        {
+            <div class="service-options-table-wrapper">
+
+                <table class="service-options-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                #
+                            </th>
+
+                            <th>
+                                Service
+                            </th>
+
+                            <th>
+                                Option
+                            </th>
+
+                            <th>
+                                Description
+                            </th>
+
+                            <th>
+                                Price
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Order
+                            </th>
+
+                            <th class="text-end">
+                                Actions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var option in Model.OrderBy(x => x.ServiceCategoryId)
+                                                   .ThenBy(x => x.DisplayOrder))
+                        {
+                            <tr>
+
+                                <!-- ID -->
+
+                                <td>
+
+                                    <span class="service-option-id">
+                                        #@option.Id
+                                    </span>
+
+                                </td>
+
+
+                                <!-- SERVICE -->
+
+                                <td>
+
+                                    <div class="service-option-service">
+
+                                        <div class="service-option-service-icon">
+
+                                            <i class="bi @(string.IsNullOrWhiteSpace(option.ServiceCategory?.Icon)
+                                                                                               ? "bi-grid"
+                                                                                               : option.ServiceCategory.Icon)">
+                                            </i>
+
+                                        </div>
+
+                                        <div>
+
+                                            <strong>
+                                                @(option.ServiceCategory?.Name ?? "Unassigned")
+                                            </strong>
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- OPTION -->
+
+                                <td>
+
+                                    <div class="service-option-name">
+
+                                        <strong>
+                                            @option.Name
+                                        </strong>
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- DESCRIPTION -->
+
+                                <td>
+
+                                    <div class="service-option-description">
+
+                                        @(string.IsNullOrWhiteSpace(option.Description)
+                                            ? "No description"
+                                            : option.Description)
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- PRICE -->
+
+                                <td>
+
+                                    <strong class="service-option-price">
+
+                                        R @option.Price.ToString("N2")
+
+                                    </strong>
+
+                                </td>
+
+
+                                <!-- STATUS -->
+
+                                <td>
+
+                                    @if (option.IsActive)
+                                    {
+                                        <span class="service-option-status active">
+
+                                            <i class="bi bi-check-circle-fill"></i>
+
+                                            Active
+
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="service-option-status inactive">
+
+                                            <i class="bi bi-x-circle-fill"></i>
+
+                                            Inactive
+
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <!-- DISPLAY ORDER -->
+
+                                <td>
+
+                                    <span class="service-option-order">
+
+                                        @option.DisplayOrder
+
+                                    </span>
+
+                                </td>
+
+
+                                <!-- ACTIONS -->
+
+                                <td>
+
+                                    <div class="service-option-actions">
+
+                                        <a asp-action="Details"
+                                           asp-route-id="@option.Id"
+                                           class="service-option-action view"
+                                           title="View option">
+
+                                            <i class="bi bi-eye"></i>
+
+                                        </a>
+
+
+                                        <a asp-action="Edit"
+                                           asp-route-id="@option.Id"
+                                           class="service-option-action edit"
+                                           title="Edit option">
+
+                                            <i class="bi bi-pencil"></i>
+
+                                        </a>
+
+
+                                        <a asp-action="Delete"
+                                           asp-route-id="@option.Id"
+                                           class="service-option-action delete"
+                                           title="Delete option">
+
+                                            <i class="bi bi-trash"></i>
+
+                                        </a>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+        else
+        {
+            <!-- =================================================
+                 EMPTY STATE
+            ================================================== -->
+
+            <div class="service-options-empty">
+
+                <div class="service-options-empty-icon">
+
+                    <i class="bi bi-sliders"></i>
+
+                </div>
+
+                <h3>
+                    No Service Options
+                </h3>
+
+                <p>
+                    You have not added any service options yet.
+                    Create your first option to start configuring
+                    your service catalogue.
+                </p>
+
+                <a asp-action="Create"
+                   asp-route-serviceCategoryId="@ViewBag.ServiceCategoryId"
+                   class="service-options-create">
+
+                    <i class="bi bi-plus-lg"></i>
+
+                    Add Service Option
+
+                </a>
+
+            </div>
+        }
+
+    </div>
+
+</div>
