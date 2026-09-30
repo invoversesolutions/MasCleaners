@@ -476,3 +476,48 @@
         width: 100%;
     }
 }
+/* =========================================================
+   SERVICE IMAGE PREVIEW
+   ========================================================= */
+
+.category-image-preview {
+    margin-top: -5px;
+    margin-bottom: 25px;
+    padding: 18px;
+    border: 1px solid #e1e6eb;
+    border-radius: 13px;
+    background: #f9fbfc;
+}
+
+.category-image-preview-header {
+    margin-bottom: 15px;
+}
+
+    .category-image-preview-header strong {
+        display: block;
+        color: #092b4c;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .category-image-preview-header span {
+        display: block;
+        margin-top: 4px;
+        color: #7d8da1;
+        font-size: 11px;
+    }
+
+.category-image-preview-container {
+    width: 100%;
+    height: 190px;
+    overflow: hidden;
+    border-radius: 11px;
+    background: #edf2f5;
+}
+
+.category-preview-image {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+}

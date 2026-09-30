@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<MasCleaners.ViewModels.HomeServiceCategoryVM>
+
+@{
     ViewData["Title"] = "Home";
 }
 
@@ -283,7 +285,6 @@
 
 </section>
 
-
 <!-- =========================================================
      SERVICES
 ========================================================== -->
@@ -299,221 +300,141 @@
             </h2>
 
             <p>
-                13 professional cleaning options
-                — pay securely online when you book.
+                Professional cleaning services tailored to your needs.
+                Choose a service category and explore the available options.
             </p>
 
         </div>
 
 
-        <div class="row g-4" id="servicesGrid">
+        <!-- =====================================================
+             SERVICE GRID
+        ====================================================== -->
 
+        <div class="row g-4"
+             id="servicesGrid">
 
-            <!-- SERVICE 1 -->
+            @foreach (var service in Model)
+            {
+                <div class="col-lg-4 col-md-6 service-item"
+                     data-search="@service.Name @service.Description">
 
-            <div class="col-lg-4 col-md-6 service-item"
-                 data-search="residential home house cleaning kitchen bathroom bedroom living">
+                    <article class="service-card">
 
-                <article class="service-card">
+                        <!-- =================================================
+                             IMAGE
+                        ================================================== -->
 
-                    <div class="service-image-wrapper">
+                        <div class="service-image-wrapper">
 
-                        <img src="~/images/residential.jpg"
-                             alt="Residential Cleaning"
-                             class="service-image" />
-
-                        <span class="service-popular">
-                            Most Popular
-                        </span>
-
-                    </div>
-
-                    <div class="service-body">
-
-                        <div class="service-title-row">
-
-                            <i class="bi bi-house-door service-icon"></i>
-
-                            <h3>
-                                Residential Cleaning
-                            </h3>
+                            <img src="@service.ImageUrl"
+                                 alt="@service.Name"
+                                 class="service-image" />
 
                         </div>
 
-                        <p>
-                            Complete home cleaning —
-                            kitchens, bathrooms,
-                            bedrooms, living areas.
-                        </p>
 
-                        <div class="service-divider"></div>
+                        <!-- =================================================
+                             BODY
+                        ================================================== -->
 
-                        <div class="service-footer">
+                        <div class="service-body">
 
-                            <div class="service-price">
 
-                                <strong>
-                                    From R89
-                                </strong>
+                            <!-- TITLE -->
 
-                                <span>
-                                    2–4 hrs
-                                </span>
+                            <div class="service-title-row">
+
+                                <i class="bi @(string.IsNullOrWhiteSpace(service.Icon)
+                                    ? "bi-stars"
+                                    : service.Icon) service-icon">
+                                </i>
+
+                                <h3>
+                                    @service.Name
+                                </h3>
 
                             </div>
 
-                            <a asp-controller="Booking"
-                               asp-action="Booking"
-                               class="service-book-button">
 
-                                Book Now
+                            <!-- DESCRIPTION -->
 
-                            </a>
-
-                        </div>
-
-                    </div>
-
-                </article>
-
-            </div>
+                            @if (!string.IsNullOrWhiteSpace(service.Description))
+                            {
+                                <p>
+                                    @service.Description
+                                </p>
+                            }
 
 
-            <!-- SERVICE 2 -->
-
-            <div class="col-lg-4 col-md-6 service-item"
-                 data-search="deep clean scrub appliances grout thorough">
-
-                <article class="service-card">
-
-                    <div class="service-image-wrapper">
-
-                        <img src="~/images/deep-clean.jpg"
-                             alt="Deep Cleaning"
-                             class="service-image" />
-
-                    </div>
-
-                    <div class="service-body">
-
-                        <div class="service-title-row">
-
-                            <i class="bi bi-stars service-icon"></i>
-
-                            <h3>
-                                Deep Clean
-                            </h3>
-
-                        </div>
-
-                        <p>
-                            Thorough scrub of every surface —
-                            baseboards, inside appliances,
-                            grout lines.
-                        </p>
-
-                        <div class="service-divider"></div>
-
-                        <div class="service-footer">
-
-                            <div class="service-price">
-
-                                <strong>
-                                    From R149
-                                </strong>
-
-                                <span>
-                                    4–6 hrs
-                                </span>
-
-                            </div>
-
-                            <a asp-controller="Booking"
-                               asp-action="Booking"
-                               class="service-book-button">
-
-                                Book Now
-
-                            </a>
-
-                        </div>
-
-                    </div>
-
-                </article>
-
-            </div>
+                            <div class="service-divider"></div>
 
 
-            <!-- SERVICE 3 -->
+                            <!-- =================================================
+                                 FOOTER
+                            ================================================== -->
 
-            <div class="col-lg-4 col-md-6 service-item"
-                 data-search="commercial office retail business daily weekly monthly">
+                            <div class="service-footer">
 
-                <article class="service-card">
 
-                    <div class="service-image-wrapper">
+                                <!-- PRICE -->
 
-                        <img src="~/images/commercial.jpg"
-                             alt="Commercial and Office Cleaning"
-                             class="service-image" />
+                                <div class="service-price">
 
-                    </div>
+                                    @if (service.StartingPrice > 0)
+                                    {
+                                        <strong>
+                                            From R @service.StartingPrice.ToString("N0")
+                                        </strong>
+                                    }
+                                    else
+                                    {
+                                        <strong>
+                                            Price on Request
+                                        </strong>
+                                    }
 
-                    <div class="service-body">
+                                    <span>
 
-                        <div class="service-title-row">
+                                        @service.ServiceOptionCount
 
-                            <i class="bi bi-building service-icon"></i>
+                                        @(service.ServiceOptionCount == 1
+                                            ? "option"
+                                            : "options")
 
-                            <h3>
-                                Commercial / Office
-                            </h3>
+                                    </span>
 
-                        </div>
+                                </div>
 
-                        <p>
-                            Scheduled office and retail cleaning —
-                            daily, weekly, or monthly contracts.
-                        </p>
 
-                        <div class="service-divider"></div>
+                                <!-- VIEW OPTIONS -->
 
-                        <div class="service-footer">
+                                <a asp-controller="Home"
+                                   asp-action="Options"
+                                   asp-route-serviceCategoryId="@service.Id"
+                                   class="service-book-button">
 
-                            <div class="service-price">
+                                    View Options
 
-                                <strong>
-                                    From R199
-                                </strong>
+                                    <i class="bi bi-arrow-right"></i>
 
-                                <span>
-                                    Custom
-                                </span>
+                                </a>
 
                             </div>
 
-                            <a asp-controller="Booking"
-                               asp-action="Booking"
-                               class="service-book-button">
-
-                                Book Now
-
-                            </a>
-
                         </div>
 
-                    </div>
+                    </article>
 
-                </article>
+                </div>
+            }
 
-            </div>
-
-
-         </div>
+        </div>
 
 
-        <!-- NO RESULTS -->
+        <!-- =====================================================
+             NO RESULTS
+        ====================================================== -->
 
         <div id="noServices"
              class="services-no-results"
@@ -534,6 +455,7 @@
     </div>
 
 </section>
+
 @section Scripts {
     <script src="~/js/home/index.js"
             asp-append-version="true"></script>

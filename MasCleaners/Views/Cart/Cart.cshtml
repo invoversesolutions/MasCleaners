@@ -1,0 +1,449 @@
+﻿@model MasCleaners.Models.Cart
+
+@{
+    ViewData["Title"] = "Your Cart";
+    Layout = "_Layout";
+
+    var cartItems = Model.CartItems ?? new List<MasCleaners.Models.CartItem>();
+
+    decimal subtotal = cartItems.Sum(x =>
+        x.ServiceOption != null
+            ? x.ServiceOption.Price * x.Quantity
+            : 0);
+}
+
+@section Styles {
+
+    <link rel="stylesheet"
+          href="~/css/cart/index.css"
+          asp-append-version="true" />
+
+}
+
+<div class="cart-page">
+
+    <!-- =========================================================
+         BREADCRUMB
+    ========================================================== -->
+
+    <div class="cart-breadcrumb">
+
+        <a asp-controller="Home"
+           asp-action="Index">
+
+            <i class="bi bi-house"></i>
+
+            Home
+
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+        <span>
+            Your Cart
+        </span>
+
+    </div>
+
+
+    <!-- =========================================================
+         PAGE HEADER
+    ========================================================== -->
+
+    <div class="cart-header">
+
+        <div>
+
+            <span class="cart-eyebrow">
+
+                <i class="bi bi-cart3"></i>
+
+                YOUR SELECTION
+
+            </span>
+
+            <h1>
+                Your Cart
+            </h1>
+
+            <p>
+                Review the cleaning services you have selected
+                before continuing with your booking.
+            </p>
+
+        </div>
+
+
+        @if (cartItems.Any())
+        {
+            <div class="cart-item-count">
+
+                <i class="bi bi-bag-check"></i>
+
+                <span>
+                    @cartItems.Sum(x => x.Quantity)
+                    @(cartItems.Sum(x => x.Quantity) == 1
+                        ? "Item"
+                        : "Items")
+                </span>
+
+            </div>
+        }
+
+    </div>
+
+
+    <!-- =========================================================
+         EMPTY CART
+    ========================================================== -->
+    @if (!cartItems.Any())
+    {
+        <div class="cart-empty">
+
+            <div class="cart-empty-icon">
+
+                <i class="bi bi-cart-x"></i>
+
+            </div>
+
+            <h2>
+                Your Cart Is Empty
+            </h2>
+
+            <p>
+                You haven't selected any cleaning services yet.
+                Explore our services and add what you need.
+            </p>
+
+            <a asp-controller="Home"
+               asp-action="Index"
+               class="cart-empty-button">
+
+                <i class="bi bi-stars"></i>
+
+                Explore Services
+
+                <i class="bi bi-arrow-right"></i>
+
+            </a>
+
+        </div>
+    }
+    else
+    {
+        <!-- =====================================================
+             CART CONTENT
+        ====================================================== -->
+
+        <div class="cart-layout">
+
+
+            <!-- =================================================
+                 CART ITEMS
+            ================================================== -->
+
+            <div class="cart-items-section">
+
+                <div class="cart-section-heading">
+
+                    <div>
+
+                        <span>
+                            SELECTED SERVICES
+                        </span>
+
+                        <h2>
+                            Cleaning Services
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div class="cart-items">
+
+                    @foreach (var item in cartItems)
+                    {
+                        if (item.ServiceOption == null)
+                        {
+                            continue;
+                        }
+
+                        var service = item.ServiceOption;
+
+                        var lineTotal =
+                            service.Price * item.Quantity;
+
+
+                        <article class="cart-item">
+
+
+                            <!-- SERVICE ICON -->
+
+                            <div class="cart-item-icon">
+
+                                <i class="bi bi-stars"></i>
+
+                            </div>
+
+
+                            <!-- SERVICE INFORMATION -->
+
+                            <div class="cart-item-details">
+
+                                <h3>
+                                    @service.Name
+                                </h3>
+
+                                @if (!string.IsNullOrWhiteSpace(service.Description))
+                                {
+                                    <p>
+                                        @service.Description
+                                    </p>
+                                }
+
+                                <span class="cart-item-price">
+
+                                    R @service.Price.ToString("N2")
+                                    <small>
+                                        per service
+                                    </small>
+
+                                </span>
+
+                            </div>
+
+
+                            <!-- QUANTITY -->
+
+                            <div class="cart-item-quantity">
+
+                                <span>
+                                    Quantity
+                                </span>
+
+                                <div class="quantity-control">
+
+                                    <form asp-controller="Cart"
+                                          asp-action="DecreaseQuantity"
+                                          method="post">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <input type="hidden"
+                                               name="cartItemId"
+                                               value="@item.Id" />
+
+                                        <button type="submit"
+                                                aria-label="Decrease quantity">
+
+                                            <i class="bi bi-dash"></i>
+
+                                        </button>
+
+                                    </form>
+
+
+                                    <strong>
+                                        @item.Quantity
+                                    </strong>
+
+
+                                    <form asp-controller="Cart"
+                                          asp-action="IncreaseQuantity"
+                                          method="post">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <input type="hidden"
+                                               name="cartItemId"
+                                               value="@item.Id" />
+
+                                        <button type="submit"
+                                                aria-label="Increase quantity">
+
+                                            <i class="bi bi-plus"></i>
+
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- LINE TOTAL -->
+
+                            <div class="cart-item-total">
+
+                                <span>
+                                    Total
+                                </span>
+
+                                <strong>
+                                    R @lineTotal.ToString("N2")
+                                </strong>
+
+                            </div>
+
+
+                            <!-- REMOVE -->
+
+                            <div class="cart-item-remove">
+
+                                <form asp-controller="Cart"
+                                      asp-action="Remove"
+                                      method="post">
+
+                                    @Html.AntiForgeryToken()
+
+                                    <input type="hidden"
+                                           name="cartItemId"
+                                           value="@item.Id" />
+
+                                    <button type="submit"
+                                            title="Remove service"
+                                            aria-label="Remove service">
+
+                                        <i class="bi bi-trash3"></i>
+
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </article>
+                    }
+
+                </div>
+
+
+                <!-- CONTINUE SHOPPING -->
+
+                <div class="cart-continue">
+
+                    <a asp-controller="Home"
+                       asp-action="Index">
+
+                        <i class="bi bi-arrow-left"></i>
+
+                        Continue Shopping
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 ORDER SUMMARY
+            ================================================== -->
+
+            <aside class="cart-summary">
+
+                <div class="cart-summary-header">
+
+                    <span>
+                        BOOKING SUMMARY
+                    </span>
+
+                    <h2>
+                        Your Selection
+                    </h2>
+
+                </div>
+
+
+                <div class="cart-summary-items">
+
+                    <div class="cart-summary-row">
+
+                        <span>
+                            Services
+                        </span>
+
+                        <strong>
+                            @cartItems.Sum(x => x.Quantity)
+                        </strong>
+
+                    </div>
+
+                    <div class="cart-summary-row">
+
+                        <span>
+                            Subtotal
+                        </span>
+
+                        <strong>
+                            R @subtotal.ToString("N2")
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="cart-summary-divider"></div>
+
+
+                <div class="cart-summary-total">
+
+                    <span>
+                        Estimated Total
+                    </span>
+
+                    <strong>
+                        R @subtotal.ToString("N2")
+                    </strong>
+
+                </div>
+
+
+                <div class="cart-summary-note">
+
+                    <i class="bi bi-info-circle"></i>
+
+                    <p>
+                        Your final booking total may depend on
+                        the service details and options you select
+                        during checkout.
+                    </p>
+
+                </div>
+
+
+                <!-- CHECKOUT -->
+
+                <a asp-controller="Booking"
+                   asp-action="Create"
+                   class="cart-checkout-button">
+
+                    Continue to Booking
+
+                    <i class="bi bi-arrow-right"></i>
+
+                </a>
+
+
+                <!-- SECURE -->
+
+                <div class="cart-secure">
+
+                    <i class="bi bi-shield-check"></i>
+
+                    <span>
+                        Secure booking process
+                    </span>
+
+                </div>
+
+            </aside>
+
+        </div>
+    }
+
+</div>

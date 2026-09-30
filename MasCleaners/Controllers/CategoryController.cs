@@ -8,13 +8,16 @@ namespace MasCleaners.Controllers
     {
         private readonly ILogger<CategoryController> _logger;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IWebHostEnvironment _environment;
 
         public CategoryController(
             ILogger<CategoryController> logger,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            IWebHostEnvironment environment)
         {
             _logger = logger;
             _unitOfWork = unitOfWork;
+            _environment = environment;
         }
 
 
@@ -67,7 +70,7 @@ namespace MasCleaners.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ServiceCategory model)
+        public async Task<IActionResult> Create(ServiceCategory model, IFormFile? imageFile)
         {
             if (!ModelState.IsValid)
             {
@@ -82,7 +85,43 @@ namespace MasCleaners.Controllers
                 _logger.LogInformation(
                     "Creating service category: {CategoryName}",
                     model.Name);
+                // =====================================================
+                // IMAGE UPLOAD
+                // =====================================================
 
+                if (imageFile != null && imageFile.Length > 0)
+                {
+                    string uploadsFolder = Path.Combine(
+                        _environment.WebRootPath,
+                        "images",
+                        "services");
+
+                    if (!Directory.Exists(uploadsFolder))
+                    {
+                        Directory.CreateDirectory(uploadsFolder);
+                    }
+
+                    string extension =
+                        Path.GetExtension(imageFile.FileName)
+                        .ToLowerInvariant();
+
+                    string fileName =
+                        $"{Guid.NewGuid()}{extension}";
+
+                    string filePath =
+                        Path.Combine(uploadsFolder, fileName);
+
+                    using (var stream = new FileStream(
+                        filePath,
+                        FileMode.Create))
+                    {
+                        await imageFile.CopyToAsync(stream);
+                    }
+
+                    // Save absolute URL
+                    model.ImageUrl =
+                        $"{Request.Scheme}://{Request.Host}/images/services/{fileName}";
+                }
                 //model.CreatedDate = DateTime.UtcNow;
 
                 await _unitOfWork.ServiceCategory.AddAsync(model);
@@ -162,7 +201,10 @@ namespace MasCleaners.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, ServiceCategory model)
+        public async Task<IActionResult> Edit(
+            int id,
+            ServiceCategory model,
+            IFormFile? imageFile)
         {
             if (id != model.Id)
             {
@@ -186,7 +228,8 @@ namespace MasCleaners.Controllers
             try
             {
                 var category =
-                    await _unitOfWork.ServiceCategory.GetAsync(p=>p.Id ==id);
+                    await _unitOfWork.ServiceCategory
+                        .GetAsync(p => p.Id == id);
 
                 if (category == null)
                 {
@@ -197,22 +240,141 @@ namespace MasCleaners.Controllers
                     return NotFound();
                 }
 
+                // =====================================================
+                // UPDATE BASIC INFORMATION
+                // =====================================================
+
                 category.Name = model.Name;
                 category.Description = model.Description;
                 category.DisplayOrder = model.DisplayOrder;
                 category.Icon = model.Icon;
                 category.IsActive = model.IsActive;
 
-               await _unitOfWork.ServiceCategory.UpdateAsync(category);
+
+                // =====================================================
+                // IMAGE UPLOAD
+                // =====================================================
+
+                if (imageFile != null && imageFile.Length > 0)
+                {
+                    string uploadsFolder = Path.Combine(
+                        _environment.WebRootPath,
+                        "images",
+                        "services");
+
+                    if (!Directory.Exists(uploadsFolder))
+                    {
+                        Directory.CreateDirectory(uploadsFolder);
+                    }
+
+
+                    // =================================================
+                    // DELETE OLD LOCAL IMAGE
+                    // =================================================
+
+                    if (!string.IsNullOrWhiteSpace(category.ImageUrl))
+                    {
+                        try
+                        {
+                            var oldUri = new Uri(category.ImageUrl);
+
+                            string oldPath = oldUri.LocalPath
+                                .TrimStart('/')
+                                .Replace(
+                                    '/',
+                                    Path.DirectorySeparatorChar);
+
+                            string oldFilePath = Path.Combine(
+                                _environment.WebRootPath,
+                                oldPath);
+
+                            if (System.IO.File.Exists(oldFilePath))
+                            {
+                                System.IO.File.Delete(oldFilePath);
+
+                                _logger.LogInformation(
+                                    "Deleted old service image for category {CategoryId}: {ImagePath}",
+                                    id,
+                                    oldFilePath);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogWarning(
+                                ex,
+                                "Could not delete old image for category {CategoryId}.",
+                                id);
+                        }
+                    }
+
+
+                    // =================================================
+                    // CREATE NEW FILE NAME
+                    // =================================================
+
+                    string extension =
+                        Path.GetExtension(imageFile.FileName)
+                            .ToLowerInvariant();
+
+                    string fileName =
+                        $"{Guid.NewGuid()}{extension}";
+
+                    string filePath =
+                        Path.Combine(
+                            uploadsFolder,
+                            fileName);
+
+
+                    // =================================================
+                    // SAVE IMAGE
+                    // =================================================
+
+                    using (var stream = new FileStream(
+                        filePath,
+                        FileMode.Create))
+                    {
+                        await imageFile.CopyToAsync(stream);
+                    }
+
+
+                    // =================================================
+                    // ABSOLUTE URL
+                    // =================================================
+
+                    var request = HttpContext.Request;
+
+                    string baseUrl =
+                        $"{request.Scheme}://{request.Host}";
+
+                    category.ImageUrl =
+                        $"{baseUrl}/images/services/{fileName}";
+
+
+                    _logger.LogInformation(
+                        "New service image uploaded for category {CategoryId}: {ImageUrl}",
+                        id,
+                        category.ImageUrl);
+                }
+
+
+                // =====================================================
+                // SAVE
+                // =====================================================
+
+                await _unitOfWork.ServiceCategory
+                    .UpdateAsync(category);
 
                 await _unitOfWork.CommitAsync();
+
 
                 _logger.LogInformation(
                     "Category {CategoryId} updated successfully.",
                     id);
 
+
                 TempData["SuccessMessage"] =
-                    "Category updated successfully.";
+                    "Service updated successfully.";
+
 
                 return RedirectToAction(nameof(Index));
             }
@@ -225,13 +387,11 @@ namespace MasCleaners.Controllers
 
                 ModelState.AddModelError(
                     "",
-                    "An error occurred while updating the category.");
+                    "An error occurred while updating the service.");
 
                 return View(model);
             }
         }
-
-
         // =========================================================
         // DELETE - GET
         // =========================================================

@@ -1,0 +1,343 @@
+﻿@model MasCleaners.ViewModels.ServiceOptionsVM
+
+@{
+    ViewData["Title"] = "Service Options";
+    Layout = "_Layout";
+
+
+}
+
+@section Styles {
+
+    <link rel="stylesheet"
+          href="~/css/service-options/index.css"
+          asp-append-version="true" />
+
+}
+
+<div class="service-options-page">
+
+    <!-- =========================================================
+         BREADCRUMB
+    ========================================================== -->
+
+    <div class="service-options-breadcrumb">
+
+        <a asp-controller="Home"
+           asp-action="Index">
+
+            <i class="bi bi-house"></i>
+
+            Home
+
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+        <span>
+            Services
+        </span>
+
+        <i class="bi bi-chevron-right"></i>
+
+        <span>
+            @(Model.ServiceCategory?.Name ?? "Service Options")
+        </span>
+
+    </div>
+
+
+    <!-- =========================================================
+         PAGE HEADER
+    ========================================================== -->
+
+    <div class="service-options-header">
+
+        <div class="service-options-heading">
+
+            <span class="service-options-eyebrow">
+
+                <i class="bi bi-stars"></i>
+
+                @(Model.ServiceCategory?.Name ?? "SERVICE")
+
+            </span>
+
+
+            <h1>
+                Choose Your Service
+            </h1>
+
+
+            @if (!string.IsNullOrWhiteSpace(Model.ServiceCategory?.Description))
+            {
+                <p>
+                    @Model.ServiceCategory.Description
+                </p>
+            }
+            else
+            {
+                <p>
+                    Choose the cleaning option that best suits your needs.
+                </p>
+            }
+
+        </div>
+
+
+        <!-- CART -->
+
+        <a asp-controller="Cart"
+           asp-action="Cart"
+           class="service-options-cart">
+
+            <i class="bi bi-cart3"></i>
+
+            <span>
+                View Cart
+            </span>
+
+            <span class="service-options-cart-count">
+                @Model.CartItemCount
+            </span>
+
+        </a>
+
+    </div>
+
+
+    <!-- =========================================================
+         CATEGORY IMAGE
+    ========================================================== -->
+
+    @if (!string.IsNullOrWhiteSpace(Model.ServiceCategory?.ImageUrl))
+    {
+        <div class="service-options-category-image">
+
+            <img src="@Model.ServiceCategory.ImageUrl"
+                 alt="@Model.ServiceCategory.Name" />
+
+            <div class="service-options-category-overlay">
+
+                <div>
+
+                    <span>
+                        @Model.ServiceCategory.Name
+                    </span>
+
+                    <strong>
+                        Professional Cleaning
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+    }
+
+
+    <!-- =========================================================
+         OPTIONS HEADER
+    ========================================================== -->
+
+    <div class="service-options-section-header">
+
+        <div>
+
+            <span>
+                AVAILABLE OPTIONS
+            </span>
+
+            <h2>
+                Select a Service
+            </h2>
+
+        </div>
+
+        <div class="service-options-count">
+
+            <i class="bi bi-grid"></i>
+
+            @Model.ServiceOptions.Count()
+            @(Model.ServiceOptions.Count() == 1 ? "Option" : "Options")
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         SERVICE OPTIONS
+    ========================================================== -->
+
+    @if (Model.ServiceOptions.Any())
+    {
+        <div class="service-options-grid">
+
+            @foreach (var option in Model.ServiceOptions)
+            {
+                <article class="service-option-card">
+
+
+                    <!-- ICON -->
+
+                    <div class="service-option-top">
+
+                        <div class="service-option-icon">
+
+                            <i class="bi bi-stars"></i>
+
+                        </div>
+
+                        <span class="service-option-available">
+
+                            <i class="bi bi-check-circle-fill"></i>
+
+                            Available
+
+                        </span>
+
+                    </div>
+
+
+                    <!-- CONTENT -->
+
+                    <div class="service-option-content">
+
+                        <h3>
+                            @option.Name
+                        </h3>
+
+
+                        @if (!string.IsNullOrWhiteSpace(option.Description))
+                        {
+                            <p>
+                                @option.Description
+                            </p>
+                        }
+
+
+                        <!-- META -->
+
+                        
+
+                    </div>
+
+
+                    <!-- FOOTER -->
+
+                    <div class="service-option-footer">
+
+                        <div class="service-option-price">
+
+                            <span>
+                                Starting from
+                            </span>
+
+                            <strong>
+                                R @option.Price.ToString("N0")
+                            </strong>
+
+                        </div>
+
+
+                        <!-- ADD TO CART -->
+
+                        <form asp-controller="Cart"
+                              asp-action="AddToCart"
+                              method="post">
+
+                            @Html.AntiForgeryToken()
+
+                            <input type="hidden"
+                                   name="serviceOptionId"
+                                   value="@option.Id" />
+
+                            <button type="submit"
+                                    class="service-option-add">
+
+                                <i class="bi bi-cart-plus"></i>
+
+                                Add to Cart
+
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </article>
+            }
+
+        </div>
+    }
+    else
+    {
+        <!-- =====================================================
+             EMPTY STATE
+        ====================================================== -->
+
+        <div class="service-options-empty">
+
+            <div class="service-options-empty-icon">
+
+                <i class="bi bi-sliders"></i>
+
+            </div>
+
+            <h3>
+                No Options Available
+            </h3>
+
+            <p>
+                There are currently no service options available
+                for this service.
+            </p>
+
+            <a asp-controller="Home"
+               asp-action="Index"
+               class="service-options-empty-button">
+
+                <i class="bi bi-arrow-left"></i>
+
+                Back to Services
+
+            </a>
+
+        </div>
+    }
+
+
+    <!-- =========================================================
+         BOTTOM ACTIONS
+    ========================================================== -->
+
+    <div class="service-options-bottom">
+
+        <a asp-controller="Home"
+           asp-action="Index"
+           class="service-options-back">
+
+            <i class="bi bi-arrow-left"></i>
+
+            Back to Services
+
+        </a>
+
+
+        <a asp-controller="Cart"
+           asp-action="Index"
+           class="service-options-view-cart">
+
+            <i class="bi bi-cart3"></i>
+
+            Continue to Cart
+
+            <i class="bi bi-arrow-right"></i>
+
+        </a>
+
+    </div>
+
+</div>

@@ -1,12 +1,15 @@
 ﻿@model MasCleaners.Models.ServiceCategory
 
 @{
-    ViewData["Title"] = "Edit Category";
+    ViewData["Title"] = "Edit Service";
     Layout = "_LayoutAdmin";
 }
 
-<!-- Local Styles -->
-<link rel="stylesheet" href="/css/category/edit.css" asp-append-version="true" />
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/category/edit.css"
+          asp-append-version="true" />
+}
 
 <div class="category-page">
 
@@ -17,25 +20,33 @@
     <div class="category-page-header">
 
         <div>
+
             <div class="category-breadcrumb">
+
                 <a asp-controller="Category"
                    asp-action="Index">
-                    Categories
+
+                    Services
+
                 </a>
 
                 <i class="bi bi-chevron-right"></i>
 
-                <span>Edit Category</span>
+                <span>Edit Service</span>
+
             </div>
 
+
             <h1>
-                Edit Category
+                Edit Service
             </h1>
 
             <p>
-                Update the details of this service category.
+                Update the details and configuration of this service.
             </p>
+
         </div>
+
 
         <div class="category-header-actions">
 
@@ -45,7 +56,7 @@
 
                 <i class="bi bi-arrow-left"></i>
 
-                Back to Categories
+                Back to Services
 
             </a>
 
@@ -60,34 +71,56 @@
 
     <div class="category-form-card">
 
+
+        <!-- =================================================
+             FORM HEADER
+        ================================================== -->
+
         <div class="category-form-header">
 
             <div class="category-form-icon">
+
                 <i class="bi bi-pencil-square"></i>
+
             </div>
 
+
             <div>
-                <h3>Edit Service Category</h3>
+
+                <h3>
+                    Edit Service
+                </h3>
 
                 <p>
                     Update the information below and save your changes.
                 </p>
+
             </div>
 
         </div>
 
 
+        <!-- =================================================
+             FORM
+        ================================================== -->
+
         <form asp-controller="Category"
               asp-action="Edit"
-              method="post">
+              method="post"
+              enctype="multipart/form-data">
 
             @Html.AntiForgeryToken()
+
+
+            <!-- ID -->
 
             <input type="hidden"
                    asp-for="Id" />
 
 
-            <!-- Validation -->
+            <!-- =================================================
+                 VALIDATION
+            ================================================== -->
 
             <div asp-validation-summary="ModelOnly"
                  class="category-validation">
@@ -95,15 +128,19 @@
 
 
             <!-- =================================================
-                 CATEGORY NAME
+                 SERVICE NAME
             ================================================== -->
 
             <div class="category-form-group">
 
                 <label asp-for="Name">
-                    Category Name
+
+                    Service Name
+
                     <span>*</span>
+
                 </label>
+
 
                 <div class="category-input-wrapper">
 
@@ -114,6 +151,7 @@
                            placeholder="e.g. Residential Cleaning" />
 
                 </div>
+
 
                 <span asp-validation-for="Name"
                       class="category-field-error">
@@ -129,9 +167,13 @@
             <div class="category-form-group">
 
                 <label asp-for="Description">
+
                     Description
+
                     <span>*</span>
+
                 </label>
+
 
                 <div class="category-input-wrapper category-textarea-wrapper">
 
@@ -140,9 +182,10 @@
                     <textarea asp-for="Description"
                               class="category-form-control category-textarea"
                               rows="5"
-                              placeholder="Describe the services included in this category..."></textarea>
+                              placeholder="Describe this cleaning service..."></textarea>
 
                 </div>
+
 
                 <span asp-validation-for="Description"
                       class="category-field-error">
@@ -152,30 +195,108 @@
 
 
             <!-- =================================================
-                 ICON
+                 SERVICE IMAGE
             ================================================== -->
 
             <div class="category-form-group">
 
-                <label asp-for="Icon">
-                    Bootstrap Icon
+                <label for="imageFile">
+                    Service Image
                 </label>
 
                 <div class="category-input-wrapper">
 
                     <i class="bi bi-image"></i>
 
-                    <input asp-for="Icon"
+                    <input type="file"
+                           id="imageFile"
+                           name="imageFile"
                            class="category-form-control"
-                           placeholder="e.g. bi bi-house-heart" />
+                           accept="image/jpeg,image/png,image/webp" />
 
                 </div>
 
                 <small class="category-help">
-                    Enter the Bootstrap Icons class for this category.
-                    Example:
-                    <strong>bi bi-house-heart</strong>
+                    Upload a new image only if you want to replace the
+                    current service image.
                 </small>
+
+            </div>
+
+
+            <!-- =================================================
+                 CURRENT IMAGE
+            ================================================== -->
+
+            @if (!string.IsNullOrWhiteSpace(Model.ImageUrl))
+            {
+                <div class="category-image-preview">
+
+                    <div class="category-image-preview-header">
+
+                        <div>
+
+                            <strong>
+                                Current Service Image
+                            </strong>
+
+                            <span>
+                                This image is currently displayed on the website.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="category-image-preview-container">
+
+                        <img src="@Model.ImageUrl"
+                             alt="@Model.Name"
+                             class="category-preview-image" />
+
+                    </div>
+
+                </div>
+            }
+
+
+            <!-- =================================================
+                 ICON
+            ================================================== -->
+
+            <div class="category-form-group">
+
+                <label asp-for="Icon">
+
+                    Bootstrap Icon
+
+                </label>
+
+
+                <div class="category-input-wrapper">
+
+                    <i class="bi bi-stars"></i>
+
+                    <input asp-for="Icon"
+                           class="category-form-control"
+                           placeholder="e.g. bi bi-house-door" />
+
+                </div>
+
+
+                <small class="category-help">
+
+                    Enter the Bootstrap Icons class for this service.
+
+                    Example:
+
+                    <strong>
+                        bi bi-house-door
+                    </strong>
+
+                </small>
+
 
                 <span asp-validation-for="Icon"
                       class="category-field-error">
@@ -191,8 +312,11 @@
             <div class="category-form-group">
 
                 <label asp-for="DisplayOrder">
+
                     Display Order
+
                 </label>
+
 
                 <div class="category-input-wrapper">
 
@@ -206,9 +330,13 @@
 
                 </div>
 
+
                 <small class="category-help">
-                    Lower numbers will appear first.
+
+                    Lower numbers will appear first on the public website.
+
                 </small>
+
 
                 <span asp-validation-for="DisplayOrder"
                       class="category-field-error">
@@ -226,22 +354,26 @@
                 <div class="category-status-info">
 
                     <div class="category-status-icon">
+
                         <i class="bi bi-toggle-on"></i>
+
                     </div>
+
 
                     <div>
 
                         <strong>
-                            Category Status
+                            Service Status
                         </strong>
 
                         <span>
-                            Enable or disable this category.
+                            Enable or disable this service.
                         </span>
 
                     </div>
 
                 </div>
+
 
                 <div class="category-switch">
 
@@ -249,6 +381,7 @@
                            class="category-switch-input"
                            type="checkbox"
                            id="IsActive" />
+
 
                     <label for="IsActive"
                            class="category-switch-label">
@@ -277,6 +410,7 @@
                     Cancel
 
                 </a>
+
 
                 <button type="submit"
                         class="category-save-button">
