@@ -13,6 +13,10 @@ namespace MasCleaners.Repositories
         public ICart Cart { get; private set; }
         public ICartItem CartItem { get; private set; }
 
+        public ICustomerRepository Customer { get; private set; }
+        public IBookingRepository Booking { get; private set; }
+        public IBookingItemRepository BookingItem { get; private set; }
+
 
         public UnitOfWork(SqlDbContext dbContext)
         {
@@ -21,6 +25,9 @@ namespace MasCleaners.Repositories
             ServiceOptions = new ServiceOptionsRepository(_dbContext);
             Cart = new CartRepository(_dbContext);
             CartItem = new CartItemRepository(_dbContext);
+            Customer = new CustomerRepository(_dbContext);
+            Booking = new BookingRepository(_dbContext);
+            BookingItem = new BookingItemRepository(_dbContext);
         }
         Task IUnitOfWork.CommitAsync() => _dbContext.SaveChangesAsync();
     }
