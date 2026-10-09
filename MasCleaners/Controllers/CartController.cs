@@ -2,6 +2,7 @@
 using MasCleaners.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace MasCleaners.Controllers
 {
@@ -400,31 +401,91 @@ namespace MasCleaners.Controllers
            
             return View(cart);
         }
-
         // =========================================================
         // GET OR CREATE CART
         // =========================================================
 
         private async Task<Cart> GetOrCreateCartAsync()
         {
-            var guestToken =
-                Request.Cookies[CartCookieName];
+            // =====================================================
+            // CHECK AUTHENTICATION
+            // =====================================================
+
+            var userId = User.FindFirstValue(
+                System.Security.Claims.ClaimTypes.NameIdentifier);
+
+            var isAuthenticated =
+                User.Identity?.IsAuthenticated == true &&
+                !string.IsNullOrWhiteSpace(userId);
 
 
             // =====================================================
-            // EXISTING GUEST CART
+            // AUTHENTICATED CUSTOMER CART
             // =====================================================
+
+            if (isAuthenticated)
+            {
+                var existingUserCart =
+                    await _unitOfWork.Cart.GetAsync(
+                        x => x.UserId == userId && x.IsActive,
+                        includeProperties:
+                            "CartItems,CartItems.ServiceOption");
+
+                if (existingUserCart != null)
+                {
+                    return existingUserCart;
+                }
+
+
+                // =================================================
+                // CREATE CART FOR LOGGED-IN CUSTOMER
+                // =================================================
+
+                var userCart = new Cart
+                {
+                    UserId = userId,
+
+                    GuestToken = null,
+
+                    IsActive = true,
+
+                    CreatedDate = DateTime.Now,
+
+                    UpdatedDate = DateTime.Now
+                };
+
+                await _unitOfWork.Cart.AddAsync(userCart);
+
+                await _unitOfWork.CommitAsync();
+
+                _logger.LogInformation(
+                    "Created cart {CartId} for user {UserId}.",
+                    userCart.Id,
+                    userId);
+
+                return userCart;
+            }
+
+
+            // =====================================================
+            // ANONYMOUS GUEST CART
+            // =====================================================
+
+            var guestToken = Request.Cookies[CartCookieName];
 
             if (!string.IsNullOrWhiteSpace(guestToken))
             {
-                var existingCart =
-                    await _unitOfWork.Cart.GetAsync(x =>
-                        x.GuestToken == guestToken &&
-                        x.IsActive,includeProperties: "CartItems,CartItems.ServiceOption");
+                var existingGuestCart =
+                    await _unitOfWork.Cart.GetAsync(
+                        x => x.GuestToken == guestToken
+                             && x.UserId == null
+                             && x.IsActive,
+                        includeProperties:
+                            "CartItems,CartItems.ServiceOption");
 
-                if (existingCart != null)
+                if (existingGuestCart != null)
                 {
-                    return existingCart;
+                    return existingGuestCart;
                 }
             }
 
@@ -433,31 +494,28 @@ namespace MasCleaners.Controllers
             // CREATE NEW GUEST CART
             // =====================================================
 
-            guestToken =
-                Guid.NewGuid().ToString("N");
+            guestToken = Guid.NewGuid().ToString("N");
 
-
-            var cart = new Cart
+            var guestCart = new Cart
             {
                 GuestToken = guestToken,
 
+                UserId = null,
+
                 IsActive = true,
 
-                CreatedDate =
-                    DateTime.Now,
+                CreatedDate = DateTime.Now,
 
-                UpdatedDate =
-                    DateTime.Now
+                UpdatedDate = DateTime.Now
             };
 
-
-            await _unitOfWork.Cart.AddAsync(cart);
+            await _unitOfWork.Cart.AddAsync(guestCart);
 
             await _unitOfWork.CommitAsync();
 
 
             // =====================================================
-            // STORE CART TOKEN IN COOKIE
+            // STORE GUEST TOKEN IN COOKIE
             // =====================================================
 
             Response.Cookies.Append(
@@ -469,23 +527,20 @@ namespace MasCleaners.Controllers
 
                     Secure = true,
 
-                    SameSite =
-                        SameSiteMode.Lax,
+                    SameSite = SameSiteMode.Lax,
 
-                    Expires =
-                        DateTimeOffset.Now.AddDays(30),
+                    Expires = DateTimeOffset.Now.AddDays(30),
 
                     IsEssential = true
                 });
 
-
             _logger.LogInformation(
-                "Created new guest Cart {CartId}.",
-                cart.Id);
+                "Created guest cart {CartId}.",
+                guestCart.Id);
 
-
-            return cart;
+            return guestCart;
         }
-    
+       
+
     }
 }

@@ -6,7 +6,6 @@ namespace MasCleaners.Models
     {
         public int Id { get; set; }
 
-
         // ======================================================
         // BOOKING REFERENCE
         // ======================================================
@@ -34,39 +33,6 @@ namespace MasCleaners.Models
 
         [Required]
         public TimeSpan BookingTime { get; set; }
-
-
-        // ======================================================
-        // SERVICE ADDRESS
-        // ======================================================
-
-        [Required]
-        [StringLength(150)]
-        public string AddressLine1 { get; set; } = string.Empty;
-
-        [StringLength(150)]
-        public string? AddressLine2 { get; set; }
-
-        [Required]
-        [StringLength(100)]
-        public string City { get; set; } = string.Empty;
-
-        [Required]
-        [StringLength(100)]
-        public string Province { get; set; } = string.Empty;
-
-        [Required]
-        [StringLength(20)]
-        public string PostalCode { get; set; } = string.Empty;
-
-
-        // ======================================================
-        // LOCATION
-        // ======================================================
-
-        public double? Latitude { get; set; }
-
-        public double? Longitude { get; set; }
 
 
         // ======================================================
@@ -114,7 +80,15 @@ namespace MasCleaners.Models
 
 
         // ======================================================
-        // NAVIGATION
+        // BOOKING ADDRESSES
+        // ======================================================
+
+        public ICollection<CustomerAddress> Addresses { get; set; }
+            = new List<CustomerAddress>();
+
+
+        // ======================================================
+        // BOOKING ITEMS
         // ======================================================
 
         public ICollection<BookingItem> BookingItems { get; set; }

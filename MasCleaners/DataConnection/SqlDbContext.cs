@@ -21,6 +21,8 @@ namespace MasCleaners.DataConnection
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<BookingItem> BookingItems { get; set; }
 
+        public DbSet<CustomerAddress> CustomerAddresses { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -117,6 +119,31 @@ namespace MasCleaners.DataConnection
             modelBuilder.Entity<BookingItem>()
                 .Property(x => x.TotalPrice)
                 .HasPrecision(18, 2);
+
+            // =========================================================
+            // BOOKING <-> CUSTOMER ADDRESSES
+            // Many-to-many relationship
+            // =========================================================
+
+            modelBuilder.Entity<Booking>()
+                .HasMany(x => x.Addresses)
+                .WithMany()
+                .UsingEntity<Dictionary<string, object>>(
+                    "BookingCustomerAddress",
+                    right => right
+                        .HasOne<CustomerAddress>()
+                        .WithMany()
+                        .HasForeignKey("CustomerAddressId")
+                        .OnDelete(DeleteBehavior.Restrict),
+                    left => left
+                        .HasOne<Booking>()
+                        .WithMany()
+                        .HasForeignKey("BookingId")
+                        .OnDelete(DeleteBehavior.Cascade),
+                    join =>
+                    {
+                        join.HasKey("BookingId", "CustomerAddressId");
+                    });
 
         }
     }

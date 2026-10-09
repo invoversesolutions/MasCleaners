@@ -11,6 +11,7 @@
         public ICustomerRepository Customer { get; }
         public IBookingRepository Booking { get; }
         public IBookingItemRepository BookingItem { get; }
+        public ICustomerAddress CustomerAddress { get; }
 
 
         Task CommitAsync();

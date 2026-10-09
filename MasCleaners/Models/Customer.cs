@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿
+using System.ComponentModel.DataAnnotations;
 
 namespace MasCleaners.Models
 {
@@ -17,7 +18,15 @@ namespace MasCleaners.Models
 
 
         // ======================================================
-        // PERSONAL INFORMATION
+        // CUSTOMER TYPE
+        // ======================================================
+
+        public CustomerType CustomerType { get; set; }
+            = CustomerType.Individual;
+
+
+        // ======================================================
+        // CUSTOMER / CONTACT DETAILS
         // ======================================================
 
         [Required]
@@ -28,11 +37,6 @@ namespace MasCleaners.Models
         [StringLength(100)]
         public string LastName { get; set; } = string.Empty;
 
-
-        // ======================================================
-        // CONTACT INFORMATION
-        // ======================================================
-
         [Required]
         [Phone]
         [StringLength(30)]
@@ -40,23 +44,15 @@ namespace MasCleaners.Models
 
 
         // ======================================================
-        // ADDRESS
+        // COMPANY DETAILS
+        // Required by application validation for companies
         // ======================================================
 
-        [StringLength(150)]
-        public string? AddressLine1 { get; set; }
+        [StringLength(200)]
+        public string? CompanyName { get; set; }
 
-        [StringLength(150)]
-        public string? AddressLine2 { get; set; }
-
-        [StringLength(100)]
-        public string? City { get; set; }
-
-        [StringLength(100)]
-        public string? Province { get; set; }
-
-        [StringLength(20)]
-        public string? PostalCode { get; set; }
+        [StringLength(50)]
+        public string? VatNumber { get; set; }
 
 
         // ======================================================
@@ -78,6 +74,9 @@ namespace MasCleaners.Models
         // ======================================================
         // NAVIGATION
         // ======================================================
+
+        public ICollection<CustomerAddress> Addresses { get; set; }
+            = new List<CustomerAddress>();
 
         public ICollection<Booking> Bookings { get; set; }
             = new List<Booking>();
