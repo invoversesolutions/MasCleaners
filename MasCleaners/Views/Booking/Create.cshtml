@@ -1,0 +1,980 @@
+﻿@model MasCleaners.ViewModels.BookingCreateVM
+
+@using MasCleaners.Models
+
+@{
+    ViewData["Title"] = "Complete Your Booking";
+    Layout = "_Layout";
+}
+
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/booking/create.css"
+          asp-append-version="true" />
+}
+
+<div class="booking-page">
+
+    <!-- =====================================================
+         BREADCRUMB
+    ====================================================== -->
+
+    <nav class="booking-breadcrumb" aria-label="Breadcrumb">
+        <a asp-controller="Home" asp-action="Index">
+            <i class="bi bi-house"></i>
+            Home
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+        <a asp-controller="Cart" asp-action="Cart">
+            Your Cart
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+        <span>Booking Details</span>
+    </nav>
+
+
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
+
+    <header class="booking-header">
+        <div class="booking-header-content">
+            <span class="booking-eyebrow">
+                <i class="bi bi-calendar2-check"></i>
+                LET'S GET YOU BOOKED
+            </span>
+
+            <h1>Complete Your <span>Booking.</span></h1>
+
+            <p>
+                Just a few details and we'll help get your space
+                from mess to fresh.
+            </p>
+        </div>
+
+        <div class="booking-progress">
+            <div class="booking-progress-step completed">
+                <span><i class="bi bi-check-lg"></i></span>
+                <small>Services</small>
+            </div>
+
+            <div class="booking-progress-line active"></div>
+
+            <div class="booking-progress-step current">
+                <span>2</span>
+                <small>Booking details</small>
+            </div>
+
+            <div class="booking-progress-line"></div>
+
+            <div class="booking-progress-step">
+                <span>3</span>
+                <small>Confirmation</small>
+            </div>
+        </div>
+    </header>
+
+
+    <!-- =====================================================
+         VALIDATION AND MESSAGES
+    ====================================================== -->
+
+    <div asp-validation-summary="ModelOnly"
+         class="booking-validation"
+         role="alert"></div>
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="booking-alert booking-alert-error" role="alert">
+            <i class="bi bi-exclamation-circle"></i>
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+
+    <!-- =====================================================
+         BOOKING FORM
+    ====================================================== -->
+
+    <form asp-controller="Booking"
+          asp-action="Create"
+          method="post"
+          id="bookingForm">
+
+        @Html.AntiForgeryToken()
+
+        <div class="booking-layout">
+
+            <!-- =============================================
+                 MAIN FORM
+            ============================================== -->
+
+            <div class="booking-main">
+
+
+                <!-- =========================================
+                     CUSTOMER INFORMATION
+                ========================================== -->
+
+                <section class="booking-card">
+
+                    <div class="booking-section-header">
+                        <div class="booking-section-icon">
+                            <i class="bi bi-person"></i>
+                        </div>
+
+                        <div>
+                            <h2>Your Information</h2>
+                            <p>Who should we contact about this booking?</p>
+                        </div>
+
+                        @if (Model.IsAuthenticated)
+                        {
+                            <span class="booking-account-badge">
+                                <i class="bi bi-person-check"></i>
+                                Registered customer
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="booking-guest-badge">
+                                <i class="bi bi-person"></i>
+                                Guest booking
+                            </span>
+                        }
+                    </div>
+
+                    @if (!Model.IsAuthenticated)
+                    {
+                        <div class="booking-info-banner">
+                            <i class="bi bi-info-circle"></i>
+
+                            <div>
+                                <strong>No account needed</strong>
+                                <p>
+                                    You can complete your booking as a guest.
+                                    Enter your contact details below.
+                                </p>
+                            </div>
+                        </div>
+                    }
+
+                    <div class="booking-form-grid">
+
+                        <div class="booking-field">
+                            <label asp-for="FirstName">First name <span>*</span></label>
+
+                            <input asp-for="FirstName"
+                                   class="booking-input"
+                                   placeholder="Enter your first name"
+                                   autocomplete="given-name" />
+
+                            <span asp-validation-for="FirstName"
+                                  class="booking-field-error"></span>
+                        </div>
+
+                        <div class="booking-field">
+                            <label asp-for="LastName">Last name <span>*</span></label>
+
+                            <input asp-for="LastName"
+                                   class="booking-input"
+                                   placeholder="Enter your surname"
+                                   autocomplete="family-name" />
+
+                            <span asp-validation-for="LastName"
+                                  class="booking-field-error"></span>
+                        </div>
+
+                        <div class="booking-field">
+                            <label asp-for="Email">Email address <span>*</span></label>
+
+                            <input asp-for="Email"
+                                   type="email"
+                                   class="booking-input"
+                                   placeholder="you@example.com"
+                                   autocomplete="email" />
+
+                            <span asp-validation-for="Email"
+                                  class="booking-field-error"></span>
+                        </div>
+
+                        <div class="booking-field">
+                            <label asp-for="PhoneNumber">Contact number <span>*</span></label>
+
+                            <input asp-for="PhoneNumber"
+                                   type="tel"
+                                   class="booking-input"
+                                   placeholder="+27..."
+                                   autocomplete="tel" />
+
+                            <span asp-validation-for="PhoneNumber"
+                                  class="booking-field-error"></span>
+                        </div>
+
+                        <div class="booking-field booking-field-full">
+                            <label asp-for="CustomerType">Booking for</label>
+
+                            <select asp-for="CustomerType"
+                                    asp-items="Html.GetEnumSelectList<CustomerType>()"
+                                    class="booking-input"
+                                    id="customerType">
+                            </select>
+                        </div>
+
+                        <div class="booking-field booking-field-full"
+                             id="companyFields">
+
+                            <div class="booking-form-grid">
+
+                                <div class="booking-field">
+                                    <label asp-for="CompanyName">Company name</label>
+
+                                    <input asp-for="CompanyName"
+                                           class="booking-input"
+                                           placeholder="Registered business name" />
+
+                                    <span asp-validation-for="CompanyName"
+                                          class="booking-field-error"></span>
+                                </div>
+
+                                <div class="booking-field">
+                                    <label asp-for="VatNumber">VAT number</label>
+
+                                    <input asp-for="VatNumber"
+                                           class="booking-input"
+                                           placeholder="VAT number (if applicable)" />
+
+                                    <span asp-validation-for="VatNumber"
+                                          class="booking-field-error"></span>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+
+                <!-- =========================================
+                     BOOKING SCHEDULE
+                ========================================== -->
+
+                <section class="booking-card">
+
+                    <div class="booking-section-header">
+                        <div class="booking-section-icon">
+                            <i class="bi bi-calendar2-week"></i>
+                        </div>
+
+                        <div>
+                            <h2>When Do You Need Us?</h2>
+                            <p>Choose your preferred date and arrival time.</p>
+                        </div>
+                    </div>
+
+                    <div class="booking-form-grid">
+
+                        <div class="booking-field">
+                            <label asp-for="BookingDate">Preferred date <span>*</span></label>
+
+                            <input asp-for="BookingDate"
+                                   type="date"
+                                   class="booking-input"
+                                   min="@DateTime.Today.ToString("yyyy-MM-dd")" />
+
+                            <span asp-validation-for="BookingDate"
+                                  class="booking-field-error"></span>
+                        </div>
+
+                        <div class="booking-field">
+                            <label asp-for="BookingTime">Preferred time <span>*</span></label>
+
+                            <select asp-for="BookingTime"
+                                    class="booking-input">
+
+                                <option value="">Select a time</option>
+
+                                @for (var hour = 7; hour <= 15; hour++)
+                                {
+                                    var time = new TimeSpan(hour, 0, 0);
+
+                                    <option value="@time.ToString(@"hh\:mm\:ss")">
+                                        @DateTime.Today.Add(time).ToString("h:mm tt")
+                                    </option>
+                                }
+                            </select>
+
+                            <span asp-validation-for="BookingTime"
+                                  class="booking-field-error"></span>
+                        </div>
+
+                        <div class="booking-field booking-field-full">
+                            <label asp-for="CustomerNotes">
+                                Additional instructions
+                                <small>Optional</small>
+                            </label>
+
+                            <textarea asp-for="CustomerNotes"
+                                      class="booking-input booking-textarea"
+                                      rows="4"
+                                      placeholder="Tell us about access instructions, special requirements or anything we should know..."></textarea>
+
+                            <span asp-validation-for="CustomerNotes"
+                                  class="booking-field-error"></span>
+                        </div>
+
+                    </div>
+
+                    <div class="booking-info-banner schedule-note">
+                        <i class="bi bi-info-circle"></i>
+
+                        <div>
+                            <strong>Preferred time</strong>
+                            <p>
+                                Your requested date and time are preferences
+                                until your booking is confirmed by MAS Cleaners.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+
+                <!-- =========================================
+                     SERVICE ADDRESSES
+                ========================================== -->
+
+                <section class="booking-card">
+
+                    <div class="booking-section-header">
+                        <div class="booking-section-icon">
+                            <i class="bi bi-geo-alt"></i>
+                        </div>
+
+                        <div>
+                            <h2>Service Addresses</h2>
+                            <p>
+                                Add every location relevant to this booking.
+                            </p>
+                        </div>
+                    </div>
+
+
+                    <!-- SAVED ADDRESSES -->
+
+                    @if (Model.IsAuthenticated && Model.AvailableAddresses.Any())
+                    {
+                        <div class="booking-address-subheading">
+                            <h3>Your Saved Addresses</h3>
+
+                            <span>
+                                Select one or more
+                            </span>
+                        </div>
+
+                        <div class="booking-saved-addresses">
+
+                            @foreach (var address in Model.AvailableAddresses)
+                            {
+                                var isSelected =
+                                    Model.SelectedAddressIds.Contains(address.Id);
+
+                                <label class="booking-address-option">
+
+                                    <input type="checkbox"
+                                           name="SelectedAddressIds"
+                                           value="@address.Id"
+                                           checked="@isSelected" />
+
+                                    <span class="booking-address-check">
+                                        <i class="bi bi-check-lg"></i>
+                                    </span>
+
+                                    <span class="booking-address-content">
+
+                                        <strong>
+                                            @address.AddressName
+
+                                            @if (address.IsDefault)
+                                            {
+                                                <span class="booking-default-label">
+                                                    Default
+                                                </span>
+                                            }
+                                        </strong>
+
+                                        <span>@address.AddressLine1</span>
+
+                                        @if (!string.IsNullOrWhiteSpace(address.AddressLine2))
+                                        {
+                                            <span>@address.AddressLine2</span>
+                                        }
+
+                                        <span>
+                                            @address.City, @address.Province
+                                            @if (!string.IsNullOrWhiteSpace(address.PostalCode))
+                                            {
+                                                <text>, @address.PostalCode</text>
+                                            }
+                                        </span>
+
+                                    </span>
+                                </label>
+                            }
+
+                        </div>
+                    }
+                    else if (Model.IsAuthenticated)
+                    {
+                        <div class="booking-empty-addresses">
+                            <i class="bi bi-geo"></i>
+
+                            <div>
+                                <strong>No saved addresses yet</strong>
+                                <p>
+                                    Add a service address below. You can save
+                                    it to your address book.
+                                </p>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="booking-info-banner">
+                            <i class="bi bi-geo-alt"></i>
+
+                            <div>
+                                <strong>Where should we clean?</strong>
+                                <p>
+                                    Enter the service address below. You can
+                                    add multiple locations if needed.
+                                </p>
+                            </div>
+                        </div>
+                    }
+
+
+                    <!-- NEW ADDRESSES -->
+
+                    <div class="booking-address-subheading booking-new-address-heading">
+                        <div>
+                            <h3>Add a New Address</h3>
+                            <p>Provide the details for another service location.</p>
+                        </div>
+
+                        <button type="button"
+                                class="booking-add-address"
+                                id="addAddressButton">
+
+                            <i class="bi bi-plus-lg"></i>
+                            Add address
+                        </button>
+                    </div>
+
+                    <div id="newAddressesContainer">
+
+                        @for (var i = 0; i < Model.NewAddresses.Count; i++)
+                        {
+                            <div class="booking-new-address" data-address-index="@i">
+
+                                <div class="booking-new-address-header">
+                                    <div class="booking-new-address-title">
+                                        <span class="booking-address-number">
+                                            @(i + 1)
+                                        </span>
+
+                                        <strong>New service address</strong>
+                                    </div>
+
+                                    <button type="button"
+                                            class="booking-remove-address"
+                                            aria-label="Remove address">
+
+                                        <i class="bi bi-trash3"></i>
+                                        Remove
+                                    </button>
+                                </div>
+
+                                <div class="booking-form-grid">
+
+                                    <div class="booking-field">
+                                        <label>Address name <span>*</span></label>
+
+                                        <input name="NewAddresses[@i].AddressName"
+                                               value="@Model.NewAddresses[i].AddressName"
+                                               class="booking-input"
+                                               placeholder="Home, Office, Property 2"
+                                               required />
+                                    </div>
+
+                                    <div class="booking-field">
+                                        <label>Street address <span>*</span></label>
+
+                                        <input name="NewAddresses[@i].AddressLine1"
+                                               value="@Model.NewAddresses[i].AddressLine1"
+                                               class="booking-input"
+                                               placeholder="Street number and name"
+                                               required />
+                                    </div>
+
+                                    <div class="booking-field booking-field-full">
+                                        <label>Address line 2</label>
+
+                                        <input name="NewAddresses[@i].AddressLine2"
+                                               value="@Model.NewAddresses[i].AddressLine2"
+                                               class="booking-input"
+                                               placeholder="Complex, unit or suburb (optional)" />
+                                    </div>
+
+                                    <div class="booking-field">
+                                        <label>City <span>*</span></label>
+
+                                        <input name="NewAddresses[@i].City"
+                                               value="@Model.NewAddresses[i].City"
+                                               class="booking-input"
+                                               required />
+                                    </div>
+
+                                    <div class="booking-field">
+                                        <label>Province <span>*</span></label>
+
+                                        <select name="NewAddresses[@i].Province"
+                                                class="booking-input"
+                                                required>
+
+                                            <option value="">Select province</option>
+
+                                            @foreach (var province in new[]
+                                            {
+                                                "Eastern Cape",
+                                                "Free State",
+                                                "Gauteng",
+                                                "KwaZulu-Natal",
+                                                "Limpopo",
+                                                "Mpumalanga",
+                                                "Northern Cape",
+                                                "North West",
+                                                "Western Cape"
+                                            })
+                                            {
+                                                if (Model.NewAddresses[i].Province == province)
+                                                {
+                                                    <option value="@province" selected>
+                                                        @province
+                                                    </option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@province">
+                                                        @province
+                                                    </option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+
+                                    <div class="booking-field">
+                                        <label>Postal code</label>
+
+                                        <input name="NewAddresses[@i].PostalCode"
+                                               value="@Model.NewAddresses[i].PostalCode"
+                                               class="booking-input"
+                                               placeholder="Postal code" />
+                                    </div>
+
+                                    @if (Model.IsAuthenticated)
+                                    {
+                                        <div class="booking-field booking-field-full">
+                                            <label class="booking-save-address">
+
+                                                <input type="checkbox"
+                                                       name="NewAddresses[@i].SaveToAddressBook"
+                                                       value="true"
+                                                       checked="@Model.NewAddresses[i].SaveToAddressBook" />
+
+                                                <span>
+                                                    <strong>Save to my address book</strong>
+                                                    <small>
+                                                        Make this address available for future bookings.
+                                                    </small>
+                                                </span>
+                                            </label>
+
+                                            <input type="hidden"
+                                                   name="NewAddresses[@i].SaveToAddressBook"
+                                                   value="false" />
+                                        </div>
+                                    }
+
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+
+                    <p class="booking-address-footnote">
+                        <i class="bi bi-telephone"></i>
+                        Our team can contact you to confirm which services
+                        should be performed at each address.
+                    </p>
+
+                </section>
+
+            </div>
+
+
+            <!-- =============================================
+                 ORDER SUMMARY
+            ============================================== -->
+
+            <aside class="booking-sidebar">
+
+                <div class="booking-summary-card">
+
+                    <div class="booking-summary-header">
+                        <span>YOUR SELECTION</span>
+                        <h2>Booking Summary</h2>
+
+                        <p>
+                            Review your selected services before continuing.
+                        </p>
+                    </div>
+
+
+                    <div class="booking-summary-services">
+
+                        @foreach (var item in Model.CartItems)
+                        {
+                            <div class="booking-summary-service">
+
+                                <div class="booking-summary-service-icon">
+                                    <i class="bi bi-stars"></i>
+                                </div>
+
+                                <div class="booking-summary-service-details">
+                                    <strong>@item.ServiceName</strong>
+
+                                    <span>
+                                        Qty: @item.Quantity
+                                        × R @item.UnitPrice.ToString("N2")
+                                    </span>
+                                </div>
+
+                                <strong class="booking-summary-line-total">
+                                    R @item.TotalPrice.ToString("N2")
+                                </strong>
+
+                            </div>
+                        }
+
+                    </div>
+
+
+                    <div class="booking-summary-divider"></div>
+
+                    <div class="booking-summary-row">
+                        <span>Services</span>
+
+                        <strong>
+                            @Model.CartItems.Sum(x => x.Quantity)
+                        </strong>
+                    </div>
+
+                    <div class="booking-summary-row">
+                        <span>Subtotal</span>
+
+                        <strong>
+                            R @Model.Subtotal.ToString("N2")
+                        </strong>
+                    </div>
+
+                    <div class="booking-summary-divider"></div>
+
+                    <div class="booking-summary-total">
+                        <span>Estimated total</span>
+
+                        <strong>
+                            R @Model.Total.ToString("N2")
+                        </strong>
+                    </div>
+
+                    <div class="booking-summary-note">
+                        <i class="bi bi-info-circle"></i>
+
+                        <p>
+                            Your booking is subject to confirmation.
+                            The team will contact you if further details
+                            are needed.
+                        </p>
+                    </div>
+
+
+                    <button type="submit"
+                            class="booking-submit-button">
+
+                        <i class="bi bi-calendar-check"></i>
+                        Submit Booking
+                        <i class="bi bi-arrow-right"></i>
+                    </button>
+
+                    <a asp-controller="Cart"
+                       asp-action="Cart"
+                       class="booking-back-to-cart">
+
+                        <i class="bi bi-arrow-left"></i>
+                        Return to cart
+                    </a>
+
+                    <div class="booking-secure-note">
+                        <i class="bi bi-shield-check"></i>
+
+                        <span>
+                            Your details are handled securely.
+                        </span>
+                    </div>
+
+                </div>
+
+                <div class="booking-help-card">
+                    <div class="booking-help-icon">
+                        <i class="bi bi-headset"></i>
+                    </div>
+
+                    <div>
+                        <strong>Need assistance?</strong>
+
+                        <p>
+                            Contact the MAS Cleaners team if you need help
+                            with your booking.
+                        </p>
+
+                        <a href="tel:+27614908391">
+                            <i class="bi bi-telephone"></i>
+                            +27 61 490 8391
+                        </a>
+                    </div>
+                </div>
+
+            </aside>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+<!-- =========================================================
+     ADDRESS TEMPLATE
+========================================================== -->
+
+<template id="addressTemplate">
+
+    <div class="booking-new-address" data-address-index="__INDEX__">
+
+        <div class="booking-new-address-header">
+            <div class="booking-new-address-title">
+                <span class="booking-address-number">__NUMBER__</span>
+                <strong>New service address</strong>
+            </div>
+
+            <button type="button"
+                    class="booking-remove-address"
+                    aria-label="Remove address">
+
+                <i class="bi bi-trash3"></i>
+                Remove
+            </button>
+        </div>
+
+        <div class="booking-form-grid">
+
+            <div class="booking-field">
+                <label>Address name <span>*</span></label>
+
+                <input name="NewAddresses[__INDEX__].AddressName"
+                       class="booking-input"
+                       placeholder="Home, Office, Property 2"
+                       required />
+            </div>
+
+            <div class="booking-field">
+                <label>Street address <span>*</span></label>
+
+                <input name="NewAddresses[__INDEX__].AddressLine1"
+                       class="booking-input"
+                       placeholder="Street number and name"
+                       required />
+            </div>
+
+            <div class="booking-field booking-field-full">
+                <label>Address line 2</label>
+
+                <input name="NewAddresses[__INDEX__].AddressLine2"
+                       class="booking-input"
+                       placeholder="Complex, unit or suburb (optional)" />
+            </div>
+
+            <div class="booking-field">
+                <label>City <span>*</span></label>
+
+                <input name="NewAddresses[__INDEX__].City"
+                       class="booking-input"
+                       required />
+            </div>
+
+            <div class="booking-field">
+                <label>Province <span>*</span></label>
+
+                <select name="NewAddresses[__INDEX__].Province"
+                        class="booking-input"
+                        required>
+
+                    <option value="">Select province</option>
+                    <option value="Eastern Cape">Eastern Cape</option>
+                    <option value="Free State">Free State</option>
+                    <option value="Gauteng">Gauteng</option>
+                    <option value="KwaZulu-Natal">KwaZulu-Natal</option>
+                    <option value="Limpopo">Limpopo</option>
+                    <option value="Mpumalanga">Mpumalanga</option>
+                    <option value="Northern Cape">Northern Cape</option>
+                    <option value="North West">North West</option>
+                    <option value="Western Cape">Western Cape</option>
+
+                </select>
+            </div>
+
+            <div class="booking-field">
+                <label>Postal code</label>
+
+                <input name="NewAddresses[__INDEX__].PostalCode"
+                       class="booking-input"
+                       placeholder="Postal code" />
+            </div>
+
+            @if (Model.IsAuthenticated)
+            {
+                <div class="booking-field booking-field-full">
+
+                    <label class="booking-save-address">
+
+                        <input type="checkbox"
+                               name="NewAddresses[__INDEX__].SaveToAddressBook"
+                               value="true"
+                               checked />
+
+                        <span>
+                            <strong>Save to my address book</strong>
+                            <small>
+                                Make this address available for future bookings.
+                            </small>
+                        </span>
+                    </label>
+
+                    <input type="hidden"
+                           name="NewAddresses[__INDEX__].SaveToAddressBook"
+                           value="false" />
+
+                </div>
+            }
+
+        </div>
+    </div>
+
+</template>
+
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            // =====================================================
+            // CUSTOMER TYPE
+            // =====================================================
+
+            const customerType = document.getElementById("customerType");
+            const companyFields = document.getElementById("companyFields");
+
+            function toggleCompanyFields() {
+                if (!customerType || !companyFields) return;
+
+                const isCompany = customerType.value === "2";
+
+                companyFields.style.display = isCompany ? "block" : "none";
+
+                companyFields.querySelectorAll("input").forEach(input => {
+                    input.disabled = !isCompany;
+                });
+            }
+
+            if (customerType) {
+                customerType.addEventListener("change", toggleCompanyFields);
+                toggleCompanyFields();
+            }
+
+
+            // =====================================================
+            // DYNAMIC ADDRESSES
+            // =====================================================
+
+            const container = document.getElementById("newAddressesContainer");
+            const addButton = document.getElementById("addAddressButton");
+            const template = document.getElementById("addressTemplate");
+
+            if (!container || !addButton || !template) return;
+
+            let nextIndex = @Model.NewAddresses.Count;
+
+            function refreshAddressNumbers() {
+                const addressCards = container.querySelectorAll(".booking-new-address");
+
+                addressCards.forEach((card, index) => {
+                    const number = card.querySelector(".booking-address-number");
+
+                    if (number) {
+                        number.textContent = index + 1;
+                    }
+                });
+            }
+
+            addButton.addEventListener("click", function () {
+                const html = template.innerHTML
+                    .replaceAll("__INDEX__", nextIndex)
+                    .replaceAll("__NUMBER__", container.querySelectorAll(".booking-new-address").length + 1);
+
+                container.insertAdjacentHTML("beforeend", html);
+
+                nextIndex++;
+
+                refreshAddressNumbers();
+
+                const newCard = container.lastElementChild;
+                const firstInput = newCard?.querySelector("input");
+
+                if (firstInput) {
+                    firstInput.focus();
+                }
+            });
+
+            container.addEventListener("click", function (event) {
+                const removeButton = event.target.closest(".booking-remove-address");
+
+                if (!removeButton) return;
+
+                const card = removeButton.closest(".booking-new-address");
+
+                if (card) {
+                    card.remove();
+                    refreshAddressNumbers();
+                }
+            });
+
+        });
+    </script>
+}

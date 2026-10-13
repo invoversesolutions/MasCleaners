@@ -9,5 +9,10 @@ namespace MasCleaners.Models
         // ======================================================
 
         public Customer? Customer { get; set; }
+        // ======================================================
+        // EMPLOYEE
+        // ======================================================
+
+        public Employee? Employee { get; set; }
     }
 }

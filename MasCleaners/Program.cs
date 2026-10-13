@@ -41,7 +41,23 @@ builder.Services
     .AddEntityFrameworkStores<SqlDbContext>()
     .AddDefaultTokenProviders();
 
+// ======================================================
+// AUTHENTICATION COOKIE
+// ======================================================
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Account/Login";
+    options.AccessDeniedPath = "/Account/AccessDenied";
+
+    options.Cookie.Name = "MASCleaners.Auth";
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.SameSite = SameSiteMode.Lax;
+
+    options.ExpireTimeSpan = TimeSpan.FromHours(8);
+    options.SlidingExpiration = true;
+});
 // =========================================================
 // MVC
 // =========================================================
@@ -105,6 +121,23 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
+// ======================================================
+// SEED IDENTITY ROLES
+// ======================================================
 
+var startupLogger = app.Services
+    .GetRequiredService<ILogger<Program>>();
+
+await IdentitySeeder.SeedRolesAsync(
+    app.Services,
+    startupLogger);
+
+// ======================================================
+// SEED INITIAL SUPER USER
+// ======================================================
+
+await IdentitySeeder.SeedSuperUserAsync(
+    app.Services,
+    startupLogger);
 
 app.Run();

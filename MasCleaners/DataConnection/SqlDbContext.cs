@@ -17,6 +17,7 @@ namespace MasCleaners.DataConnection
         public DbSet<CartItem> CartItems { get; set; }
 
         public DbSet<Customer> Customers { get; set; }
+        public DbSet<Employee> Employees { get; set; }
 
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<BookingItem> BookingItems { get; set; }
@@ -66,7 +67,27 @@ namespace MasCleaners.DataConnection
                 .HasForeignKey<Customer>(x => x.ApplicationUserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            // ==================================================
+            // APPLICATION USER - EMPLOYEE (ONE TO ONE)
+            // ==================================================
 
+            modelBuilder.Entity<ApplicationUser>()
+                .HasOne(user => user.Employee)
+                .WithOne(employee => employee.ApplicationUser)
+                .HasForeignKey<Employee>(
+                    employee => employee.ApplicationUserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // ==================================================
+            // EMPLOYEE NUMBER
+            // ==================================================
+
+            modelBuilder.Entity<Employee>()
+                .HasIndex(employee => employee.EmployeeNumber)
+                .IsUnique();
+
+            // Retain your other existing entity relationships
+            // and decimal precision configuration here.
             // =========================================================
             // CUSTOMER -> BOOKINGS
             // =========================================================

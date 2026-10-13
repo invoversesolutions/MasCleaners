@@ -373,6 +373,66 @@ namespace MasCleaners.Migrations
                     b.ToTable("CustomerAddresses");
                 });
 
+            modelBuilder.Entity("MasCleaners.Models.Employee", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Department")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("EmployeeNumber")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("JobTitle")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId")
+                        .IsUnique();
+
+                    b.HasIndex("EmployeeNumber")
+                        .IsUnique()
+                        .HasFilter("[EmployeeNumber] IS NOT NULL");
+
+                    b.ToTable("Employees");
+                });
+
             modelBuilder.Entity("MasCleaners.Models.ServiceCategory", b =>
                 {
                     b.Property<int>("Id")
@@ -665,6 +725,17 @@ namespace MasCleaners.Migrations
                     b.Navigation("Customer");
                 });
 
+            modelBuilder.Entity("MasCleaners.Models.Employee", b =>
+                {
+                    b.HasOne("MasCleaners.Models.ApplicationUser", "ApplicationUser")
+                        .WithOne("Employee")
+                        .HasForeignKey("MasCleaners.Models.Employee", "ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+                });
+
             modelBuilder.Entity("MasCleaners.Models.ServiceOption", b =>
                 {
                     b.HasOne("MasCleaners.Models.ServiceCategory", "ServiceCategory")
@@ -730,6 +801,8 @@ namespace MasCleaners.Migrations
             modelBuilder.Entity("MasCleaners.Models.ApplicationUser", b =>
                 {
                     b.Navigation("Customer");
+
+                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("MasCleaners.Models.Booking", b =>
