@@ -1,0 +1,99 @@
+﻿
+@{
+    ViewData["Title"] = "Super Dashboard";
+    Layout = "_LayoutAdmin";
+}
+
+<div class="super-dashboard">
+
+    <div class="dashboard-heading">
+        <div>
+            <h2>Super User Dashboard</h2>
+            <p>
+                Manage system access and oversee MAS Cleaners operations.
+            </p>
+        </div>
+
+        <span class="super-role-badge">
+            <i class="bi bi-shield-lock"></i>
+            Super User
+        </span>
+    </div>
+
+    <div class="dashboard-welcome">
+        <div class="welcome-icon">
+            <i class="bi bi-speedometer2"></i>
+        </div>
+
+        <div>
+            <h4>Welcome, @(User.Identity?.Name ?? "Super User")</h4>
+            <p>
+                You have access to the system's privileged management
+                functions.
+            </p>
+        </div>
+    </div>
+
+    <div class="super-management-grid">
+
+        <a asp-controller="SuperDashboard"
+           asp-action="Users"
+           class="super-management-card">
+            <div class="management-icon">
+                <i class="bi bi-people-fill"></i>
+            </div>
+            <h5>User Management</h5>
+            <p>Manage administrator accounts and user access.</p>
+            <span class="management-link">
+                Manage users <i class="bi bi-arrow-right"></i>
+            </span>
+        </a>
+
+        <a asp-controller="SuperDashboard"
+           asp-action="Roles"
+           class="super-management-card">
+            <div class="management-icon">
+                <i class="bi bi-shield-check"></i>
+            </div>
+            <h5>Role Management</h5>
+            <p>Review system roles and access permissions.</p>
+            <span class="management-link">
+                Manage roles <i class="bi bi-arrow-right"></i>
+            </span>
+        </a>
+
+        <a asp-controller="SuperDashboard"
+           asp-action="Settings"
+           class="super-management-card">
+            <div class="management-icon">
+                <i class="bi bi-gear"></i>
+            </div>
+            <h5>System Settings</h5>
+            <p>Configure system-wide settings and preferences.</p>
+            <span class="management-link">
+                View settings <i class="bi bi-arrow-right"></i>
+            </span>
+        </a>
+
+        <a asp-controller="SuperDashboard"
+           asp-action="AuditLogs"
+           class="super-management-card">
+            <div class="management-icon">
+                <i class="bi bi-journal-text"></i>
+            </div>
+            <h5>Audit Logs</h5>
+            <p>Review administrative activity and system events.</p>
+            <span class="management-link">
+                View activity <i class="bi bi-arrow-right"></i>
+            </span>
+        </a>
+
+    </div>
+
+</div>
+
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/super-dashboard.css"
+          asp-append-version="true" />
+}

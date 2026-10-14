@@ -1,0 +1,247 @@
+﻿@using MasCleaners.Models
+
+@{
+    ViewData["Title"] = "My Account";
+    Layout = "_Layout";
+}
+
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/account/profile.css"
+          asp-append-version="true" />
+}
+
+<div class="mas-account-page">
+    <div class="mas-account-container">
+
+        <div class="mas-account-header">
+            <div>
+                <span class="mas-account-eyebrow">YOUR MAS CLEANERS ACCOUNT</span>
+                <h1>My Account</h1>
+                <p>Manage your bookings, personal details and cleaning services.</p>
+            </div>
+
+            <div class="mas-account-welcome">
+                <div class="mas-account-avatar">
+                    <i class="bi bi-person"></i>
+                </div>
+                <div>
+                    <span>Signed in as</span>
+                    <strong>@User.Identity?.Name</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="mas-account-grid">
+
+            <!-- BOOKINGS -->
+            <section class="mas-account-card">
+                <div class="mas-account-card-heading">
+                    <div class="mas-account-card-title">
+                        <span class="mas-account-card-icon">
+                            <i class="bi bi-calendar2-check"></i>
+                        </span>
+                        <h2>My Bookings</h2>
+                    </div>
+                    <i class="bi bi-calendar-check mas-account-card-symbol"></i>
+                </div>
+
+                <p class="mas-account-card-description">
+                    Arrange cleaning services and keep track of your bookings.
+                </p>
+
+                <div class="mas-account-links">
+                    <a asp-controller="Booking" asp-action="Index">
+                        <span>Book a Cleaning Service</span>
+                        <i class="bi bi-arrow-up-right"></i>
+                    </a>
+
+                    <a href="#booking-history">
+                        <span>Booking History</span>
+                        <i class="bi bi-arrow-up-right"></i>
+                    </a>
+
+                    <a href="#upcoming-bookings">
+                        <span>Upcoming Bookings</span>
+                        <i class="bi bi-arrow-up-right"></i>
+                    </a>
+                </div>
+            </section>
+
+            <!-- BILLING -->
+            <section class="mas-account-card">
+                <div class="mas-account-card-heading">
+                    <div class="mas-account-card-title">
+                        <span class="mas-account-card-icon">
+                            <i class="bi bi-credit-card"></i>
+                        </span>
+                        <h2>Payments &amp; Invoices</h2>
+                    </div>
+                    <i class="bi bi-wallet2 mas-account-card-symbol"></i>
+                </div>
+
+                <p class="mas-account-card-description">
+                    Keep your invoices and payment information organised.
+                </p>
+
+                <div class="mas-account-links">
+                    <a href="#invoices">
+                        <span>My Invoices</span>
+                        <i class="bi bi-arrow-up-right"></i>
+                    </a>
+
+                    <a href="#payment-history">
+                        <span>Payment History</span>
+                        <i class="bi bi-arrow-up-right"></i>
+                    </a>
+
+                    <a href="#outstanding-payments">
+                        <span>Outstanding Payments</span>
+                        <i class="bi bi-arrow-up-right"></i>
+                    </a>
+                </div>
+            </section>
+
+            <!-- SERVICES -->
+            <section class="mas-account-card">
+                <div class="mas-account-card-heading">
+                    <div class="mas-account-card-title">
+                        <span class="mas-account-card-icon">
+                            <i class="bi bi-stars"></i>
+                        </span>
+                        <h2>Cleaning Services</h2>
+                    </div>
+                    <i class="bi bi-house-heart mas-account-card-symbol"></i>
+                </div>
+
+                <p class="mas-account-card-description">
+                    Discover services that help keep your spaces fresh.
+                </p>
+
+                <div class="mas-account-links">
+                    <a asp-controller="Home" asp-action="Index">
+                        <span>Explore Our Services</span>
+                        <i class="bi bi-arrow-up-right"></i>
+                    </a>
+
+                    <a asp-controller="Cart" asp-action="Cart">
+                        <span>Book a Service</span>
+                        <i class="bi bi-arrow-up-right"></i>
+                    </a>
+                </div>
+            </section>
+
+            <!-- PROFILE -->
+            <section class="mas-account-card">
+                <div class="mas-account-card-heading">
+                    <div class="mas-account-card-title">
+                        <span class="mas-account-card-icon">
+                            <i class="bi bi-person-vcard"></i>
+                        </span>
+                        <h2>My Profile</h2>
+                    </div>
+                    <i class="bi bi-person-circle mas-account-card-symbol"></i>
+                </div>
+
+                <p class="mas-account-card-description">
+                    Keep your contact details and account information up to date.
+                </p>
+
+                <div class="mas-account-links">
+                    <a href="#personal-details">
+                        <span>Personal Details</span>
+                        <i class="bi bi-arrow-up-right"></i>
+                    </a>
+
+                    <a href="#security-settings">
+                        <span>Security Settings</span>
+                        <i class="bi bi-arrow-up-right"></i>
+                    </a>
+
+                    <a href="#change-password">
+                        <span>Change Password</span>
+                        <i class="bi bi-arrow-up-right"></i>
+                    </a>
+                </div>
+            </section>
+
+            <!-- ADDRESSES -->
+            <section class="mas-account-card">
+                <div class="mas-account-card-heading">
+                    <div class="mas-account-card-title">
+                        <span class="mas-account-card-icon">
+                            <i class="bi bi-geo-alt"></i>
+                        </span>
+                        <h2>My Addresses</h2>
+                    </div>
+                    <i class="bi bi-geo mas-account-card-symbol"></i>
+                </div>
+
+                <p class="mas-account-card-description">
+                    Manage the addresses where you need our cleaning services.
+                </p>
+
+                <div class="mas-account-links">
+                    <a href="#saved-addresses">
+                        <span>Saved Addresses</span>
+                        <i class="bi bi-arrow-up-right"></i>
+                    </a>
+
+                    <a href="#add-address">
+                        <span>Add a New Address</span>
+                        <i class="bi bi-arrow-up-right"></i>
+                    </a>
+                </div>
+            </section>
+
+            <!-- SUPPORT -->
+            <section class="mas-account-card">
+                <div class="mas-account-card-heading">
+                    <div class="mas-account-card-title">
+                        <span class="mas-account-card-icon">
+                            <i class="bi bi-headset"></i>
+                        </span>
+                        <h2>Help &amp; Support</h2>
+                    </div>
+                    <i class="bi bi-question-circle mas-account-card-symbol"></i>
+                </div>
+
+                <p class="mas-account-card-description">
+                    Need assistance? Get in touch with the MAS Cleaners team.
+                </p>
+
+                <div class="mas-account-links">
+                    <a href="mailto:info@mascleaners.com">
+                        <span>Email Customer Support</span>
+                        <i class="bi bi-arrow-up-right"></i>
+                    </a>
+
+                    <a href="tel:+27614908391">
+                        <span>Call +27 61 490 8391</span>
+                        <i class="bi bi-arrow-up-right"></i>
+                    </a>
+                </div>
+
+                <div class="mas-account-logout">
+                    <form asp-controller="Account"
+                          asp-action="Logout"
+                          method="post">
+                        @Html.AntiForgeryToken()
+
+                        <button type="submit">
+                            <i class="bi bi-box-arrow-right"></i>
+                            Sign Out
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+        </div>
+
+        <div class="mas-account-bottom">
+            <i class="bi bi-shield-check"></i>
+            Your MAS Cleaners account helps you manage your services in one place.
+        </div>
+
+    </div>
+</div>

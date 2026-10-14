@@ -1,0 +1,333 @@
+﻿
+.role-management-page {
+    width: 100%;
+    min-width: 0;
+}
+
+.role-page-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 26px;
+}
+
+    .role-page-heading h2 {
+        color: #092b4c;
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .role-page-heading p,
+    .role-table-heading p {
+        color: #7d8da1;
+        margin-bottom: 0;
+    }
+
+.role-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 16px;
+    border: 1px solid #e1e6eb;
+    border-radius: 10px;
+    color: #092b4c;
+    text-decoration: none;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+    .role-back-link:hover {
+        color: #07877f;
+        border-color: #0f9d94;
+    }
+
+.role-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    margin-bottom: 26px;
+}
+
+.role-summary-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 22px;
+    background: #fff;
+    border: 1px solid #e1e6eb;
+    border-radius: 16px;
+}
+
+.role-summary-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: #e8f8f6;
+    color: #0f9d94;
+    font-size: 22px;
+}
+
+    .role-summary-icon.unused {
+        background: #fff4e5;
+        color: #b7791f;
+    }
+
+.role-summary-card span {
+    display: block;
+    margin-bottom: 5px;
+    color: #7d8da1;
+    font-size: 13px;
+}
+
+.role-summary-card h3 {
+    margin: 0;
+    color: #092b4c;
+    font-size: 26px;
+    font-weight: 700;
+}
+
+.role-table-panel {
+    min-width: 0;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid #e1e6eb;
+    border-radius: 16px;
+}
+
+.role-table-heading {
+    padding: 24px;
+    border-bottom: 1px solid #e1e6eb;
+}
+
+    .role-table-heading h4 {
+        margin-bottom: 6px;
+        color: #092b4c;
+        font-size: 18px;
+        font-weight: 700;
+    }
+
+.role-table-container {
+    width: 100%;
+}
+
+.role-management-table {
+    width: 100%;
+    margin: 0;
+    table-layout: fixed;
+}
+
+    .role-management-table thead th {
+        padding: 15px 18px;
+        background: #f6f8fa;
+        border-bottom: 1px solid #e1e6eb;
+        color: #7d8da1;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: .5px;
+        overflow-wrap: anywhere;
+    }
+
+    .role-management-table tbody td {
+        padding: 18px;
+        border-color: #edf0f3;
+        color: #526b88;
+        font-size: 13px;
+        vertical-align: middle;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+
+    .role-management-table th:nth-child(1) {
+        width: 35%;
+    }
+
+    .role-management-table th:nth-child(2) {
+        width: 21%;
+    }
+
+    .role-management-table th:nth-child(3) {
+        width: 17%;
+    }
+
+    .role-management-table th:nth-child(4) {
+        width: 27%;
+    }
+
+.role-name-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.role-name-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: #e8f8f6;
+    color: #0f9d94;
+    font-size: 19px;
+}
+
+.role-name-cell strong,
+.role-name-cell small {
+    display: block;
+    overflow-wrap: anywhere;
+}
+
+.role-name-cell strong {
+    color: #092b4c;
+    font-size: 13px;
+}
+
+.role-name-cell small {
+    margin-top: 5px;
+    color: #7d8da1;
+    font-size: 10px;
+}
+
+.role-type-badge,
+.role-usage-status {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.role-type-badge {
+    padding: 6px 9px;
+    border-radius: 8px;
+}
+
+    .role-type-badge.system {
+        background: #e8f8f6;
+        color: #07877f;
+    }
+
+    .role-type-badge.standard {
+        background: #f0f3f7;
+        color: #526b88;
+    }
+
+.role-user-count {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #092b4c;
+    font-weight: 600;
+}
+
+    .role-user-count i {
+        color: #7d8da1;
+    }
+
+.role-usage-status.in-use {
+    color: #07877f;
+}
+
+.role-usage-status.unused {
+    color: #b7791f;
+}
+
+.role-empty-state {
+    padding: 48px 20px;
+    text-align: center;
+}
+
+    .role-empty-state > i {
+        color: #0f9d94;
+        font-size: 38px;
+    }
+
+    .role-empty-state h5 {
+        margin-top: 15px;
+        color: #092b4c;
+        font-weight: 700;
+    }
+
+    .role-empty-state p {
+        margin-bottom: 0;
+        color: #7d8da1;
+    }
+
+.role-table-footer {
+    padding: 16px 24px;
+    border-top: 1px solid #e1e6eb;
+    color: #7d8da1;
+    font-size: 12px;
+}
+
+@media (max-width: 767px) {
+    .role-page-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+        .role-page-heading h2 {
+            font-size: 24px;
+        }
+
+    .role-summary-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .role-management-table thead {
+        display: none;
+    }
+
+    .role-management-table,
+    .role-management-table tbody,
+    .role-management-table tr,
+    .role-management-table td {
+        display: block;
+        width: 100%;
+    }
+
+        .role-management-table tbody tr {
+            padding: 14px 18px;
+            border-bottom: 1px solid #e1e6eb;
+        }
+
+        .role-management-table tbody td {
+            padding: 9px 0;
+            border: 0;
+        }
+
+            .role-management-table tbody td::before {
+                display: block;
+                margin-bottom: 7px;
+                color: #7d8da1;
+                font-size: 10px;
+                font-weight: 700;
+                letter-spacing: .5px;
+            }
+
+            .role-management-table tbody td:nth-child(1)::before {
+                content: "ROLE";
+            }
+
+            .role-management-table tbody td:nth-child(2)::before {
+                content: "ROLE TYPE";
+            }
+
+            .role-management-table tbody td:nth-child(3)::before {
+                content: "ASSIGNED USERS";
+            }
+
+            .role-management-table tbody td:nth-child(4)::before {
+                content: "USAGE STATUS";
+            }
+}

@@ -1,0 +1,305 @@
+﻿@model MasCleaners.ViewModels.RegisterVM
+
+@{
+    ViewData["Title"] = "Create Your Account";
+    Layout = "_Layout";
+}
+
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/account/register.css"
+          asp-append-version="true" />
+}
+
+<section class="register-page">
+    <div class="register-container">
+
+        <!-- Introduction -->
+        <div class="register-intro">
+            <a asp-controller="Home"
+               asp-action="Index"
+               class="register-brand">
+                <img src="~/images/mas-logo.jpeg"
+                     alt="MAS Cleaners"
+                     class="register-logo" />
+
+                <span>
+                    <strong>MAS Cleaners</strong>
+                    <small>From Mess to Fresh.</small>
+                </span>
+            </a>
+
+            <span class="register-eyebrow">
+                <i class="bi bi-stars"></i>
+                A cleaner start begins here
+            </span>
+
+            <h1>Create your <span>account.</span></h1>
+
+            <p>
+                Join MAS Cleaners to manage your details, save your
+                addresses and keep track of your cleaning bookings.
+            </p>
+
+            <div class="register-benefits">
+                <div>
+                    <i class="bi bi-check-circle-fill"></i>
+                    Manage your bookings
+                </div>
+                <div>
+                    <i class="bi bi-check-circle-fill"></i>
+                    Save your addresses
+                </div>
+                <div>
+                    <i class="bi bi-check-circle-fill"></i>
+                    Keep your details in one place
+                </div>
+            </div>
+        </div>
+
+        <!-- Registration Form -->
+        <div class="register-card">
+
+            <div class="register-card-heading">
+                <span class="register-icon">
+                    <i class="bi bi-person-plus"></i>
+                </span>
+
+                <div>
+                    <h2>Get started</h2>
+                    <p>Create your customer account below.</p>
+                </div>
+            </div>
+
+            <form asp-controller="Account"
+                  asp-action="Register"
+                  method="post"
+                  class="register-form">
+
+                @Html.AntiForgeryToken()
+
+                <div asp-validation-summary="ModelOnly"
+                     class="register-validation-summary"></div>
+
+                <!-- Account Type -->
+                <div class="register-field">
+                    <label asp-for="CustomerType"></label>
+
+                    <select asp-for="CustomerType"
+                            asp-items="Html.GetEnumSelectList<MasCleaners.Models.CustomerType>()"
+                            class="register-input"
+                            id="CustomerType">
+                    </select>
+
+                    <span asp-validation-for="CustomerType"
+                          class="register-validation"></span>
+                </div>
+
+                <!-- Company Details -->
+                <div id="companyFields"
+                     class="register-company-fields"
+                     hidden>
+
+                    <div class="register-field">
+                        <label asp-for="CompanyName"></label>
+
+                        <input asp-for="CompanyName"
+                               class="register-input"
+                               placeholder="Enter registered company name"
+                               autocomplete="organization" />
+
+                        <span asp-validation-for="CompanyName"
+                              class="register-validation"></span>
+                    </div>
+
+                    <div class="register-field">
+                        <label asp-for="VatNumber"></label>
+
+                        <input asp-for="VatNumber"
+                               class="register-input"
+                               placeholder="Enter VAT number (optional)" />
+
+                        <span asp-validation-for="VatNumber"
+                              class="register-validation"></span>
+                    </div>
+                </div>
+
+                <!-- Names -->
+                <div class="register-form-grid">
+
+                    <div class="register-field">
+                        <label asp-for="FirstName"></label>
+
+                        <input asp-for="FirstName"
+                               class="register-input"
+                               placeholder="First name"
+                               autocomplete="given-name" />
+
+                        <span asp-validation-for="FirstName"
+                              class="register-validation"></span>
+                    </div>
+
+                    <div class="register-field">
+                        <label asp-for="LastName"></label>
+
+                        <input asp-for="LastName"
+                               class="register-input"
+                               placeholder="Last name"
+                               autocomplete="family-name" />
+
+                        <span asp-validation-for="LastName"
+                              class="register-validation"></span>
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="register-field">
+                    <label asp-for="Email"></label>
+
+                    <div class="register-input-wrap">
+                        <i class="bi bi-envelope"></i>
+
+                        <input asp-for="Email"
+                               class="register-input"
+                               placeholder="you@example.com"
+                               autocomplete="email" />
+                    </div>
+
+                    <span asp-validation-for="Email"
+                          class="register-validation"></span>
+                </div>
+
+                <!-- Phone -->
+                <div class="register-field">
+                    <label asp-for="PhoneNumber"></label>
+
+                    <div class="register-input-wrap">
+                        <i class="bi bi-telephone"></i>
+
+                        <input asp-for="PhoneNumber"
+                               class="register-input"
+                               placeholder="+27 00 000 0000"
+                               autocomplete="tel" />
+                    </div>
+
+                    <span asp-validation-for="PhoneNumber"
+                          class="register-validation"></span>
+                </div>
+
+                <!-- Password -->
+                <div class="register-field">
+                    <label asp-for="Password"></label>
+
+                    <div class="register-input-wrap">
+                        <i class="bi bi-lock"></i>
+
+                        <input asp-for="Password"
+                               class="register-input"
+                               id="Password"
+                               placeholder="At least 8 characters"
+                               autocomplete="new-password" />
+
+                        <button type="button"
+                                class="register-password-toggle"
+                                data-password-target="Password"
+                                aria-label="Show password">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                    </div>
+
+                    <span asp-validation-for="Password"
+                          class="register-validation"></span>
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="register-field">
+                    <label asp-for="ConfirmPassword"></label>
+
+                    <div class="register-input-wrap">
+                        <i class="bi bi-shield-lock"></i>
+
+                        <input asp-for="ConfirmPassword"
+                               class="register-input"
+                               id="ConfirmPassword"
+                               placeholder="Enter your password again"
+                               autocomplete="new-password" />
+
+                        <button type="button"
+                                class="register-password-toggle"
+                                data-password-target="ConfirmPassword"
+                                aria-label="Show password">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                    </div>
+
+                    <span asp-validation-for="ConfirmPassword"
+                          class="register-validation"></span>
+                </div>
+
+                <p class="register-privacy-note">
+                    <i class="bi bi-shield-check"></i>
+                    Your account details are used to manage your
+                    customer profile and bookings.
+                </p>
+
+                <button type="submit" class="register-submit">
+                    Create Customer Account
+                    <i class="bi bi-arrow-right"></i>
+                </button>
+
+                <p class="register-login-prompt">
+                    Already have an account?
+                    <a asp-controller="Account"
+                       asp-action="Login">Sign in</a>
+                </p>
+            </form>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const customerType = document.getElementById("CustomerType");
+            const companyFields = document.getElementById("companyFields");
+            const companyName = document.getElementById("CompanyName");
+
+            function updateCompanyFields() {
+                const isCompany = customerType.value === "2";
+
+                companyFields.hidden = !isCompany;
+
+                if (companyName) {
+                    companyName.required = isCompany;
+                }
+            }
+
+            customerType.addEventListener("change", updateCompanyFields);
+            updateCompanyFields();
+
+            document.querySelectorAll("[data-password-target]")
+                .forEach(function (button) {
+                    button.addEventListener("click", function () {
+                        const targetId = button.dataset.passwordTarget;
+                        const input = document.getElementById(targetId);
+                        const icon = button.querySelector("i");
+
+                        if (!input || !icon) return;
+
+                        const showPassword = input.type === "password";
+
+                        input.type = showPassword ? "text" : "password";
+                        icon.className = showPassword
+                            ? "bi bi-eye-slash"
+                            : "bi bi-eye";
+
+                        button.setAttribute(
+                            "aria-label",
+                            showPassword ? "Hide password" : "Show password");
+                    });
+                });
+        });
+    </script>
+}

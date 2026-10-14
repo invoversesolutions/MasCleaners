@@ -87,236 +87,268 @@
         </div>
 
 
-        <!-- Navigation -->
+       
+<nav class="admin-navigation">
 
-        <nav class="admin-navigation">
+    @* =====================================================
+       SHARED ADMIN NAVIGATION
+    ====================================================== *@
 
+    <div class="admin-nav-section">
 
-            <!-- Main -->
+        <span class="admin-nav-title">MAIN</span>
 
-            <div class="admin-nav-section">
+        <a asp-controller="Admin"
+           asp-action="Index"
+           class="admin-nav-link">
+            <span class="admin-nav-icon">
+                <i class="bi bi-grid-1x2"></i>
+            </span>
+            <span>Dashboard</span>
+        </a>
 
-                <span class="admin-nav-title">
-                    MAIN
-                </span>
+        <a asp-controller="Booking"
+           asp-action="Admin"
+           class="admin-nav-link">
+            <span class="admin-nav-icon">
+                <i class="bi bi-calendar3"></i>
+            </span>
+            <span>Bookings</span>
+        </a>
 
+    </div>
 
-                <a asp-controller="Admin"
-                   asp-action="Index"
-                   class="admin-nav-link">
+    @* =====================================================
+       ADMIN USER LINKS
+    ====================================================== *@
 
-                    <span class="admin-nav-icon">
-                        <i class="bi bi-grid-1x2"></i>
-                    </span>
-
-                    <span>
-                        Dashboard
-                    </span>
-
-                </a>
-
-
-                <a asp-controller="Booking"
-                   asp-action="Admin"
-                   class="admin-nav-link">
-
-                    <span class="admin-nav-icon">
-                        <i class="bi bi-calendar3"></i>
-                    </span>
-
-                    <span>
-                        Bookings
-                    </span>
-
-                </a>
-
-            </div>
-
-
-            <!-- Service Catalogue -->
-
-            <div class="admin-nav-section">
-
-                <span class="admin-nav-title">
-                    SERVICE CATALOGUE
-                </span>
-
-
-                <a asp-controller="Category"
-                   asp-action="Index"
-                   class="admin-nav-link">
-
-                    <span class="admin-nav-icon">
-                        <i class="bi bi-collection"></i>
-                    </span>
-
-                    <span>
-                        Categories/Services
-                    </span>
-
-                </a>
-
-
-
-                <a asp-controller="ServiceOptions"
-                   asp-action="Index"
-                   class="admin-nav-link">
-
-                    <span class="admin-nav-icon">
-                        <i class="bi bi-tags"></i>
-                    </span>
-
-                    <span>
-                        Service Options
-                    </span>
-
-                </a>
-
-            </div>
-              <!-- =====================================================
-             CRM
-        ====================================================== -->
-
+    @if (User.IsInRole("Administrator"))
+    {
         <div class="admin-nav-section">
 
-            <span class="admin-nav-title">
-                CRM
-            </span>
+            <span class="admin-nav-title">OPERATIONS</span>
 
+            <a asp-controller="Category"
+               asp-action="Index"
+               class="admin-nav-link">
+                <span class="admin-nav-icon">
+                    <i class="bi bi-collection"></i>
+                </span>
+                <span>Categories &amp; Services</span>
+            </a>
+
+            <a asp-controller="ServiceOptions"
+               asp-action="Index"
+               class="admin-nav-link">
+                <span class="admin-nav-icon">
+                    <i class="bi bi-tags"></i>
+                </span>
+                <span>Service Options</span>
+            </a>
 
             <a asp-controller="Customers"
                asp-action="Index"
                class="admin-nav-link">
-
                 <span class="admin-nav-icon">
                     <i class="bi bi-people"></i>
                 </span>
-
-                <span>
-                    Customers
-                </span>
-
+                <span>Customers</span>
             </a>
-
 
             <a asp-controller="Leads"
                asp-action="Index"
                class="admin-nav-link">
-
                 <span class="admin-nav-icon">
                     <i class="bi bi-person-lines-fill"></i>
                 </span>
-
-                <span>
-                    Leads
-                </span>
-
+                <span>Leads</span>
             </a>
-
 
             <a asp-controller="CustomerActivity"
                asp-action="Index"
                class="admin-nav-link">
-
                 <span class="admin-nav-icon">
                     <i class="bi bi-clock-history"></i>
                 </span>
-
-                <span>
-                    Customer Activity
-                </span>
-
+                <span>Customer Activity</span>
             </a>
 
         </div>
 
-
-        <!-- =====================================================
-             BROADCASTING
-        ====================================================== -->
-
         <div class="admin-nav-section">
 
-            <span class="admin-nav-title">
-                BROADCASTING
-            </span>
+            <span class="admin-nav-title">MARKETING</span>
 
+            <a asp-controller="Ads"
+               asp-action="Index"
+               class="admin-nav-link">
+                <span class="admin-nav-icon">
+                    <i class="bi bi-megaphone"></i>
+                </span>
+                <span>Ads Manager</span>
+            </a>
 
             <a asp-controller="Broadcast"
                asp-action="Index"
                class="admin-nav-link">
-
                 <span class="admin-nav-icon">
-                    <i class="bi bi-megaphone"></i>
+                    <i class="bi bi-megaphone-fill"></i>
                 </span>
-
-                <span>
-                    Broadcasts
-                </span>
-
+                <span>Broadcasts</span>
             </a>
-
 
             <a asp-controller="Broadcast"
                asp-action="Create"
                class="admin-nav-link">
-
                 <span class="admin-nav-icon">
                     <i class="bi bi-send"></i>
                 </span>
-
-                <span>
-                    New Broadcast
-                </span>
-
+                <span>New Broadcast</span>
             </a>
-
 
             <a asp-controller="Broadcast"
                asp-action="History"
                class="admin-nav-link">
-
                 <span class="admin-nav-icon">
                     <i class="bi bi-envelope-paper"></i>
                 </span>
+                <span>Broadcast History</span>
+            </a>
 
-                <span>
-                    Broadcast History
+        </div>
+    }
+
+    @* =====================================================
+       SUPER USER LINKS
+    ====================================================== *@
+
+    @if (User.IsInRole("SuperUser"))
+    {
+        <div class="admin-nav-section">
+
+            <span class="admin-nav-title">SUPER USER</span>
+
+            <a asp-controller="SuperUser"
+               asp-action="Index"
+               class="admin-nav-link">
+                <span class="admin-nav-icon">
+                    <i class="bi bi-speedometer2"></i>
                 </span>
+                <span>Super User Dashboard</span>
+            </a>
 
+            <a asp-controller="SuperUser"
+               asp-action="Users"
+               class="admin-nav-link">
+                <span class="admin-nav-icon">
+                    <i class="bi bi-people-fill"></i>
+                </span>
+                <span>User Management</span>
+            </a>
+
+            <a asp-controller="SuperUser"
+               asp-action="Roles"
+               class="admin-nav-link">
+                <span class="admin-nav-icon">
+                    <i class="bi bi-shield-lock"></i>
+                </span>
+                <span>Role Management</span>
+            </a>
+
+            <a asp-controller="SuperUser"
+               asp-action="Settings"
+               class="admin-nav-link">
+                <span class="admin-nav-icon">
+                    <i class="bi bi-gear"></i>
+                </span>
+                <span>System Settings</span>
+            </a>
+
+            <a asp-controller="SuperUser"
+               asp-action="AuditLogs"
+               class="admin-nav-link">
+                <span class="admin-nav-icon">
+                    <i class="bi bi-journal-text"></i>
+                </span>
+                <span>Audit Logs</span>
             </a>
 
         </div>
 
+        @* Super users can also access regular admin operations. *@
 
+        <div class="admin-nav-section">
 
-            <!-- Business -->
+            <span class="admin-nav-title">BUSINESS OPERATIONS</span>
 
-            <div class="admin-nav-section">
-
-                <span class="admin-nav-title">
-                    BUSINESS
+            <a asp-controller="Category"
+               asp-action="Index"
+               class="admin-nav-link">
+                <span class="admin-nav-icon">
+                    <i class="bi bi-collection"></i>
                 </span>
+                <span>Categories &amp; Services</span>
+            </a>
 
+            <a asp-controller="ServiceOptions"
+               asp-action="Index"
+               class="admin-nav-link">
+                <span class="admin-nav-icon">
+                    <i class="bi bi-tags"></i>
+                </span>
+                <span>Service Options</span>
+            </a>
 
-                <a asp-controller="Ads"
-                   asp-action="Index"
-                   class="admin-nav-link">
+            <a asp-controller="Customers"
+               asp-action="Index"
+               class="admin-nav-link">
+                <span class="admin-nav-icon">
+                    <i class="bi bi-people"></i>
+                </span>
+                <span>Customers</span>
+            </a>
 
-                    <span class="admin-nav-icon">
-                        <i class="bi bi-megaphone"></i>
-                    </span>
+            <a asp-controller="Leads"
+               asp-action="Index"
+               class="admin-nav-link">
+                <span class="admin-nav-icon">
+                    <i class="bi bi-person-lines-fill"></i>
+                </span>
+                <span>Leads</span>
+            </a>
 
-                    <span>
-                        Ads Manager
-                    </span>
+            <a asp-controller="CustomerActivity"
+               asp-action="Index"
+               class="admin-nav-link">
+                <span class="admin-nav-icon">
+                    <i class="bi bi-clock-history"></i>
+                </span>
+                <span>Customer Activity</span>
+            </a>
 
-                </a>
+            <a asp-controller="Ads"
+               asp-action="Index"
+               class="admin-nav-link">
+                <span class="admin-nav-icon">
+                    <i class="bi bi-megaphone"></i>
+                </span>
+                <span>Ads Manager</span>
+            </a>
 
-            </div>
+            <a asp-controller="Broadcast"
+               asp-action="Index"
+               class="admin-nav-link">
+                <span class="admin-nav-icon">
+                    <i class="bi bi-broadcast"></i>
+                </span>
+                <span>Broadcasts</span>
+            </a>
 
+        </div>
+    }
 
-        </nav>
+</nav>
+
 
 
         <!-- Sidebar Bottom -->
@@ -436,27 +468,38 @@
 
                 <!-- User -->
 
-                <div class="admin-user">
+           
+                    <div class="admin-user">
 
-                    <div class="admin-user-icon">
+                        <div class="admin-user-icon">
+                            <i class="bi bi-person"></i>
+                        </div>
 
-                        <i class="bi bi-person"></i>
+                        <div class="admin-user-details">
+
+                            <strong>
+                                @(User.Identity?.Name ?? "User")
+                            </strong>
+
+                            <span>
+                                @if (User.IsInRole("Super"))
+                                {
+                                    @:Super User
+                                }
+                                else if (User.IsInRole("Administrator"))
+                                {
+                                    @:Administrator
+                                }
+                                else
+                                {
+                                    @:Staff
+                                }
+                            </span>
+
+                        </div>
 
                     </div>
 
-                    <div class="admin-user-details">
-
-                        <strong>
-                            Admin
-                        </strong>
-
-                        <span>
-                            Administrator
-                        </span>
-
-                    </div>
-
-                </div>
 
 
             </div>

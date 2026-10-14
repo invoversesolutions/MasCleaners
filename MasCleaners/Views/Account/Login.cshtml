@@ -1,0 +1,149 @@
+﻿@model MasCleaners.ViewModels.LoginVM
+
+@{
+    ViewData["Title"] = "Sign In";
+    Layout = "_Layout";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/account/login.css" asp-append-version="true" />
+}
+
+<div class="mas-login-page">
+    <div class="mas-login-card">
+
+        <div class="mas-login-brand">
+            <div class="mas-login-icon">
+                <i class="bi bi-stars"></i>
+            </div>
+
+            <h1>Welcome Back</h1>
+            <p>Sign in to your MAS Cleaners account.</p>
+        </div>
+
+        <form asp-controller="Account"
+              asp-action="Login"
+              asp-route-returnUrl="@Model.ReturnUrl"
+              method="post"
+              class="mas-login-form">
+
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="ModelOnly"
+                 class="mas-login-validation"
+                 role="alert"></div>
+
+            <div class="mas-form-group">
+                <label asp-for="Email"></label>
+
+                <div class="mas-input-wrapper">
+                    <i class="bi bi-envelope"></i>
+
+                    <input asp-for="Email"
+                           type="email"
+                           class="mas-form-control"
+                           placeholder="Enter your email address"
+                           autocomplete="username"
+                           autofocus />
+
+                </div>
+
+                <span asp-validation-for="Email"
+                      class="mas-field-error"></span>
+            </div>
+
+            <div class="mas-form-group">
+                <div class="mas-password-heading">
+                    <label asp-for="Password"></label>
+                </div>
+
+                <div class="mas-input-wrapper">
+                    <i class="bi bi-lock"></i>
+
+                    <input asp-for="Password"
+                           id="loginPassword"
+                           class="mas-form-control"
+                           placeholder="Enter your password"
+                           autocomplete="current-password" />
+
+                    <button type="button"
+                            class="mas-password-toggle"
+                            id="togglePassword"
+                            aria-label="Show password"
+                            aria-pressed="false">
+                        <i class="bi bi-eye"></i>
+                    </button>
+                </div>
+
+                <span asp-validation-for="Password"
+                      class="mas-field-error"></span>
+            </div>
+
+            <div class="mas-login-options">
+                <label class="mas-remember-me">
+                    <input asp-for="RememberMe" />
+                    <span>Remember me</span>
+                </label>
+
+                <a asp-controller="Account"
+                   asp-action="ForgotPassword"
+                   class="mas-forgot-link">
+                    Forgot password?
+                </a>
+            </div>
+
+            <button type="submit" class="mas-login-button">
+                <span>Sign In</span>
+                <i class="bi bi-arrow-right"></i>
+            </button>
+
+            <div class="mas-login-divider">
+                <span>New to MAS Cleaners?</span>
+            </div>
+
+            <a asp-controller="Account"
+               asp-action="Register"
+               class="mas-register-button">
+                Create a Customer Account
+            </a>
+        </form>
+
+        <div class="mas-login-footer">
+            <i class="bi bi-shield-check"></i>
+            Secure sign-in for MAS Cleaners customers and staff
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const toggleButton = document.getElementById("togglePassword");
+            const passwordInput = document.getElementById("loginPassword");
+
+            if (!toggleButton || !passwordInput) return;
+
+            toggleButton.addEventListener("click", function () {
+                const isPassword = passwordInput.type === "password";
+
+                passwordInput.type = isPassword ? "text" : "password";
+                toggleButton.setAttribute("aria-pressed", String(isPassword));
+                toggleButton.setAttribute(
+                    "aria-label",
+                    isPassword ? "Hide password" : "Show password"
+                );
+
+                const icon = toggleButton.querySelector("i");
+
+                if (icon) {
+                    icon.className = isPassword
+                        ? "bi bi-eye-slash"
+                        : "bi bi-eye";
+                }
+            });
+        });
+    </script>
+}

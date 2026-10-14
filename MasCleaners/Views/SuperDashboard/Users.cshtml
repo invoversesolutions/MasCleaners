@@ -1,0 +1,314 @@
+﻿ @model MasCleaners.ViewModels.SuperUser.UserManagementVM
+
+@{
+    ViewData["Title"] = "User Management";
+    Layout = "_LayoutAdmin";
+}
+
+<div class="user-management-page">
+
+    <div class="user-management-heading">
+        <div>
+            <h2>User Management</h2>
+            <p>View registered accounts, employee details, assigned roles and account status.</p>
+        </div>
+
+        <a asp-controller="SuperDashboard"
+           asp-action="Index"
+           class="user-back-link">
+            <i class="bi bi-arrow-left"></i>
+            Super Dashboard
+        </a>
+    </div>
+
+    @if (TempData["ErrorMessage"] is string errorMessage)
+    {
+        <div class="alert alert-danger" role="alert">
+            @errorMessage
+        </div>
+    }
+
+    @if (TempData["SuccessMessage"] is string successMessage)
+    {
+        <div class="alert alert-success" role="alert">
+            @successMessage
+        </div>
+    }
+
+    <div class="user-summary-grid">
+
+        <div class="user-summary-card">
+            <div class="user-summary-icon">
+                <i class="bi bi-people"></i>
+            </div>
+            <div>
+                <span>Total Accounts</span>
+                <h3>@Model.TotalUsers</h3>
+            </div>
+        </div>
+
+        <div class="user-summary-card">
+            <div class="user-summary-icon confirmed">
+                <i class="bi bi-envelope-check"></i>
+            </div>
+            <div>
+                <span>Email Confirmed</span>
+                <h3>@Model.ConfirmedUsers</h3>
+            </div>
+        </div>
+
+        <div class="user-summary-card">
+            <div class="user-summary-icon unconfirmed">
+                <i class="bi bi-envelope-exclamation"></i>
+            </div>
+            <div>
+                <span>Email Unconfirmed</span>
+                <h3>@Model.UnconfirmedUsers</h3>
+            </div>
+        </div>
+
+    </div>
+
+    <section class="user-table-panel">
+
+        <div class="user-table-header">
+            <div class="user-table-heading-text">
+                <h4>Registered Users</h4>
+                <p>Manage accounts, employee information and access.</p>
+            </div>
+
+            <div class="user-table-tools">
+
+                <form asp-controller="SuperDashboard"
+                      asp-action="Users"
+                      method="get"
+                      class="user-search-form">
+
+                    <div class="user-search-input">
+                        <i class="bi bi-search"></i>
+
+                        <input type="search"
+                               name="searchTerm"
+                               value="@Model.SearchTerm"
+                               placeholder="Search users..."
+                               aria-label="Search users" />
+                    </div>
+
+                    <button type="submit" class="user-search-button">
+                        Search
+                    </button>
+
+                    @if (!string.IsNullOrWhiteSpace(Model.SearchTerm))
+                    {
+                        <a asp-controller="SuperDashboard"
+                           asp-action="Users"
+                           class="user-clear-search"
+                           title="Clear search"
+                           aria-label="Clear search">
+                            <i class="bi bi-x-lg"></i>
+                        </a>
+                    }
+                </form>
+
+                <a asp-controller="SuperDashboard"
+                   asp-action="CreateUser"
+                   class="user-add-button">
+                    <i class="bi bi-person-plus"></i>
+                    Add New User
+                </a>
+
+            </div>
+        </div>
+
+        <div class="user-table-container">
+
+            <table class="table user-management-table align-middle">
+
+                <thead>
+                    <tr>
+                        <th>USER</th>
+                        <th>CONTACT</th>
+                        <th>ROLE</th>
+                        <th>EMAIL STATUS</th>
+                        <th>ACCOUNT STATUS</th>
+                        <th>ACTIONS</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @if (Model.Users.Any())
+                    {
+                        foreach (var user in Model.Users)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="managed-user">
+                                        <div class="managed-user-avatar">
+                                            <i class="bi bi-person"></i>
+                                        </div>
+
+                                        <div class="managed-user-info">
+                                            <strong>
+                                                @(string.IsNullOrWhiteSpace(user.FullName)
+                                                    ? "Employee details unavailable"
+                                                    : user.FullName)
+                                            </strong>
+
+                                            <span>ID: @user.Id</span>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td class="user-contact-cell">
+                                    <span>@(user.Email ?? "No email")</span>
+                                    <small>@(user.PhoneNumber ?? "No phone number")</small>
+                                </td>
+
+                                <td>
+                                    <div class="user-role-list">
+                                        @if (user.Roles.Any())
+                                        {
+                                            foreach (var role in user.Roles)
+                                            {
+                                                <span class="user-role-badge">@role</span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span class="user-no-role">No role assigned</span>
+                                        }
+                                    </div>
+                                </td>
+
+                                <td>
+                                    @if (user.EmailConfirmed)
+                                    {
+                                        <span class="user-status confirmed">
+                                            <i class="bi bi-check-circle-fill"></i>
+                                            Confirmed
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="user-status unconfirmed">
+                                            <i class="bi bi-exclamation-circle-fill"></i>
+                                            Unconfirmed
+                                        </span>
+                                    }
+                                </td>
+
+                                <td>
+                                    @if (user.IsLockedOut)
+                                    {
+                                        <span class="user-status locked">
+                                            <i class="bi bi-lock-fill"></i>
+                                            Locked
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="user-status active">
+                                            <i class="bi bi-check-circle"></i>
+                                            Not locked
+                                        </span>
+                                    }
+                                </td>
+
+                                <td>
+                                    <div class="user-actions">
+
+                                        @if (!user.IsCurrentUser)
+                                        {
+                                            @if (user.IsLockedOut)
+                                            {
+                                                <form asp-controller="SuperDashboard"
+                                                      asp-action="UnlockUser"
+                                                      method="post"
+                                                      onsubmit="return confirm('Unlock this user account?');">
+
+                                                    @Html.AntiForgeryToken()
+
+                                                    <input type="hidden"
+                                                           name="id"
+                                                           value="@user.Id" />
+
+                                                    <button type="submit"
+                                                            class="user-action-button unlock">
+                                                        <i class="bi bi-unlock"></i>
+                                                        Unlock
+                                                    </button>
+                                                </form>
+                                            }
+                                            else
+                                            {
+                                                <form asp-controller="SuperDashboard"
+                                                      asp-action="LockUser"
+                                                      method="post"
+                                                      onsubmit="return confirm('Lock this user account? The user will be prevented from signing in.');">
+
+                                                    @Html.AntiForgeryToken()
+
+                                                    <input type="hidden"
+                                                           name="id"
+                                                           value="@user.Id" />
+
+                                                    <button type="submit"
+                                                            class="user-action-button lock">
+                                                        <i class="bi bi-lock"></i>
+                                                        Lock
+                                                    </button>
+                                                </form>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span class="current-user-label">Current account</span>
+                                        }
+
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6">
+                                <div class="user-empty-state">
+                                    <i class="bi bi-people"></i>
+                                    <h5>No users found</h5>
+                                    <p>
+                                        @if (!string.IsNullOrWhiteSpace(Model.SearchTerm))
+                                        {
+                                            @:Try another search term.
+                                        }
+                                        else
+                                        {
+                                            @:There are no registered user accounts to display.
+                                        }
+                                    </p>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <div class="user-table-footer">
+            Showing @Model.Users.Count user(s)
+        </div>
+
+    </section>
+
+</div>
+
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/super-users.css"
+          asp-append-version="true" />
+}

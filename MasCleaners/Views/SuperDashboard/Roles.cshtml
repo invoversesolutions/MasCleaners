@@ -1,0 +1,173 @@
+﻿
+@model MasCleaners.ViewModels.SuperUser.RoleManagementVM
+
+@{
+    ViewData["Title"] = "Role Management";
+    Layout = "_LayoutAdmin";
+}
+
+<div class="role-management-page">
+
+    <div class="role-page-heading">
+        <div>
+            <h2>Role Management</h2>
+            <p>
+                Review system roles and the access groups assigned to users.
+            </p>
+        </div>
+
+        <a asp-controller="SuperDashboard"
+           asp-action="Index"
+           class="role-back-link">
+            <i class="bi bi-arrow-left"></i>
+            Super Dashboard
+        </a>
+    </div>
+
+    @if (TempData["ErrorMessage"] is string errorMessage)
+    {
+        <div class="alert alert-danger" role="alert">
+            @errorMessage
+        </div>
+    }
+
+    <div class="role-summary-grid">
+
+        <div class="role-summary-card">
+            <div class="role-summary-icon">
+                <i class="bi bi-shield-check"></i>
+            </div>
+            <div>
+                <span>Total Roles</span>
+                <h3>@Model.TotalRoles</h3>
+            </div>
+        </div>
+
+        <div class="role-summary-card">
+            <div class="role-summary-icon unused">
+                <i class="bi bi-shield-exclamation"></i>
+            </div>
+            <div>
+                <span>Roles Without Users</span>
+                <h3>@Model.RolesWithoutUsers</h3>
+            </div>
+        </div>
+
+    </div>
+
+    <section class="role-table-panel">
+
+        <div class="role-table-heading">
+            <div>
+                <h4>Registered System Roles</h4>
+                <p>
+                    These roles come from the application's Identity role store.
+                </p>
+            </div>
+        </div>
+
+        <div class="role-table-container">
+            <table class="table role-management-table align-middle">
+
+                <thead>
+                    <tr>
+                        <th>ROLE</th>
+                        <th>ROLE TYPE</th>
+                        <th>ASSIGNED USERS</th>
+                        <th>USAGE STATUS</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @if (Model.Roles.Any())
+                    {
+                        foreach (var role in Model.Roles)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="role-name-cell">
+                                        <div class="role-name-icon">
+                                            <i class="bi bi-shield-lock"></i>
+                                        </div>
+                                        <div>
+                                            <strong>@role.Name</strong>
+                                            <small>Role ID: @role.Id</small>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    @if (role.IsSystemRole)
+                                    {
+                                        <span class="role-type-badge system">
+                                            <i class="bi bi-lock-fill"></i>
+                                            System role
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="role-type-badge standard">
+                                            <i class="bi bi-person-badge"></i>
+                                            Standard role
+                                        </span>
+                                    }
+                                </td>
+
+                                <td>
+                                    <span class="role-user-count">
+                                        <i class="bi bi-people"></i>
+                                        @role.UserCount
+                                    </span>
+                                </td>
+
+                                <td>
+                                    @if (role.UserCount > 0)
+                                    {
+                                        <span class="role-usage-status in-use">
+                                            <i class="bi bi-check-circle-fill"></i>
+                                            In use
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="role-usage-status unused">
+                                            <i class="bi bi-exclamation-circle-fill"></i>
+                                            No users assigned
+                                        </span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="4">
+                                <div class="role-empty-state">
+                                    <i class="bi bi-shield"></i>
+                                    <h5>No roles found</h5>
+                                    <p>
+                                        No Identity roles are currently registered.
+                                    </p>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
+
+        <div class="role-table-footer">
+            Showing @Model.Roles.Count role(s)
+        </div>
+
+    </section>
+
+</div>
+
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/super-roles.css"
+          asp-append-version="true" />
+}

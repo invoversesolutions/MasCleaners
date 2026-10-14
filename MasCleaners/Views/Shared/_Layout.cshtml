@@ -117,17 +117,64 @@
 
                     </a>
 
-                    <a asp-controller="Account"
-                       asp-action="Access"
-                       class="mas-nav-link">
+                <!-- Account Actions -->
+                <div class="mas-nav-actions">
 
-                        <span class="nav-icon">
-                            <i class="bi bi-lock"></i>
-                        </span>
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        @if (User.IsInRole(StaticRoles.Role_Super))
+                        {
+                            <a asp-controller="SuperDashboard"
+                               asp-action="Index"
+                               class="mas-nav-link mas-admin-link">
+                                <i class="bi bi-speedometer2"></i>
+                                Super Admin Panel
+                            </a>
+                        }
+                          @if (User.IsInRole(StaticRoles.Role_Admin))
+                        {
+                            <a asp-controller="Admin"
+                               asp-action="Index"
+                               class="mas-nav-link mas-admin-link">
+                                <i class="bi bi-speedometer2"></i>
+                                Admin Panel
+                            </a>
+                        }
+                        <a asp-controller="Account"
+                           asp-action="Profile"
+                           class="mas-signin-button">
+                            <i class="bi bi-person-circle"></i>
+                            My Account
+                        </a>
 
-                        Admin
+                        <form asp-controller="Account"
+                              asp-action="Logout"
+                              method="post"
+                              class="mas-logout-form">
+                            <button type="submit"
+                                    class="mas-started-button mas-logout-button">
+                                <i class="bi bi-box-arrow-right"></i>
+                                Sign Out
+                            </button>
+                        </form>
+                    }
+                    else
+                    {
+                        <a asp-controller="Account"
+                           asp-action="Login"
+                           class="mas-signin-button">
+                            Sign In
+                        </a>
 
-                    </a>
+                        <a asp-controller="Account"
+                           asp-action="Register"
+                           class="mas-started-button">
+                            Get Started
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                    }
+
+                </div>
 
                 </div>
 
