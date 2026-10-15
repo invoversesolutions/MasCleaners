@@ -1,0 +1,703 @@
+﻿
+/* =========================================================
+   MAS CLEANERS - BOOKING CONFIRMATION
+   ========================================================= */
+
+.confirmation-page {
+    --confirm-primary: #0f9d94;
+    --confirm-primary-dark: #07877f;
+    --confirm-navy: #092b4c;
+    --confirm-text: #526b88;
+    --confirm-muted: #7d8da1;
+    --confirm-light: #f6f8fa;
+    --confirm-light-teal: #e8f8f6;
+    --confirm-border: #e1e6eb;
+    --confirm-white: #ffffff;
+    --confirm-radius: 16px;
+    width: 100%;
+    min-height: 75vh;
+    padding: 54px 24px 70px;
+    background: var(--confirm-light);
+    color: var(--confirm-navy);
+    font-family: Inter, "Segoe UI", sans-serif;
+}
+
+.confirmation-container {
+    width: 100%;
+    max-width: 1050px;
+    margin: 0 auto;
+}
+
+/* =========================================================
+   SUCCESS HEADER
+   ========================================================= */
+
+.confirmation-success {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 36px;
+}
+
+.success-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 78px;
+    height: 78px;
+    margin-bottom: 24px;
+    border-radius: 50%;
+    background: var(--confirm-light-teal);
+    border: 1px solid rgba(15, 157, 148, 0.2);
+    color: var(--confirm-primary);
+    font-size: 38px;
+    box-shadow: 0 8px 24px rgba(15, 157, 148, 0.08);
+}
+
+.success-eyebrow {
+    margin-bottom: 12px;
+    color: var(--confirm-primary-dark);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.confirmation-success h1 {
+    max-width: 760px;
+    margin: 0 0 16px;
+    color: var(--confirm-navy);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(32px, 4vw, 46px);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.8px;
+}
+
+    .confirmation-success h1 span {
+        color: var(--confirm-primary);
+    }
+
+.success-description {
+    max-width: 610px;
+    margin: 0;
+    color: var(--confirm-text);
+    font-size: 15px;
+    line-height: 1.8;
+}
+
+/* =========================================================
+   BOOKING REFERENCE
+   ========================================================= */
+
+.booking-reference {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    max-width: 410px;
+    margin-top: 28px;
+    padding: 18px 20px;
+    background: var(--confirm-white);
+    border: 1px solid var(--confirm-border);
+    border-radius: 14px;
+    text-align: left;
+    box-shadow: 0 8px 26px rgba(9, 43, 76, 0.04);
+}
+
+.reference-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    background: var(--confirm-light-teal);
+    color: var(--confirm-primary);
+    font-size: 21px;
+}
+
+.reference-content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+}
+
+    .reference-content span {
+        color: var(--confirm-muted);
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 1.2px;
+    }
+
+    .reference-content strong {
+        overflow-wrap: anywhere;
+        color: var(--confirm-navy);
+        font-size: 19px;
+        font-weight: 800;
+        letter-spacing: 0.8px;
+    }
+
+.copy-reference {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--confirm-border);
+    border-radius: 10px;
+    background: var(--confirm-white);
+    color: var(--confirm-text);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+    .copy-reference:hover {
+        background: var(--confirm-light-teal);
+        border-color: var(--confirm-primary);
+        color: var(--confirm-primary);
+    }
+
+.copy-feedback {
+    min-height: 20px;
+    margin-top: 8px;
+    color: var(--confirm-primary-dark);
+    font-size: 12px;
+}
+
+/* =========================================================
+   MAIN GRID
+   ========================================================= */
+
+.confirmation-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+    align-items: start;
+    gap: 22px;
+}
+
+.confirmation-card {
+    min-width: 0;
+    padding: 27px;
+    background: var(--confirm-white);
+    border: 1px solid var(--confirm-border);
+    border-radius: var(--confirm-radius);
+    box-shadow: 0 6px 24px rgba(9, 43, 76, 0.035);
+}
+
+.card-heading {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 26px;
+}
+
+.heading-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: 13px;
+    background: var(--confirm-light-teal);
+    color: var(--confirm-primary);
+    font-size: 22px;
+}
+
+.card-heading h2 {
+    margin: 0 0 5px;
+    color: var(--confirm-navy);
+    font-size: 18px;
+    font-weight: 750;
+}
+
+.card-heading p {
+    margin: 0;
+    color: var(--confirm-muted);
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+/* =========================================================
+   BOOKING DETAILS
+   ========================================================= */
+
+.detail-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 17px 0;
+    border-bottom: 1px solid #edf0f3;
+}
+
+    .detail-row:first-of-type {
+        padding-top: 0;
+    }
+
+    .detail-row:last-child {
+        padding-bottom: 0;
+        border-bottom: 0;
+    }
+
+.detail-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 39px;
+    height: 39px;
+    border-radius: 11px;
+    background: var(--confirm-light);
+    color: var(--confirm-text);
+    font-size: 17px;
+}
+
+.detail-content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+}
+
+    .detail-content > span {
+        color: var(--confirm-muted);
+        font-size: 12px;
+    }
+
+    .detail-content > strong {
+        overflow-wrap: anywhere;
+        color: var(--confirm-navy);
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    gap: 7px;
+    padding: 6px 10px;
+    border-radius: 20px;
+    background: #fff7e8;
+    color: #946200 !important;
+    font-size: 11px !important;
+}
+
+.status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #d99b22;
+}
+
+/* =========================================================
+   SERVICE SUMMARY
+   ========================================================= */
+
+.service-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.service-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 17px 0;
+    border-bottom: 1px solid #edf0f3;
+}
+
+.service-description {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    min-width: 0;
+}
+
+.service-check {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 29px;
+    height: 29px;
+    border-radius: 9px;
+    background: var(--confirm-light-teal);
+    color: var(--confirm-primary-dark);
+    font-size: 16px;
+}
+
+.service-description > div:last-child {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+}
+
+.service-description strong {
+    overflow-wrap: anywhere;
+    color: var(--confirm-navy);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.service-description span {
+    color: var(--confirm-muted);
+    font-size: 12px;
+}
+
+.service-price {
+    flex-shrink: 0;
+    color: var(--confirm-navy);
+    font-size: 13px;
+    font-weight: 750;
+}
+
+.price-summary {
+    padding-top: 21px;
+}
+
+.price-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 15px;
+    color: var(--confirm-text);
+    font-size: 13px;
+}
+
+    .price-row strong {
+        color: var(--confirm-navy);
+        font-weight: 700;
+    }
+
+.total-row {
+    margin: 0;
+    padding-top: 18px;
+    border-top: 1px solid var(--confirm-border);
+    color: var(--confirm-navy);
+    font-size: 15px;
+    font-weight: 800;
+}
+
+    .total-row strong {
+        color: var(--confirm-primary-dark);
+        font-size: 24px;
+        font-weight: 800;
+    }
+
+.payment-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin: 20px 0 0;
+    padding: 12px;
+    border-radius: 10px;
+    background: var(--confirm-light);
+    color: var(--confirm-text);
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+    .payment-note i {
+        margin-top: 1px;
+        color: var(--confirm-primary);
+        font-size: 14px;
+    }
+
+/* =========================================================
+   SERVICE ADDRESS
+   ========================================================= */
+
+.address-card {
+    margin-top: 22px;
+}
+
+.address-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.address-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 13px;
+    padding: 18px;
+    border: 1px solid var(--confirm-border);
+    border-radius: 12px;
+    background: #fff;
+}
+
+.address-pin {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: var(--confirm-light-teal);
+    color: var(--confirm-primary);
+}
+
+.address-item strong {
+    display: block;
+    margin-bottom: 7px;
+    color: var(--confirm-navy);
+    font-size: 13px;
+}
+
+.address-item p {
+    margin: 0;
+    color: var(--confirm-text);
+    font-size: 12px;
+    line-height: 1.8;
+    overflow-wrap: anywhere;
+}
+
+/* =========================================================
+   NEXT STEPS
+   ========================================================= */
+
+.next-steps-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 17px;
+    margin-top: 22px;
+    padding: 25px 27px;
+    border: 1px solid rgba(15, 157, 148, 0.2);
+    border-radius: var(--confirm-radius);
+    background: var(--confirm-light-teal);
+}
+
+.next-steps-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 47px;
+    height: 47px;
+    border-radius: 13px;
+    background: var(--confirm-white);
+    color: var(--confirm-primary);
+    font-size: 22px;
+}
+
+.next-steps-content h2 {
+    margin: 2px 0 8px;
+    color: var(--confirm-navy);
+    font-size: 16px;
+    font-weight: 750;
+}
+
+.next-steps-content p {
+    margin: 0;
+    color: var(--confirm-text);
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+/* =========================================================
+   ACTION BUTTONS
+   ========================================================= */
+
+.confirmation-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 30px;
+}
+
+.btn-back-home,
+.btn-book-again {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 50px;
+    padding: 0 23px;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 750;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.btn-back-home {
+    border-color: var(--confirm-border);
+    background: var(--confirm-white);
+    color: var(--confirm-navy);
+}
+
+    .btn-back-home:hover {
+        border-color: var(--confirm-primary);
+        background: var(--confirm-light-teal);
+        color: var(--confirm-primary-dark);
+    }
+
+.btn-book-again {
+    background: var(--confirm-primary);
+    color: var(--confirm-white);
+    box-shadow: 0 5px 14px rgba(15, 157, 148, 0.16);
+}
+
+    .btn-book-again:hover {
+        background: var(--confirm-primary-dark);
+        color: var(--confirm-white);
+        transform: translateY(-1px);
+        box-shadow: 0 8px 20px rgba(15, 157, 148, 0.22);
+    }
+
+.confirmation-footer {
+    margin: 28px 0 0;
+    color: var(--confirm-muted);
+    font-size: 12px;
+    line-height: 1.8;
+    text-align: center;
+}
+
+    .confirmation-footer strong {
+        display: block;
+        color: var(--confirm-primary-dark);
+        font-weight: 750;
+    }
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 800px) {
+    .confirmation-page {
+        padding: 40px 20px 55px;
+    }
+
+    .confirmation-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 18px;
+    }
+
+    .confirmation-card {
+        padding: 24px;
+    }
+
+    .address-list {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .confirmation-page {
+        padding: 30px 15px 42px;
+    }
+
+    .success-icon {
+        width: 66px;
+        height: 66px;
+        margin-bottom: 19px;
+        font-size: 32px;
+    }
+
+    .confirmation-success h1 {
+        font-size: 32px;
+    }
+
+    .success-description {
+        font-size: 13px;
+        line-height: 1.8;
+    }
+
+    .booking-reference {
+        gap: 10px;
+        padding: 14px;
+    }
+
+    .reference-icon {
+        width: 39px;
+        height: 39px;
+    }
+
+    .reference-content strong {
+        font-size: 15px;
+    }
+
+    .reference-content span {
+        font-size: 9px;
+        letter-spacing: 0.7px;
+    }
+
+    .copy-reference {
+        width: 35px;
+        height: 35px;
+    }
+
+    .confirmation-card {
+        padding: 19px;
+        border-radius: 14px;
+    }
+
+    .card-heading {
+        gap: 11px;
+        margin-bottom: 22px;
+    }
+
+    .heading-icon {
+        width: 42px;
+        height: 42px;
+        font-size: 19px;
+    }
+
+    .card-heading h2 {
+        font-size: 16px;
+    }
+
+    .card-heading p {
+        font-size: 11px;
+    }
+
+    .service-row {
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .service-price {
+        font-size: 12px;
+    }
+
+    .total-row strong {
+        font-size: 21px;
+    }
+
+    .next-steps-card {
+        gap: 12px;
+        padding: 19px;
+    }
+
+    .next-steps-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 19px;
+    }
+
+    .confirmation-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .btn-back-home,
+    .btn-book-again {
+        width: 100%;
+        min-height: 49px;
+    }
+}

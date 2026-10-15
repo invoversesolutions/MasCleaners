@@ -1,7 +1,9 @@
 ﻿using MasCleaners.DataConnection;
 using MasCleaners.Models;
+using MasCleaners.Services;
 using MasCleaners.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,17 +20,19 @@ namespace MasCleaners.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly SqlDbContext _context;
         private readonly ILogger<AccountController> _logger;
+        private readonly CartService _cartService;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             SqlDbContext context,
-            ILogger<AccountController> logger)
+            ILogger<AccountController> logger,CartService cartService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _context = context;
             _logger = logger;
+            _cartService = cartService;
         }
         // ======================================================
         // LOGIN - GET
@@ -101,6 +105,12 @@ namespace MasCleaners.Controllers
 
                 if (result.Succeeded)
                 {
+                    if(User.IsInRole(StaticRoles.Role_Customer))
+                    {
+                        await _cartService.MigrateGuestCartAsync(user.Id, Request, Response);
+                    }
+        
+
                     _logger.LogInformation(
                         "User {UserId} signed in successfully.",
                         user.Id);
@@ -372,6 +382,8 @@ namespace MasCleaners.Controllers
                 await _signInManager.SignInAsync(
                     user,
                     isPersistent: false);
+
+                await _cartService.MigrateGuestCartAsync(user.Id, Request, Response);
 
                 return RedirectToAction("Index", "Home");
             }

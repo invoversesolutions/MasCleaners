@@ -1,0 +1,328 @@
+﻿
+.create-employee-page {
+    width: 100%;
+    max-width: 1100px;
+    min-width: 0;
+    margin: 0 auto;
+}
+
+/* Page heading */
+
+.create-employee-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 26px;
+}
+
+    .create-employee-heading h2 {
+        margin-bottom: 8px;
+        color: #092b4c;
+        font-size: 28px;
+        font-weight: 700;
+    }
+
+    .create-employee-heading p {
+        margin-bottom: 0;
+        color: #7d8da1;
+        line-height: 1.6;
+    }
+
+.employee-back-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 11px 16px;
+    border: 1px solid #e1e6eb;
+    border-radius: 10px;
+    background: #fff;
+    color: #092b4c;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+    .employee-back-link:hover {
+        border-color: #0f9d94;
+        color: #07877f;
+    }
+
+/* Main card */
+
+.create-employee-card {
+    padding: 30px;
+    border: 1px solid #e1e6eb;
+    border-radius: 16px;
+    background: #fff;
+    min-width: 0;
+}
+
+.employee-card-heading {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #e1e6eb;
+}
+
+.employee-heading-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: #e8f8f6;
+    color: #0f9d94;
+    font-size: 24px;
+}
+
+.employee-card-heading h4 {
+    margin-bottom: 6px;
+    color: #092b4c;
+    font-size: 19px;
+    font-weight: 700;
+}
+
+.employee-card-heading p {
+    margin-bottom: 0;
+    color: #7d8da1;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+/* Sections */
+
+.employee-form-section {
+    margin-bottom: 30px;
+}
+
+    .employee-form-section > h5 {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 20px;
+        color: #092b4c;
+        font-size: 15px;
+        font-weight: 700;
+    }
+
+        .employee-form-section > h5 i {
+            color: #0f9d94;
+            font-size: 18px;
+        }
+
+/* Form grid */
+
+.employee-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+}
+
+.employee-form-field {
+    min-width: 0;
+}
+
+    .employee-form-field.employee-full-width {
+        grid-column: 1 / -1;
+    }
+
+    .employee-form-field label {
+        display: block;
+        margin-bottom: 9px;
+        color: #092b4c;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .employee-form-field .form-control,
+    .employee-form-field .form-select {
+        width: 100%;
+        min-width: 0;
+        min-height: 48px;
+        padding: 11px 14px;
+        border: 1px solid #e1e6eb;
+        border-radius: 10px;
+        background-color: #fff;
+        color: #092b4c;
+        font-size: 13px;
+        box-shadow: none;
+    }
+
+        .employee-form-field .form-control::placeholder {
+            color: #9aa8b8;
+        }
+
+        .employee-form-field .form-control:focus,
+        .employee-form-field .form-select:focus {
+            border-color: #0f9d94;
+            box-shadow: 0 0 0 3px rgba(15, 157, 148, .1);
+        }
+
+    .employee-form-field small {
+        display: block;
+        margin-top: 8px;
+        color: #7d8da1;
+        font-size: 12px;
+        line-height: 1.6;
+    }
+
+    .employee-form-field .text-danger {
+        display: block;
+        margin-top: 6px;
+        font-size: 12px;
+    }
+
+/* Information notice */
+
+.employee-information-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 22px;
+    padding: 15px;
+    border: 1px solid #d8eeeb;
+    border-radius: 10px;
+    background: #f2fbf9;
+    color: #526b88;
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+    .employee-information-notice i {
+        flex-shrink: 0;
+        color: #07877f;
+        font-size: 16px;
+    }
+
+/* Validation */
+
+.create-employee-card .validation-summary-valid {
+    display: none;
+}
+
+.create-employee-card .validation-summary-errors {
+    margin-bottom: 22px;
+    border-radius: 10px;
+    font-size: 13px;
+}
+
+    .create-employee-card .validation-summary-errors ul {
+        margin-bottom: 0;
+        padding-left: 20px;
+    }
+
+/* Form actions */
+
+.employee-form-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 28px;
+    padding-top: 22px;
+    border-top: 1px solid #e1e6eb;
+}
+
+.employee-cancel-button,
+.employee-submit-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 0 20px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background .2s ease, border-color .2s ease;
+}
+
+.employee-cancel-button {
+    border: 1px solid #e1e6eb;
+    background: #fff;
+    color: #526b88;
+}
+
+    .employee-cancel-button:hover {
+        background: #f6f8fa;
+        color: #092b4c;
+    }
+
+.employee-submit-button {
+    border: 1px solid #0f9d94;
+    background: #0f9d94;
+    color: #fff;
+    cursor: pointer;
+}
+
+    .employee-submit-button:hover {
+        border-color: #07877f;
+        background: #07877f;
+    }
+
+/* Tablet and mobile */
+
+@media (max-width: 767px) {
+    .create-employee-heading {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 14px;
+    }
+
+        .create-employee-heading h2 {
+            font-size: 24px;
+        }
+
+    .create-employee-card {
+        padding: 20px;
+    }
+
+    .employee-card-heading {
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .employee-heading-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        font-size: 21px;
+    }
+
+    .employee-form-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 18px;
+    }
+
+    .employee-form-field.employee-full-width {
+        grid-column: auto;
+    }
+
+    .employee-form-actions {
+        flex-direction: column-reverse;
+        align-items: stretch;
+    }
+
+    .employee-cancel-button,
+    .employee-submit-button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 380px) {
+    .create-employee-card {
+        padding: 16px;
+    }
+
+    .employee-card-heading h4 {
+        font-size: 17px;
+    }
+}

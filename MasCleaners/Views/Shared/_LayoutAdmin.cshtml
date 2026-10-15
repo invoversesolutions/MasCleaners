@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using MasCleaners.Models
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -90,7 +91,15 @@
        
 <nav class="admin-navigation">
 
+
+
     @* =====================================================
+       ADMIN USER LINKS
+    ====================================================== *@
+
+    @if (User.IsInRole(StaticRoles.Role_Admin))
+    {
+            @* =====================================================
        SHARED ADMIN NAVIGATION
     ====================================================== *@
 
@@ -98,7 +107,7 @@
 
         <span class="admin-nav-title">MAIN</span>
 
-        <a asp-controller="Admin"
+        <a asp-controller="AdminDashboard"
            asp-action="Index"
            class="admin-nav-link">
             <span class="admin-nav-icon">
@@ -117,13 +126,6 @@
         </a>
 
     </div>
-
-    @* =====================================================
-       ADMIN USER LINKS
-    ====================================================== *@
-
-    @if (User.IsInRole("Administrator"))
-    {
         <div class="admin-nav-section">
 
             <span class="admin-nav-title">OPERATIONS</span>
@@ -146,7 +148,7 @@
                 <span>Service Options</span>
             </a>
 
-            <a asp-controller="Customers"
+            <a asp-controller="Customer"
                asp-action="Index"
                class="admin-nav-link">
                 <span class="admin-nav-icon">
@@ -222,8 +224,35 @@
        SUPER USER LINKS
     ====================================================== *@
 
-    @if (User.IsInRole("SuperUser"))
+    @if (User.IsInRole(StaticRoles.Role_Super))
     {
+            @* =====================================================
+       SHARED ADMIN NAVIGATION
+    ====================================================== *@
+
+    <div class="admin-nav-section">
+
+        <span class="admin-nav-title">MAIN</span>
+
+        <a asp-controller="SuperDashboad"
+           asp-action="Index"
+           class="admin-nav-link">
+            <span class="admin-nav-icon">
+                <i class="bi bi-grid-1x2"></i>
+            </span>
+            <span>Dashboard</span>
+        </a>
+
+        <a asp-controller="Booking"
+           asp-action="Admin"
+           class="admin-nav-link">
+            <span class="admin-nav-icon">
+                <i class="bi bi-calendar3"></i>
+            </span>
+            <span>Bookings</span>
+        </a>
+
+    </div>
         <div class="admin-nav-section">
 
             <span class="admin-nav-title">SUPER USER</span>
@@ -371,19 +400,26 @@
             </a>
 
 
-            <a asp-controller="Account"
-               asp-action="Logout"
-               class="admin-nav-link admin-logout">
+           <form asp-controller="Account"
+      asp-action="Logout"
+      method="post"
+      class="admin-logout-form">
 
-                <span class="admin-nav-icon">
-                    <i class="bi bi-box-arrow-right"></i>
-                </span>
+    @Html.AntiForgeryToken()
 
-                <span>
-                    Logout
-                </span>
+    <button type="submit" class="admin-nav-link admin-logout">
 
-            </a>
+        <span class="admin-nav-icon">
+            <i class="bi bi-box-arrow-right"></i>
+        </span>
+
+        <span>
+            Logout
+        </span>
+
+    </button>
+
+</form>
 
 
         </div>

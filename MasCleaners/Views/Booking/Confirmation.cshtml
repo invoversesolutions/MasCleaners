@@ -1,0 +1,298 @@
+﻿
+@model MasCleaners.Models.Booking
+
+@{
+    ViewData["Title"] = "Booking Confirmed";
+
+    var bookingDate = Model.BookingDate.ToString("dddd, dd MMMM yyyy");
+    var bookingTime = DateTime.Today.Add(Model.BookingTime)
+        .ToString("hh:mm tt");
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/booking/booking-confirmation.css"
+          asp-append-version="true" />
+}
+
+<div class="confirmation-page">
+    <div class="confirmation-container">
+
+        <!-- SUCCESS HEADER -->
+        <div class="confirmation-success">
+            <div class="success-icon">
+                <i class="bi bi-check-lg"></i>
+            </div>
+
+            <span class="success-eyebrow">
+                BOOKING REQUEST RECEIVED
+            </span>
+
+            <h1>You're one step closer to a <span>fresh start.</span></h1>
+
+            <p class="success-description">
+                Thank you for choosing MAS Cleaners.
+                Your booking request has been submitted successfully.
+                We'll keep you updated on the next steps.
+            </p>
+
+            <div class="booking-reference">
+                <div class="reference-icon">
+                    <i class="bi bi-receipt"></i>
+                </div>
+
+                <div class="reference-content">
+                    <span>YOUR BOOKING REFERENCE</span>
+                    <strong>@Model.BookingReference</strong>
+                </div>
+
+                <button type="button"
+                        class="copy-reference"
+                        onclick="copyBookingReference()"
+                        aria-label="Copy booking reference">
+                    <i class="bi bi-copy"></i>
+                </button>
+            </div>
+
+            <span id="copyFeedback" class="copy-feedback"
+                  role="status" aria-live="polite"></span>
+        </div>
+
+        <!-- BOOKING DETAILS -->
+        <div class="confirmation-grid">
+
+            <section class="confirmation-card booking-details-card">
+                <div class="card-heading">
+                    <div class="heading-icon">
+                        <i class="bi bi-calendar-check"></i>
+                    </div>
+
+                    <div>
+                        <h2>Booking details</h2>
+                        <p>Here's a summary of your request.</p>
+                    </div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-icon">
+                        <i class="bi bi-calendar3"></i>
+                    </div>
+
+                    <div class="detail-content">
+                        <span>Scheduled date</span>
+                        <strong>@bookingDate</strong>
+                    </div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-icon">
+                        <i class="bi bi-clock"></i>
+                    </div>
+
+                    <div class="detail-content">
+                        <span>Starting time</span>
+                        <strong>@bookingTime</strong>
+                    </div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-icon">
+                        <i class="bi bi-clipboard-check"></i>
+                    </div>
+
+                    <div class="detail-content">
+                        <span>Booking status</span>
+                        <strong class="status-badge">
+                            <span class="status-dot"></span>
+                            @Model.Status
+                        </strong>
+                    </div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-icon">
+                        <i class="bi bi-credit-card"></i>
+                    </div>
+
+                    <div class="detail-content">
+                        <span>Payment status</span>
+                        <strong>@Model.PaymentStatus</strong>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SERVICES AND TOTAL -->
+            <section class="confirmation-card services-card">
+                <div class="card-heading">
+                    <div class="heading-icon">
+                        <i class="bi bi-stars"></i>
+                    </div>
+
+                    <div>
+                        <h2>Your selected services</h2>
+                        <p>Review the services in your booking.</p>
+                    </div>
+                </div>
+
+                <div class="service-list">
+                    @foreach (var item in Model.BookingItems)
+                    {
+                        <div class="service-row">
+                            <div class="service-description">
+                                <div class="service-check">
+                                    <i class="bi bi-check2"></i>
+                                </div>
+
+                                <div>
+                                    <strong>@item.ServiceName</strong>
+                                    <span>Quantity: @item.Quantity</span>
+                                </div>
+                            </div>
+
+                            <strong class="service-price">
+                                @item.TotalPrice.ToString("C",
+                                    System.Globalization.CultureInfo
+                                        .GetCultureInfo("en-ZA"))
+                            </strong>
+                        </div>
+                    }
+                </div>
+
+                <div class="price-summary">
+                    <div class="price-row">
+                        <span>Subtotal</span>
+                        <strong>
+                            @Model.Subtotal.ToString("C",
+                                System.Globalization.CultureInfo
+                                    .GetCultureInfo("en-ZA"))
+                        </strong>
+                    </div>
+
+                    <div class="price-row total-row">
+                        <span>Total</span>
+                        <strong>
+                            @Model.Total.ToString("C",
+                                System.Globalization.CultureInfo
+                                    .GetCultureInfo("en-ZA"))
+                        </strong>
+                    </div>
+
+                    <p class="payment-note">
+                        <i class="bi bi-info-circle"></i>
+                        Payment status: @Model.PaymentStatus.
+                    </p>
+                </div>
+            </section>
+        </div>
+
+        <!-- SERVICE ADDRESSES -->
+        @if (Model.Addresses != null && Model.Addresses.Any())
+        {
+            <section class="confirmation-card address-card">
+                <div class="card-heading">
+                    <div class="heading-icon">
+                        <i class="bi bi-geo-alt"></i>
+                    </div>
+
+                    <div>
+                        <h2>Service location</h2>
+                        <p>Address details associated with this booking.</p>
+                    </div>
+                </div>
+
+                <div class="address-list">
+                    @foreach (var address in Model.Addresses)
+                    {
+                        <div class="address-item">
+                            <div class="address-pin">
+                                <i class="bi bi-geo-alt-fill"></i>
+                            </div>
+
+                            <div>
+                                <strong>@address.AddressName</strong>
+                                <p>
+                                    @address.AddressLine1
+                                    @if (!string.IsNullOrWhiteSpace(address.AddressLine2))
+                                    {
+                                        <span>, @address.AddressLine2</span>
+                                    }
+                                    <br />
+                                    @address.City, @address.Province
+                                    @if (!string.IsNullOrWhiteSpace(address.PostalCode))
+                                    {
+                                        <span>, @address.PostalCode</span>
+                                    }
+                                </p>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </section>
+        }
+
+        <!-- NEXT STEPS -->
+        <section class="next-steps-card">
+            <div class="next-steps-icon">
+                <i class="bi bi-envelope-check"></i>
+            </div>
+
+            <div class="next-steps-content">
+                <h2>What happens next?</h2>
+                <p>
+                    Keep your booking reference for future enquiries.
+                    Our team can assist you with your booking and
+                    provide updates as its status changes.
+                </p>
+            </div>
+        </section>
+
+        <!-- ACTIONS -->
+        <div class="confirmation-actions">
+            <a asp-controller="Home"
+               asp-action="Index"
+               class="btn-back-home">
+                <i class="bi bi-house"></i>
+                Back to Home
+            </a>
+
+            <a asp-controller="Booking"
+               asp-action="Index"
+               class="btn-book-again">
+                Book Another Service
+                <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+
+        <p class="confirmation-footer">
+            Thank you for trusting MAS Cleaners.
+            <strong>From Mess to Fresh.</strong>
+        </p>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function copyBookingReference() {
+            const reference = @Html.Raw(
+                System.Text.Json.JsonSerializer.Serialize(
+                    Model.BookingReference));
+
+            const feedback = document.getElementById("copyFeedback");
+
+            if (!navigator.clipboard) {
+                feedback.textContent =
+                    "Please copy your reference: " + reference;
+                return;
+            }
+
+            navigator.clipboard.writeText(reference)
+                .then(() => {
+                    feedback.textContent =
+                        "Booking reference copied successfully.";
+                })
+                .catch(() => {
+                    feedback.textContent =
+                        "Please copy your reference: " + reference;
+                });
+        }
+    </script>
+}

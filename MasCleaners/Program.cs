@@ -2,6 +2,7 @@ using MasCleaners.DataConnection;
 using MasCleaners.Interfaces;
 using MasCleaners.Models;
 using MasCleaners.Repositories;
+using MasCleaners.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -70,7 +71,7 @@ builder.Services.AddControllersWithViews();
 // =========================================================
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-
+builder.Services.AddScoped<CartService>();
 
 var app = builder.Build();
 

@@ -1,0 +1,171 @@
+﻿@model MasCleaners.ViewModels.AdminDashboard.AdminDashboardVM
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
+    Layout = "_LayoutAdmin";
+}
+
+<link rel="stylesheet" href="~/css/admin-dashboard.css" asp-append-version="true" />
+
+<div class="admin-dashboard">
+
+    <div class="dashboard-header">
+        <div>
+            <span class="dashboard-eyebrow">MAS CLEANERS</span>
+            <h1>Bookings Overview</h1>
+            <p>Monitor customer bookings and their current status.</p>
+        </div>
+    </div>
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="dashboard-alert">
+            <i class="bi bi-exclamation-circle"></i>
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    <div class="dashboard-stats">
+
+        <div class="dashboard-stat">
+            <div class="stat-icon stat-icon-total">
+                <i class="bi bi-calendar-check"></i>
+            </div>
+            <div>
+                <span>Total Bookings</span>
+                <h2>@Model.TotalBookings</h2>
+            </div>
+        </div>
+
+        <div class="dashboard-stat">
+            <div class="stat-icon stat-icon-pending">
+                <i class="bi bi-clock-history"></i>
+            </div>
+            <div>
+                <span>Pending</span>
+                <h2>@Model.PendingBookings</h2>
+            </div>
+        </div>
+
+        <div class="dashboard-stat">
+            <div class="stat-icon stat-icon-confirmed">
+                <i class="bi bi-check-circle"></i>
+            </div>
+            <div>
+                <span>Confirmed</span>
+                <h2>@Model.ConfirmedBookings</h2>
+            </div>
+        </div>
+
+        <div class="dashboard-stat">
+            <div class="stat-icon stat-icon-completed">
+                <i class="bi bi-check2-all"></i>
+            </div>
+            <div>
+                <span>Completed</span>
+                <h2>@Model.CompletedBookings</h2>
+            </div>
+        </div>
+
+    </div>
+
+    <section class="bookings-panel">
+
+        <div class="bookings-panel-header">
+            <div>
+                <h3>Recent Bookings</h3>
+                <p>The latest 10 bookings recorded in the system.</p>
+            </div>
+
+            <a asp-controller="Booking"
+               asp-action="Index"
+               class="view-bookings-link">
+                View Bookings
+                <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+
+        @if (Model.RecentBookings.Any())
+        {
+            <div class="bookings-table-wrapper">
+                <table class="bookings-table">
+                    <thead>
+                        <tr>
+                            <th>BOOKING</th>
+                            <th>CUSTOMER</th>
+                            <th>BOOKING DATE</th>
+                            <th>AMOUNT</th>
+                            <th>STATUS</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var booking in Model.RecentBookings)
+                        {
+                            <tr>
+                                <td>
+                                    <span class="booking-reference">
+                                        @booking.BookingReference
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="customer-name">
+                                        @(booking.Customer?.ApplicationUser?.Email
+                                            ?? "Customer")
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="booking-date">
+                                        @booking.BookingDate.ToString("dd MMM yyyy")
+                                    </span>
+                                    <small class="booking-time">
+                                        @booking.BookingTime
+                                    </small>
+                                </td>
+
+                                <td>
+                                    <strong class="booking-amount">
+                                        @booking.Total.ToString("C", 
+                                            System.Globalization.CultureInfo.GetCultureInfo("en-ZA"))
+                                    </strong>
+                                </td>
+
+                                <td>
+                                    @{
+                                        var status = booking.Status.ToString() ?? "Pending";
+                                        var statusClass = status.ToLowerInvariant() switch
+                                        {
+                                            "pending" => "status-pending",
+                                            "confirmed" => "status-confirmed",
+                                            "completed" => "status-completed",
+                                            "cancelled" => "status-cancelled",
+                                            _ => "status-default"
+                                        };
+                                    }
+
+                                    <span class="booking-status @statusClass">
+                                        @status
+                                    </span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="empty-bookings">
+                <div class="empty-bookings-icon">
+                    <i class="bi bi-calendar2-x"></i>
+                </div>
+                <h4>No bookings yet</h4>
+                <p>Customer bookings will appear here when they are created.</p>
+            </div>
+        }
+
+    </section>
+
+</div>

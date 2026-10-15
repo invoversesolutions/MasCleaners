@@ -1,0 +1,213 @@
+﻿
+@model MasCleaners.ViewModels.SuperUser.CreateEmployeeVM
+
+@{
+    ViewData["Title"] = "Create Employee";
+    Layout = "_LayoutAdmin";
+}
+
+<div class="create-employee-page">
+
+    <div class="create-employee-heading">
+        <div>
+            <h2>Create Employee</h2>
+            <p>Create an employee profile, login account and system role.</p>
+        </div>
+
+        <a asp-controller="SuperDashboard"
+           asp-action="Users"
+           class="employee-back-link">
+            <i class="bi bi-arrow-left"></i>
+            Back to Users
+        </a>
+    </div>
+
+    <div class="create-employee-card">
+
+        <div class="employee-card-heading">
+            <div class="employee-heading-icon">
+                <i class="bi bi-person-badge"></i>
+            </div>
+
+            <div>
+                <h4>Employee Information</h4>
+                <p>Complete the employee and account details below.</p>
+            </div>
+        </div>
+
+        <form asp-controller="SuperDashboard"
+              asp-action="CreateEmployee"
+              method="post">
+
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="ModelOnly"
+                 class="alert alert-danger"
+                 role="alert"></div>
+
+            <div class="employee-form-section">
+                <h5>
+                    <i class="bi bi-person-lines-fill"></i>
+                    Personal Details
+                </h5>
+
+                <div class="employee-form-grid">
+
+                    <div class="employee-form-field">
+                        <label asp-for="FirstName"></label>
+                        <input asp-for="FirstName"
+                               class="form-control"
+                               placeholder="Enter first name"
+                               autocomplete="given-name" />
+                        <span asp-validation-for="FirstName"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="employee-form-field">
+                        <label asp-for="LastName"></label>
+                        <input asp-for="LastName"
+                               class="form-control"
+                               placeholder="Enter last name"
+                               autocomplete="family-name" />
+                        <span asp-validation-for="LastName"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="employee-form-field">
+                        <label asp-for="PhoneNumber"></label>
+                        <input asp-for="PhoneNumber"
+                               class="form-control"
+                               placeholder="e.g. 061 234 5678"
+                               autocomplete="tel" />
+                        <span asp-validation-for="PhoneNumber"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="employee-form-field">
+                        <label asp-for="Email"></label>
+                        <input asp-for="Email"
+                               class="form-control"
+                               placeholder="employee@example.com"
+                               autocomplete="email" />
+                        <span asp-validation-for="Email"
+                              class="text-danger"></span>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="employee-form-section">
+                <h5>
+                    <i class="bi bi-briefcase"></i>
+                    Employment Details
+                </h5>
+
+                <div class="employee-form-grid">
+
+                    <div class="employee-form-field">
+                        <label asp-for="EmployeeNumber"></label>
+                        <input asp-for="EmployeeNumber"
+                               class="form-control"
+                               placeholder="Optional employee number" />
+                        <span asp-validation-for="EmployeeNumber"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="employee-form-field">
+                        <label asp-for="JobTitle"></label>
+                        <input asp-for="JobTitle"
+                               class="form-control"
+                               placeholder="e.g. Cleaning Supervisor" />
+                        <span asp-validation-for="JobTitle"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="employee-form-field">
+                        <label asp-for="Department"></label>
+                        <input asp-for="Department"
+                               class="form-control"
+                               placeholder="e.g. Operations" />
+                        <span asp-validation-for="Department"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="employee-form-field">
+                        <label asp-for="SelectedRole"></label>
+                        <select asp-for="SelectedRole"
+                                class="form-select">
+                            <option value="">Select employee role</option>
+
+                            @foreach (var role in Model.AvailableRoles)
+                            {
+                                <option value="@role">@role</option>
+                            }
+                        </select>
+                        <span asp-validation-for="SelectedRole"
+                              class="text-danger"></span>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="employee-form-section">
+                <h5>
+                    <i class="bi bi-shield-lock"></i>
+                    Login Credentials
+                </h5>
+
+                <div class="employee-form-grid">
+
+                    <div class="employee-form-field employee-full-width">
+                        <label asp-for="Password"></label>
+                        <input asp-for="Password"
+                               class="form-control"
+                               placeholder="Create a temporary password"
+                               autocomplete="new-password" />
+                        <span asp-validation-for="Password"
+                              class="text-danger"></span>
+
+                        <small>
+                            The password must meet your configured
+                            ASP.NET Core Identity password policy.
+                        </small>
+                    </div>
+
+                </div>
+
+                <div class="employee-information-notice">
+                    <i class="bi bi-info-circle"></i>
+                    <span>
+                        The account will be created with the selected
+                        employee role. Email confirmation must be handled
+                        separately if required by your login policy.
+                    </span>
+                </div>
+            </div>
+
+            <div class="employee-form-actions">
+                <a asp-controller="SuperDashboard"
+                   asp-action="Users"
+                   class="employee-cancel-button">
+                    Cancel
+                </a>
+
+                <button type="submit"
+                        class="employee-submit-button">
+                    <i class="bi bi-person-check"></i>
+                    Create Employee
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/create-employee.css"
+          asp-append-version="true" />
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,303 @@
+﻿
+@model IEnumerable<MasCleaners.Models.Customer>
+
+@{
+    ViewData["Title"] = "Customers";
+    Layout = "_LayoutAdmin";
+
+    var customers = Model?.ToList()
+                    ?? new List<MasCleaners.Models.Customer>();
+
+    var totalCustomers = customers.Count;
+    var activeCustomers = customers.Count(c => c.IsActive);
+    var inactiveCustomers = totalCustomers - activeCustomers;
+}
+
+<link rel="stylesheet"
+      href="~/css/customer/index.css"
+      asp-append-version="true" />
+
+<div class="customers-page">
+
+    <!-- PAGE HEADER -->
+    <div class="customers-header">
+        <div class="customers-header-content">
+            <div class="customers-breadcrumb">
+                <i class="bi bi-house-door"></i>
+                <span>Management</span>
+                <i class="bi bi-chevron-right"></i>
+                <span>Customers</span>
+            </div>
+
+            <h1>Customers</h1>
+
+            <p>
+                View and manage customer accounts registered with MAS Cleaners.
+            </p>
+        </div>
+
+        <div class="customers-header-actions">
+            <a asp-controller="AdminDashboard"
+               asp-action="Index"
+               class="customers-back-button">
+                <i class="bi bi-arrow-left"></i>
+                <span>Dashboard</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- ALERTS -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="customers-alert success" role="alert">
+            <i class="bi bi-check-circle-fill"></i>
+            <span>@TempData["SuccessMessage"]</span>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="customers-alert error" role="alert">
+            <i class="bi bi-exclamation-circle-fill"></i>
+            <span>@TempData["ErrorMessage"]</span>
+        </div>
+    }
+
+    <!-- SUMMARY -->
+    <div class="customers-summary-grid">
+
+        <div class="customers-summary-card">
+            <div class="customers-summary-icon total">
+                <i class="bi bi-people"></i>
+            </div>
+
+            <div class="customers-summary-info">
+                <span class="customers-summary-label">
+                    Total Customers
+                </span>
+                <strong>@totalCustomers</strong>
+                <small>Registered customer accounts</small>
+            </div>
+        </div>
+
+        <div class="customers-summary-card">
+            <div class="customers-summary-icon active">
+                <i class="bi bi-person-check"></i>
+            </div>
+
+            <div class="customers-summary-info">
+                <span class="customers-summary-label">
+                    Active Customers
+                </span>
+                <strong>@activeCustomers</strong>
+                <small>Currently active accounts</small>
+            </div>
+        </div>
+
+        <div class="customers-summary-card">
+            <div class="customers-summary-icon inactive">
+                <i class="bi bi-person-dash"></i>
+            </div>
+
+            <div class="customers-summary-info">
+                <span class="customers-summary-label">
+                    Inactive Customers
+                </span>
+                <strong>@inactiveCustomers</strong>
+                <small>Inactive customer accounts</small>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- CUSTOMER LIST -->
+    <section class="customers-card">
+
+        <div class="customers-card-header">
+            <div>
+                <span class="customers-eyebrow">
+                    CUSTOMER MANAGEMENT
+                </span>
+
+                <h3>All Customers</h3>
+
+                <p>
+                    Review customer contact information and account status.
+                </p>
+            </div>
+
+            <div class="customers-count">
+                <span>@totalCustomers</span>
+                @(totalCustomers == 1 ? "Customer" : "Customers")
+            </div>
+        </div>
+
+        @if (customers.Any())
+        {
+            <div class="customers-table-wrapper">
+                <table class="customers-table">
+                    <thead>
+                        <tr>
+                            <th>Customer</th>
+                            <th>Contact Information</th>
+                            <th>Customer Type</th>
+                            <th>Company</th>
+                            <th>Status</th>
+                         @*    <th class="customers-actions-heading">Actions</th> *@
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var customer in customers)
+                        {
+                            var fullName = $"{customer.FirstName} {customer.LastName}".Trim();
+                            var initials = $"{customer.FirstName?.FirstOrDefault()}{customer.LastName?.FirstOrDefault()}".Trim();
+
+                            <tr>
+                                <!-- CUSTOMER -->
+                                <td>
+                                    <div class="customer-identity">
+                                        <div class="customer-avatar">
+                                            @if (!string.IsNullOrWhiteSpace(initials))
+                                            {
+                                                @initials.ToUpperInvariant()
+                                            }
+                                            else
+                                            {
+                                                <i class="bi bi-person"></i>
+                                            }
+                                        </div>
+
+                                        <div class="customer-identity-details">
+                                            <strong>
+                                                @(string.IsNullOrWhiteSpace(fullName)
+                                                    ? "Unnamed Customer"
+                                                    : fullName)
+                                            </strong>
+
+                                            <span>Customer #@customer.Id</span>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <!-- CONTACT -->
+                                <td>
+                                    <div class="customer-contact">
+                                        @if (!string.IsNullOrWhiteSpace(customer.ApplicationUser?.Email))
+                                        {
+                                            <div class="customer-contact-item">
+                                                <i class="bi bi-envelope"></i>
+                                                <span>@customer.ApplicationUser.Email</span>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="customer-contact-item muted">
+                                                <i class="bi bi-envelope"></i>
+                                                <span>No email available</span>
+                                            </div>
+                                        }
+
+                                        @if (!string.IsNullOrWhiteSpace(customer.PhoneNumber))
+                                        {
+                                            <div class="customer-contact-item">
+                                                <i class="bi bi-telephone"></i>
+                                                <span>@customer.PhoneNumber</span>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="customer-contact-item muted">
+                                                <i class="bi bi-telephone"></i>
+                                                <span>No phone number</span>
+                                            </div>
+                                        }
+                                    </div>
+                                </td>
+
+                                <!-- CUSTOMER TYPE -->
+                                <td>
+                                    <span class="customer-type">
+                                        @customer.CustomerType
+                                    </span>
+                                </td>
+
+                                <!-- COMPANY -->
+                                <td>
+                                    @if (!string.IsNullOrWhiteSpace(customer.CompanyName))
+                                    {
+                                        <span class="customer-company">
+                                            @customer.CompanyName
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="customer-empty-value">
+                                            Individual
+                                        </span>
+                                    }
+                                </td>
+
+                                <!-- STATUS -->
+                                <td>
+                                    @if (customer.IsActive)
+                                    {
+                                        <span class="customer-status active">
+                                            <span class="customer-status-dot"></span>
+                                            Active
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="customer-status inactive">
+                                            <span class="customer-status-dot"></span>
+                                            Inactive
+                                        </span>
+                                    }
+                                </td>
+
+                             @*    <!-- ACTIONS -->
+                                <td>
+                                    <div class="customer-actions">
+                                        <a asp-action="Details"
+                                           asp-route-id="@customer.Id"
+                                           class="customer-action view"
+                                           title="View customer"
+                                           aria-label="View customer">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+
+                                        <a asp-action="Edit"
+                                           asp-route-id="@customer.Id"
+                                           class="customer-action edit"
+                                           title="Edit customer"
+                                           aria-label="Edit customer">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                    </div>
+                                </td> *@
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="customers-empty-state">
+                <div class="customers-empty-icon">
+                    <i class="bi bi-people"></i>
+                </div>
+
+                <h3>No customers found</h3>
+
+                <p>
+                    There are currently no customer records to display.
+                    Registered customers will appear here.
+                </p>
+            </div>
+        }
+
+    </section>
+
+</div>

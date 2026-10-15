@@ -1,4 +1,5 @@
 ﻿
+using MasCleaners.Interfaces;
 using MasCleaners.Models;
 using MasCleaners.ViewModels.SuperUser;
 using Microsoft.AspNetCore.Authorization;
@@ -16,15 +17,17 @@ namespace MasCleaners.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
 
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IUnitOfWork _unitOfWork;
 
 
         public SuperDashboardController(
             ILogger<SuperDashboardController> logger,
-            UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+            UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IUnitOfWork unitOfWork)
         {
             _logger = logger;
             _userManager = userManager;
             _roleManager = roleManager;
+            _unitOfWork = unitOfWork;
         }
 
         public IActionResult Index()
@@ -307,6 +310,176 @@ namespace MasCleaners.Controllers
             return roleName == StaticRoles.Role_Super
                 || roleName == StaticRoles.Role_Admin;
         }
+        private async Task<List<string>> GetEmployeeRolesAsync()
+        {
+            return await _roleManager.Roles
+                .Where(role =>
+                    role.Name != null &&
+                    role.Name != "Customer" &&
+                    role.Name != "Super")
+                .OrderBy(role => role.Name)
+                .Select(role => role.Name!)
+                .ToListAsync();
+        }
 
+        [HttpGet]
+        public async Task<IActionResult> CreateEmployee()
+        {
+            var model = new CreateEmployeeVM
+            {
+                AvailableRoles = await GetEmployeeRolesAsync()
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateEmployee(CreateEmployeeVM model)
+        {
+            model.AvailableRoles = await GetEmployeeRolesAsync();
+
+            if (!ModelState.IsValid)
+                return View(model);
+
+            // Validate the selected employee role against the allowed roles.
+            var selectedRole = await _roleManager.FindByNameAsync(
+                model.SelectedRole);
+
+            if (selectedRole?.Name == null ||
+                !model.AvailableRoles.Contains(
+                    selectedRole.Name,
+                    StringComparer.OrdinalIgnoreCase))
+            {
+                ModelState.AddModelError(
+                    nameof(model.SelectedRole),
+                    "Please select a valid employee role.");
+
+                return View(model);
+            }
+
+            try
+            {
+                var email = model.Email.Trim();
+
+                // Create the Identity user.
+                var user = new ApplicationUser
+                {
+                    UserName = email,
+                    Email = email,
+                    PhoneNumber = model.PhoneNumber.Trim(),
+                    LockoutEnabled = true
+                };
+
+                var createResult = await _userManager.CreateAsync(
+                    user,
+                    model.Password);
+
+                if (!createResult.Succeeded)
+                {
+                    foreach (var error in createResult.Errors)
+                    {
+                        ModelState.AddModelError(
+                            string.Empty,
+                            error.Description);
+                    }
+
+                    return View(model);
+                }
+
+                // Assign the selected role.
+                var roleResult = await _userManager.AddToRoleAsync(
+                    user,
+                    selectedRole.Name);
+
+                if (!roleResult.Succeeded)
+                {
+                    // Compensate for the already-created Identity account.
+                    var deleteResult = await _userManager.DeleteAsync(user);
+
+                    if (!deleteResult.Succeeded)
+                    {
+                        _logger.LogError(
+                            "Could not remove user {UserId} after role assignment failed.",
+                            user.Id);
+                    }
+
+                    foreach (var error in roleResult.Errors)
+                    {
+                        ModelState.AddModelError(
+                            string.Empty,
+                            error.Description);
+                    }
+
+                    return View(model);
+                }
+
+                // Create the employee profile linked to the Identity user.
+                var employee = new Employee
+                {
+                    ApplicationUserId = user.Id,
+                    FirstName = model.FirstName.Trim(),
+                    LastName = model.LastName.Trim(),
+                    PhoneNumber = model.PhoneNumber.Trim(),
+
+                    EmployeeNumber = string.IsNullOrWhiteSpace(model.EmployeeNumber)
+    ? await GenerateEmployeeNumberAsync()
+    : model.EmployeeNumber.Trim(),
+
+                    JobTitle = string.IsNullOrWhiteSpace(model.JobTitle)
+                        ? null
+                        : model.JobTitle.Trim(),
+
+                    Department = string.IsNullOrWhiteSpace(model.Department)
+                        ? null
+                        : model.Department.Trim(),
+
+                    IsActive = true,
+                    CreatedDate = DateTime.Now,
+                    UpdatedDate = DateTime.Now
+                };
+
+                await _unitOfWork.Employee.AddAsync(employee);
+                await _unitOfWork.CommitAsync();
+
+                _logger.LogInformation(
+                    "Employee {EmployeeId} and user {UserId} created with role {Role} by {Actor}.",
+                    employee.Id,
+                    user.Id,
+                    selectedRole.Name,
+                    User.Identity?.Name);
+
+                TempData["SuccessMessage"] =
+                    "Employee account created successfully.";
+
+                return RedirectToAction(nameof(Users));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(
+                    ex,
+                    "Failed to create an employee account for {Email}.",
+                    model.Email);
+
+                ModelState.AddModelError(
+                    string.Empty,
+                    "An unexpected error occurred while creating the employee account. Please check the user list before trying again.");
+
+                return View(model);
+            }
+        }
+        private async Task<string> GenerateEmployeeNumberAsync()
+        {
+            string employeeNumber;
+
+            do
+            {
+                employeeNumber = $"MAS{Guid.NewGuid().ToString("N")[..8].ToUpper()}";
+
+            } while (await _unitOfWork.Employee
+                .AnyAsync(e => e.EmployeeNumber == employeeNumber));
+
+            return employeeNumber;
+        }
     }
 }

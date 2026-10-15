@@ -19,6 +19,8 @@ namespace MasCleaners.Repositories
 
         public ICustomerAddress CustomerAddress { get; private set; }
 
+        public IEmployee Employee { get; private set; }
+
 
         public UnitOfWork(SqlDbContext dbContext)
         {
@@ -31,6 +33,7 @@ namespace MasCleaners.Repositories
             Booking = new BookingRepository(_dbContext);
             BookingItem = new BookingItemRepository(_dbContext);
             CustomerAddress = new CustomerAddressRepository(_dbContext);
+            Employee = new EmployeeRepository(_dbContext);
         }
         Task IUnitOfWork.CommitAsync() => _dbContext.SaveChangesAsync();
     }

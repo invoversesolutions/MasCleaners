@@ -9,9 +9,12 @@
         public ICartItem CartItem { get; }
 
         public ICustomerRepository Customer { get; }
+
         public IBookingRepository Booking { get; }
         public IBookingItemRepository BookingItem { get; }
         public ICustomerAddress CustomerAddress { get; }
+
+        public IEmployee Employee { get; }
 
 
         Task CommitAsync();

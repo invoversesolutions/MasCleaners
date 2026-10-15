@@ -1,4 +1,5 @@
-﻿/* =========================================================
+﻿
+/* =========================================================
    ADMIN PAGE
 ========================================================= */
 
@@ -6,6 +7,18 @@
     width: min(calc(100% - 40px), 1400px);
     margin: 0 auto;
     padding: 45px 0 80px;
+}
+
+    .admin-page,
+    .admin-page * {
+        box-sizing: border-box;
+    }
+
+.admin-page-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
 }
 
 
@@ -24,6 +37,7 @@
 .admin-breadcrumb {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 8px;
     margin-bottom: 10px;
     color: #7d8da1;
@@ -41,12 +55,14 @@
     font-family: Georgia, "Times New Roman", serif;
     font-size: 38px;
     font-weight: 700;
+    line-height: 1.25;
 }
 
 .admin-page-header p {
     margin: 8px 0 0;
     color: #526b88;
     font-size: 15px;
+    line-height: 1.6;
 }
 
 
@@ -68,8 +84,9 @@
     font-size: 14px;
     font-weight: 600;
     text-decoration: none;
+    white-space: nowrap;
     box-shadow: 0 5px 15px rgba(15, 157, 148, .18);
-    transition: .25s ease;
+    transition: background .25s ease, transform .25s ease;
 }
 
     .admin-primary-button:hover {
@@ -91,6 +108,7 @@
     padding: 14px 17px;
     border-radius: 12px;
     font-size: 14px;
+    line-height: 1.5;
 }
 
 .admin-alert-success {
@@ -103,9 +121,21 @@
     color: #c0392b;
 }
 
+.admin-alert > span {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
 .admin-alert-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
     margin-left: auto;
     border: none;
+    border-radius: 8px;
     background: transparent;
     color: inherit;
     font-size: 18px;
@@ -119,7 +149,7 @@
 
 .admin-summary-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 20px;
     margin-bottom: 25px;
 }
@@ -128,6 +158,7 @@
     display: flex;
     align-items: center;
     gap: 16px;
+    min-width: 0;
     min-height: 105px;
     padding: 20px;
     border: 1px solid #e1e6eb;
@@ -164,6 +195,7 @@
     margin-bottom: 4px;
     color: #7d8da1;
     font-size: 13px;
+    line-height: 1.5;
 }
 
 .admin-summary-card strong {
@@ -171,6 +203,7 @@
     color: #092b4c;
     font-family: Georgia, "Times New Roman", serif;
     font-size: 27px;
+    line-height: 1.25;
 }
 
 
@@ -179,6 +212,7 @@
 ========================================================= */
 
 .admin-card {
+    min-width: 0;
     overflow: hidden;
     border: 1px solid #e1e6eb;
     border-radius: 18px;
@@ -206,6 +240,7 @@
         margin: 5px 0 0;
         color: #7d8da1;
         font-size: 13px;
+        line-height: 1.5;
     }
 
 .admin-card-header-icon {
@@ -214,6 +249,7 @@
     justify-content: center;
     width: 42px;
     height: 42px;
+    flex-shrink: 0;
     border-radius: 12px;
     background: #e8f8f6;
     color: #0f9d94;
@@ -221,7 +257,7 @@
 
 
 /* =========================================================
-   TABLE
+   CATEGORY TABLE — DESKTOP
 ========================================================= */
 
 .admin-table-wrapper {
@@ -231,7 +267,6 @@
 
 .admin-table {
     width: 100%;
-    min-width: 850px;
     border-collapse: collapse;
 }
 
@@ -252,10 +287,11 @@
         border-bottom: 1px solid #edf0f2;
         color: #526b88;
         font-size: 14px;
+        vertical-align: middle;
     }
 
     .admin-table tbody tr {
-        transition: .2s ease;
+        transition: background .2s ease;
     }
 
         .admin-table tbody tr:hover {
@@ -268,13 +304,14 @@
 
 
 /* =========================================================
-   CATEGORY
+   CATEGORY INFORMATION
 ========================================================= */
 
 .category-name {
     display: flex;
     align-items: center;
     gap: 12px;
+    min-width: 0;
 }
 
 .category-icon {
@@ -289,10 +326,15 @@
     color: #0f9d94;
 }
 
+.category-name > div:last-child {
+    min-width: 0;
+}
+
 .category-name strong {
     display: block;
     color: #092b4c;
     font-size: 14px;
+    overflow-wrap: anywhere;
 }
 
 .category-name span {
@@ -319,6 +361,7 @@
 .category-date {
     color: #7d8da1;
     font-size: 13px;
+    white-space: nowrap;
 }
 
 
@@ -334,6 +377,7 @@
     border-radius: 100px;
     font-size: 11px;
     font-weight: 600;
+    white-space: nowrap;
 }
 
 .status-active {
@@ -349,6 +393,7 @@
 .status-dot {
     width: 6px;
     height: 6px;
+    flex-shrink: 0;
     border-radius: 50%;
     background: currentColor;
 }
@@ -361,18 +406,21 @@
 .category-actions {
     display: flex;
     justify-content: flex-end;
+    align-items: center;
     gap: 7px;
 }
 
 .category-action {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     width: 36px;
     height: 36px;
+    flex-shrink: 0;
+    border: 1px solid transparent;
     border-radius: 9px;
     text-decoration: none;
-    transition: .2s ease;
+    transition: background .2s ease, color .2s ease, transform .2s ease;
 }
 
     .category-action.edit {
@@ -383,6 +431,12 @@
     .category-action.delete {
         background: #fff1f1;
         color: #d94a4a;
+    }
+
+    .category-action.view {
+        color: #0f9d94;
+        background: #e8f8f6;
+        border-color: #d3efec;
     }
 
     .category-action:hover {
@@ -399,23 +453,12 @@
         color: #ffffff;
     }
 
-
-    /* =========================================================
-   VIEW
-   ========================================================= */
-
-    .category-action.view {
-        color: #0f9d94;
-        background: #e8f8f6;
-        border: 1px solid #d3efec;
+    .category-action.view:hover {
+        color: #ffffff;
+        background: #0f9d94;
+        border-color: #0f9d94;
     }
 
-        .category-action.view:hover {
-            color: #ffffff;
-            background: #0f9d94;
-            border-color: #0f9d94;
-            transform: translateY(-1px);
-        }
 
 /* =========================================================
    EMPTY STATE
@@ -455,38 +498,402 @@
 
 
 /* =========================================================
-   RESPONSIVE
+   TABLETS
 ========================================================= */
 
 @media (max-width: 900px) {
 
-    .admin-summary-grid {
-        grid-template-columns: 1fr;
+    .admin-page {
+        width: calc(100% - 32px);
+        padding: 30px 0 55px;
     }
 
     .admin-page-header {
         align-items: flex-start;
-        flex-direction: column;
-    }
-}
-
-@media (max-width: 600px) {
-
-    .admin-page {
-        width: min(calc(100% - 25px), 1400px);
-        padding-top: 30px;
+        gap: 18px;
     }
 
-    .admin-page-header h1 {
-        font-size: 30px;
+        .admin-page-header h1 {
+            font-size: 32px;
+        }
+
+    .admin-summary-grid {
+        gap: 14px;
     }
+
+    .admin-summary-card {
+        min-height: 95px;
+        padding: 16px;
+        gap: 12px;
+    }
+
+        .admin-summary-card strong {
+            font-size: 24px;
+        }
 
     .admin-card-header {
         padding: 20px;
     }
 
-    .admin-table th,
+    .admin-table th {
+        padding: 14px 12px;
+    }
+
     .admin-table td {
-        padding: 14px 16px;
+        padding: 15px 12px;
+    }
+
+    .category-actions {
+        gap: 5px;
+    }
+
+    .category-action {
+        width: 32px;
+        height: 32px;
+    }
+}
+
+
+/* =========================================================
+   PHONES
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .admin-page {
+        width: calc(100% - 24px);
+        padding: 24px 0 40px;
+    }
+
+    /* Header */
+
+    .admin-page-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 18px;
+        margin-bottom: 22px;
+    }
+
+    .admin-breadcrumb {
+        gap: 6px;
+        margin-bottom: 9px;
+        font-size: 11px;
+    }
+
+    .admin-page-header h1 {
+        font-size: 27px;
+        line-height: 1.3;
+    }
+
+    .admin-page-header p {
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    .admin-page-actions {
+        width: 100%;
+    }
+
+    .admin-primary-button {
+        width: 100%;
+        min-height: 46px;
+        padding: 0 14px;
+        font-size: 13px;
+    }
+
+    /* Alerts */
+
+    .admin-alert {
+        align-items: flex-start;
+        gap: 9px;
+        margin-bottom: 18px;
+        padding: 12px;
+        font-size: 12px;
+    }
+
+    /* Summary cards: two per row */
+
+    .admin-summary-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .admin-summary-card {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 10px;
+        min-height: 0;
+        padding: 14px;
+        border-radius: 14px;
+    }
+
+    .admin-summary-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        font-size: 17px;
+    }
+
+    .admin-summary-label {
+        margin-bottom: 4px;
+        font-size: 11px;
+        line-height: 1.4;
+    }
+
+    .admin-summary-card strong {
+        font-size: 23px;
+        line-height: 1.2;
+    }
+
+    /* Card header */
+
+    .admin-card {
+        border-radius: 14px;
+    }
+
+    .admin-card-header {
+        padding: 17px 15px;
+        gap: 10px;
+    }
+
+        .admin-card-header h3 {
+            font-size: 16px;
+            line-height: 1.4;
+        }
+
+        .admin-card-header p {
+            font-size: 12px;
+        }
+
+    .admin-card-header-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+    }
+
+    /* Turn table rows into mobile-friendly stacked records */
+
+    .admin-table-wrapper {
+        overflow: visible;
+    }
+
+    .admin-table,
+    .admin-table tbody {
+        display: block;
+        width: 100%;
+    }
+
+        .admin-table thead {
+            display: none;
+        }
+
+        .admin-table tbody tr {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            gap: 0 14px;
+            padding: 14px;
+            border-bottom: 1px solid #edf0f2;
+        }
+
+            .admin-table tbody tr:last-child {
+                border-bottom: none;
+            }
+
+            .admin-table tbody tr:hover {
+                background: #fbfdfd;
+            }
+
+        .admin-table td {
+            display: block;
+            min-width: 0;
+            padding: 10px 0;
+            border: none;
+            font-size: 12px;
+            overflow-wrap: anywhere;
+        }
+
+            /* Category takes the full first row */
+
+            .admin-table td:nth-child(1) {
+                grid-column: 1 / -1;
+                padding-top: 4px;
+                padding-bottom: 12px;
+            }
+
+            /* Description and status */
+
+            .admin-table td:nth-child(2),
+            .admin-table td:nth-child(3) {
+                align-self: start;
+            }
+
+                .admin-table td:nth-child(2)::before {
+                    content: "DESCRIPTION";
+                }
+
+                .admin-table td:nth-child(3)::before {
+                    content: "STATUS";
+                }
+
+                .admin-table td:nth-child(2)::before,
+                .admin-table td:nth-child(3)::before,
+                .admin-table td:nth-child(4)::before,
+                .admin-table td:nth-child(5)::before {
+                    display: block;
+                    margin-bottom: 7px;
+                    color: #7d8da1;
+                    font-size: 9px;
+                    font-weight: 800;
+                    letter-spacing: .5px;
+                }
+
+            .admin-table td:nth-child(4)::before {
+                content: "CREATED";
+            }
+
+            .admin-table td:nth-child(5)::before {
+                content: "ACTIONS";
+            }
+
+    /* Category content */
+
+    .category-name {
+        align-items: center;
+        gap: 10px;
+    }
+
+    .category-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+    }
+
+    .category-name strong {
+        font-size: 13px;
+    }
+
+    .category-name span {
+        font-size: 10px;
+    }
+
+    .category-description {
+        display: block;
+        max-width: 100%;
+        overflow: visible;
+        text-overflow: unset;
+        white-space: normal;
+        overflow-wrap: anywhere;
+        line-height: 1.5;
+    }
+
+    .category-empty {
+        display: block;
+        line-height: 1.5;
+        font-size: 11px;
+    }
+
+    .category-date {
+        font-size: 11px;
+        white-space: normal;
+    }
+
+    /* Status badges */
+
+    .status-badge {
+        gap: 5px;
+        padding: 6px 8px;
+        font-size: 10px;
+        white-space: normal;
+    }
+
+    /* Actions */
+
+    .admin-table td:nth-child(5) {
+        grid-column: 1 / -1;
+        padding-top: 12px;
+        border-top: 1px solid #edf0f2;
+    }
+
+    .category-actions {
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .category-action {
+        width: 34px;
+        height: 34px;
+        border-radius: 9px;
+    }
+
+    /* Empty state */
+
+    .admin-empty-state {
+        padding: 42px 16px;
+    }
+
+    .admin-empty-icon {
+        width: 56px;
+        height: 56px;
+        margin-bottom: 15px;
+        border-radius: 16px;
+        font-size: 24px;
+    }
+
+    .admin-empty-state h3 {
+        font-size: 17px;
+    }
+
+    .admin-empty-state p {
+        margin-bottom: 20px;
+        font-size: 12px;
+    }
+}
+
+
+/* =========================================================
+   VERY SMALL PHONES
+========================================================= */
+
+@media (max-width: 380px) {
+
+    .admin-page {
+        width: calc(100% - 18px);
+        padding-top: 20px;
+    }
+
+    .admin-page-header h1 {
+        font-size: 24px;
+    }
+
+    .admin-summary-grid {
+        gap: 8px;
+    }
+
+    .admin-summary-card {
+        padding: 11px;
+    }
+
+        .admin-summary-card strong {
+            font-size: 21px;
+        }
+
+    .admin-table tbody tr {
+        gap: 0 10px;
+        padding: 12px;
+    }
+
+    .admin-table td {
+        font-size: 11px;
+    }
+
+    .category-actions {
+        gap: 6px;
+    }
+
+    .category-action {
+        width: 32px;
+        height: 32px;
     }
 }

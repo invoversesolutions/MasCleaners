@@ -472,3 +472,17 @@
         padding: 18px 15px;
     }
 }
+.admin-logout-form {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.admin-logout {
+    width: 100%;
+    border: none;
+    background: transparent;
+    text-align: left;
+    font: inherit;
+    cursor: pointer;
+}
