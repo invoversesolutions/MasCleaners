@@ -1,0 +1,116 @@
+﻿@model MasCleaners.ViewModels.Customer.BookingRescheduleVM
+
+@{
+    ViewData["Title"] = "Request Reschedule";
+    Layout = "_Layout";
+}
+
+<link rel="stylesheet"
+      href="~/css/customer-booking-management.css"
+      asp-append-version="true" />
+
+<section class="booking-manage-page">
+    <a asp-controller="Customer"
+       asp-action="BookingDetails"
+       asp-route-id="@Model.BookingId"
+       class="manage-back-link">
+        <i class="bi bi-arrow-left"></i>
+        Back to booking
+    </a>
+
+    <div class="manage-card">
+        <div class="manage-heading-icon">
+            <i class="bi bi-calendar2-week"></i>
+        </div>
+
+        <span class="manage-eyebrow">BOOKING MANAGEMENT</span>
+        <h1>Request a Reschedule</h1>
+        <p class="manage-intro">
+            Tell us when you'd prefer your cleaning appointment.
+            Our team will review your request.
+        </p>
+
+        <div class="manage-booking-summary">
+            <span>Booking reference</span>
+            <strong>@Model.BookingReference</strong>
+
+            <span>Current appointment</span>
+            <strong>
+                @Model.CurrentBookingDate.ToString("dd MMMM yyyy")
+                @if (!string.IsNullOrWhiteSpace(Model.CurrentBookingTime))
+                {
+                    <text> · @Model.CurrentBookingTime</text>
+                }
+            </strong>
+        </div>
+
+        <div asp-validation-summary="ModelOnly"
+             class="manage-validation-summary"></div>
+
+        <form asp-controller="Customer"
+              asp-action="RequestReschedule"
+              method="post"
+              class="manage-form">
+
+            @Html.AntiForgeryToken()
+
+            <input asp-for="BookingId" type="hidden" />
+            <input asp-for="BookingReference" type="hidden" />
+            <input asp-for="CurrentBookingDate" type="hidden" />
+            <input asp-for="CurrentBookingTime" type="hidden" />
+
+            <div class="manage-field">
+                <label asp-for="RequestedBookingDateTime"></label>
+
+                <input asp-for="RequestedBookingDateTime"
+                       type="datetime-local"
+                       min="@DateTime.Now.AddMinutes(1).ToString("yyyy-MM-ddTHH:mm")"
+                       class="manage-input" />
+
+                <span asp-validation-for="RequestedBookingDateTime"
+                      class="manage-field-error"></span>
+
+                <small>Please choose a future date and time.</small>
+            </div>
+
+            <div class="manage-field">
+                <label asp-for="Reason"></label>
+
+                <textarea asp-for="Reason"
+                          rows="4"
+                          class="manage-input"
+                          placeholder="Let us know why you need to reschedule (optional)."></textarea>
+
+                <span asp-validation-for="Reason"
+                      class="manage-field-error"></span>
+            </div>
+
+            <div class="manage-notice">
+                <i class="bi bi-info-circle"></i>
+                <p>
+                    This is a request, not a confirmed change.
+                    Your existing appointment remains in place until
+                    MAS Cleaners reviews your request.
+                </p>
+            </div>
+
+            <div class="manage-form-actions">
+                <a asp-controller="Customer"
+                   asp-action="BookingDetails"
+                   asp-route-id="@Model.BookingId"
+                   class="manage-secondary-btn">
+                    Go Back
+                </a>
+
+                <button type="submit" class="manage-primary-btn">
+                    <i class="bi bi-send"></i>
+                    Submit Request
+                </button>
+            </div>
+        </form>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,171 @@
+﻿
+@model MasCleaners.ViewModels.SuperUser.VatSettingsVM
+
+@{
+    ViewData["Title"] = "VAT Settings";
+    Layout = "_LayoutAdmin";
+}
+
+<link rel="stylesheet"
+      href="~/css/super-user/vat-settings.css"
+      asp-append-version="true" />
+
+<div class="vat-settings-page">
+
+    <div class="vat-page-header">
+        <div>
+            <span class="vat-eyebrow">FINANCIAL CONFIGURATION</span>
+            <h1>VAT Settings</h1>
+            <p>
+                Manage VAT registration and tax configuration
+                for MAS Cleaners invoices.
+            </p>
+        </div>
+
+        <a asp-controller="SuperDashboard"
+           asp-action="Index"
+           class="vat-back-button">
+            <i class="bi bi-arrow-left"></i>
+            Dashboard
+        </a>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="vat-alert success" role="alert">
+            <i class="bi bi-check-circle-fill"></i>
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="vat-alert error" role="alert">
+            <i class="bi bi-exclamation-circle-fill"></i>
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    <form asp-action="Index"
+          method="post"
+          class="vat-settings-form">
+
+        @Html.AntiForgeryToken()
+
+        <div asp-validation-summary="ModelOnly"
+             class="vat-validation-summary"></div>
+
+        <input asp-for="Id" type="hidden" />
+
+        <section class="vat-card">
+            <div class="vat-card-heading">
+                <div class="vat-heading-icon">
+                    <i class="bi bi-shield-check"></i>
+                </div>
+                <div>
+                    <h2>Registration Status</h2>
+                    <p>
+                        Enable VAT only when the business is
+                        registered and the configuration is valid.
+                    </p>
+                </div>
+            </div>
+
+            <div class="vat-status-panel">
+                <div>
+                    <strong>VAT registration</strong>
+                    <span>
+                        @if (Model.IsVatRegistered)
+                        {
+                            <text>VAT registration is enabled.</text>
+                        }
+                        else
+                        {
+                            <text>
+                                VAT is disabled. Invoices must not
+                                charge VAT.
+                            </text>
+                        }
+                    </span>
+                </div>
+
+                <label class="vat-switch">
+                    <input asp-for="IsVatRegistered"
+                           id="IsVatRegistered" />
+                    <span class="vat-switch-slider"></span>
+                </label>
+            </div>
+
+            <div class="vat-form-grid">
+                <div class="vat-field">
+                    <label asp-for="VatRegistrationNumber"></label>
+                    <input asp-for="VatRegistrationNumber"
+                           placeholder="Enter registration number" />
+                    <span asp-validation-for="VatRegistrationNumber"
+                          class="field-error"></span>
+                </div>
+
+                <div class="vat-field">
+                    <label asp-for="VatRate"></label>
+                    <div class="vat-rate-input">
+                        <input asp-for="VatRate"
+                               type="number"
+                               min="0"
+                               max="100"
+                               step="0.01" />
+                        <span>%</span>
+                    </div>
+                    <span asp-validation-for="VatRate"
+                          class="field-error"></span>
+                </div>
+
+                <div class="vat-field">
+                    <label asp-for="VatEffectiveDate"></label>
+                    <input asp-for="VatEffectiveDate"
+                           type="date" />
+                    <span asp-validation-for="VatEffectiveDate"
+                          class="field-error"></span>
+                </div>
+
+                <div class="vat-field vat-field-full">
+                    <label asp-for="Notes"></label>
+                    <textarea asp-for="Notes"
+                              rows="3"
+                              placeholder="Optional administrative notes"></textarea>
+                    <span asp-validation-for="Notes"
+                          class="field-error"></span>
+                </div>
+            </div>
+        </section>
+
+        <section class="vat-info-panel">
+            <i class="bi bi-info-circle"></i>
+            <div>
+                <strong>Invoice protection</strong>
+                <p>
+                    These settings define the current configuration.
+                    Issued invoices must retain their own VAT
+                    registration status, rate and calculated amounts.
+                    Updating this page must not modify historical invoices.
+                </p>
+            </div>
+        </section>
+
+        <div class="vat-form-actions">
+            <a asp-controller="SuperDashboard"
+               asp-action="Index"
+               class="vat-cancel-button">
+                Cancel
+            </a>
+
+            <button type="submit" class="vat-save-button">
+                <i class="bi bi-check-lg"></i>
+                Save VAT Settings
+            </button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

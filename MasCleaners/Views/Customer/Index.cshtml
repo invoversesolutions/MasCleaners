@@ -35,7 +35,8 @@
                 View and manage customer accounts registered with MAS Cleaners.
             </p>
         </div>
-
+               @if (User.IsInRole($"{StaticRoles.Role_Admin}"))
+        {
         <div class="customers-header-actions">
             <a asp-controller="AdminDashboard"
                asp-action="Index"
@@ -44,6 +45,21 @@
                 <span>Dashboard</span>
             </a>
         </div>
+        }
+              @if (User.IsInRole($"{StaticRoles.Role_Super}"))
+        {
+
+             <div class="customers-header-actions">
+            <a asp-controller="SuperDashboard"
+               asp-action="Index"
+               class="customers-back-button">
+                <i class="bi bi-arrow-left"></i>
+                <span>Dashboard</span>
+            </a>
+        </div>
+     
+        }
+       
     </div>
 
     <!-- ALERTS -->

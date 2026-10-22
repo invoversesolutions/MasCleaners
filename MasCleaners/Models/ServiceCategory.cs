@@ -13,6 +13,8 @@
 
         public bool IsActive { get; set; } = true;
 
+        public bool IsDeleted { get; set; } = false;
+
         public int DisplayOrder { get; set; }
         public DateTime CreatedData { get; set; } = DateTime.Now;
 

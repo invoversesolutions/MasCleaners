@@ -12,6 +12,6 @@ namespace MasCleaners.ViewModels.AdminDashboard
 
         public int CompletedBookings { get; set; }
 
-        public List<Booking> RecentBookings { get; set; } = new();
+        public List<MasCleaners.Models.Booking> RecentBookings { get; set; } = new();
     }
 }

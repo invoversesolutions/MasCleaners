@@ -1,0 +1,192 @@
+﻿
+@model MasCleaners.ViewModels.AddPaymentVM
+
+<div class="modal fade"
+     id="addPaymentModal"
+     tabindex="-1"
+     aria-labelledby="addPaymentModalLabel"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content add-payment-modal">
+
+            <div class="modal-header">
+                <div>
+                    <span class="payment-modal-eyebrow">
+                        BOOKING FINANCES
+                    </span>
+
+                    <h5 class="modal-title" id="addPaymentModalLabel">
+                        Record Payment
+                    </h5>
+
+                    <p class="payment-modal-subtitle">
+                        Record a payment against this booking.
+                    </p>
+                </div>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+
+            <form asp-controller="Payment"
+                  asp-action="Create"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+                <input asp-for="BookingId" type="hidden" />
+                <input asp-for="BookingReference" type="hidden" />
+                <input asp-for="BookingTotal" type="hidden" />
+
+                <div class="modal-body">
+
+                    <div class="payment-booking-summary">
+                        <div class="payment-summary-icon">
+                            <i class="bi bi-receipt"></i>
+                        </div>
+
+                        <div>
+                            <span>Booking Reference</span>
+                            <strong>@Model.BookingReference</strong>
+                        </div>
+
+                        <div class="payment-summary-total">
+                            <span>Booking Total</span>
+                            <strong>R @Model.BookingTotal.ToString("N2")</strong>
+                        </div>
+                    </div>
+
+                    <div asp-validation-summary="ModelOnly"
+                         class="text-danger small mb-3"></div>
+
+                    <div class="add-payment-field">
+                        <label asp-for="Amount">Payment Amount (R)</label>
+
+                        <div class="payment-amount-input">
+                            <span>R</span>
+                            <input asp-for="Amount"
+                                   type="number"
+                                   class="form-control"
+                                   min="0.01"
+                                   max="@Model.BookingTotal"
+                                   step="0.01"
+                                   placeholder="0.00"
+                                   required />
+                        </div>
+
+                        <span asp-validation-for="Amount"
+                              class="text-danger small"></span>
+                    </div>
+
+                    <div class="add-payment-field">
+                        <label asp-for="PaymentMethod">Payment Method</label>
+
+                        <select asp-for="PaymentMethod"
+                                class="form-select"
+                                id="paymentMethod"
+                                required>
+                            <option value="EFT">EFT / Bank Transfer</option>
+                            <option value="Card">Card Payment</option>
+                            <option value="Cash">Cash</option>
+                        </select>
+
+                        <span asp-validation-for="PaymentMethod"
+                              class="text-danger small"></span>
+                    </div>
+
+                    <div class="add-payment-field"
+                         id="transactionReferenceField">
+
+                        <label asp-for="TransactionReference">
+                            Transaction / Reference Number
+                            <span class="payment-optional">(Optional)</span>
+                        </label>
+
+                        <input asp-for="TransactionReference"
+                               class="form-control"
+                               maxlength="100"
+                               placeholder="Enter payment reference" />
+
+                        <span asp-validation-for="TransactionReference"
+                              class="text-danger small"></span>
+                    </div>
+
+                    <div class="add-payment-field">
+                        <label asp-for="PaymentDate">Payment Date</label>
+
+                        <input asp-for="PaymentDate"
+                               type="date"
+                               class="form-control"
+                               max="@DateTime.Today.ToString("yyyy-MM-dd")"
+                               required />
+
+                        <span asp-validation-for="PaymentDate"
+                              class="text-danger small"></span>
+                    </div>
+
+                    <div class="add-payment-field">
+                        <label asp-for="Notes">
+                            Payment Notes
+                            <span class="payment-optional">(Optional)</span>
+                        </label>
+
+                        <textarea asp-for="Notes"
+                                  class="form-control"
+                                  rows="3"
+                                  maxlength="500"
+                                  placeholder="Add any relevant payment notes..."></textarea>
+
+                        <span asp-validation-for="Notes"
+                              class="text-danger small"></span>
+                    </div>
+
+                    <div class="payment-record-notice">
+                        <i class="bi bi-shield-check"></i>
+                        <span>
+                            Ensure the payment has been received or verified
+                            before recording it.
+                        </span>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button"
+                            class="btn btn-light"
+                            data-bs-dismiss="modal">
+                        Close
+                    </button>
+
+                    <button type="submit"
+                            class="btn btn-save-payment">
+                        <i class="bi bi-check-circle me-1"></i>
+                        Record Payment
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    (() => {
+        const paymentMethod = document.getElementById("paymentMethod");
+        const referenceField =
+            document.getElementById("transactionReferenceField");
+
+        if (!paymentMethod || !referenceField) return;
+
+        function updateReferenceField() {
+            // A reference may be useful for EFT and card payments,
+            // but it is usually unnecessary for cash.
+            referenceField.hidden = paymentMethod.value === "Cash";
+        }
+
+        paymentMethod.addEventListener("change", updateReferenceField);
+        updateReferenceField();
+    })();
+</script>

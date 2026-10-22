@@ -16,6 +16,11 @@
 
         public IEmployee Employee { get; }
 
+        public IPayment Payment { get; }
+        public IVatSetting VatSetting { get; }  
+        public IInvoice Invoice { get; }
+        public IInvoiceItem InvoiceItem { get; }
+        public IBookingRescheduleRequest BookingRescheduleRequest { get; }
 
         Task CommitAsync();
     }

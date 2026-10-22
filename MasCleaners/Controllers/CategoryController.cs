@@ -459,7 +459,7 @@ namespace MasCleaners.Controllers
 
                     return NotFound();
                 }
-                category.IsActive = false;
+                category.IsDeleted = true;
               await  _unitOfWork.ServiceCategory.UpdateAsync(category);
 
                 await _unitOfWork.CommitAsync();
@@ -527,5 +527,99 @@ namespace MasCleaners.Controllers
                 return RedirectToAction(nameof(Index));
             }
         }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Deactivate(int id)
+        {
+            try
+            {
+                var category = await _unitOfWork.ServiceCategory
+                    .GetAsync(c => c.Id == id);
+
+                if (category == null)
+                {
+                    TempData["ErrorMessage"] = "Category not found.";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                if (!category.IsActive)
+                {
+                    TempData["ErrorMessage"] = "This category is already inactive.";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                category.IsActive = false;
+
+              await  _unitOfWork.ServiceCategory.UpdateAsync(category);
+                await _unitOfWork.CommitAsync();
+
+                _logger.LogInformation(
+                    "Service category {CategoryId} was deactivated.", id);
+
+                TempData["SuccessMessage"] =
+                    "Category deactivated successfully.";
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(
+                    ex, "Error deactivating service category {CategoryId}.", id);
+
+                TempData["ErrorMessage"] =
+                    "Unable to deactivate the category.";
+
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Activate(int id)
+        {
+            try
+            {
+                var category = await _unitOfWork.ServiceCategory
+                    .GetAsync(c => c.Id == id);
+
+                if (category == null)
+                {
+                    TempData["ErrorMessage"] = "Category not found.";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                if (category.IsActive)
+                {
+                    TempData["ErrorMessage"] = "This category is already active.";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                category.IsActive = true;
+
+               await _unitOfWork.ServiceCategory.UpdateAsync(category);
+                await _unitOfWork.CommitAsync();
+
+                _logger.LogInformation(
+                    "Service category {CategoryId} was activated.", id);
+
+                TempData["SuccessMessage"] =
+                    "Category activated successfully.";
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(
+                    ex, "Error activating service category {CategoryId}.", id);
+
+                TempData["ErrorMessage"] =
+                    "Unable to activate the category.";
+
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
     }
 }

@@ -36,8 +36,8 @@ namespace MasCleaners.Controllers
                         .GetAllAsync(
                             includeProperties: "ServiceOptions");
 
-                var model = categories
-                    .Where(c => c.IsActive)
+                var model = categories.
+                    Where(c=> !c.IsDeleted)
                     .OrderBy(c => c.DisplayOrder)
                     .Select(c => new HomeServiceCategoryVM
                     {
@@ -57,8 +57,8 @@ namespace MasCleaners.Controllers
                             .Min(),
 
                         ServiceOptionCount = c.ServiceOptions
-                            .Count(o => o.IsActive)
-
+                            .Count(o => o.IsActive),
+                            IsActive = c.IsActive
                     })
                     .ToList();
 

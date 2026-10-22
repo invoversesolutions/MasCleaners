@@ -1,0 +1,245 @@
+﻿@model MasCleaners.Models.Booking
+
+@{
+    ViewData["Title"] = "Booking Details";
+    Layout = "_Layout";
+
+    var isConfirmed = string.Equals(
+        Model.Status.ToString(),
+        "Confirmed",
+        StringComparison.OrdinalIgnoreCase);
+
+    var bookingItems = Model.BookingItems?.ToList()
+        ?? new List<MasCleaners.Models.BookingItem>();
+}
+
+<link rel="stylesheet"
+      href="~/css/customer-booking-details.css"
+      asp-append-version="true" />
+
+<section class="booking-details-page">
+
+    <div class="booking-details-header">
+        <div>
+            <a asp-controller="Customer"
+               asp-action="BookingHistory"
+               class="booking-back-link">
+                <i class="bi bi-arrow-left"></i>
+                Back to booking history
+            </a>
+
+            <span class="booking-eyebrow">YOUR ACCOUNT</span>
+            <h1>Booking Details</h1>
+            <p>Review your appointment, booked services and payment status.</p>
+        </div>
+
+        <span class="booking-status-badge
+            @(isConfirmed ? "status-confirmed" : "status-other")">
+            <i class="bi @(isConfirmed ? "bi-check-circle-fill" : "bi-info-circle-fill")"></i>
+            @Model.Status
+        </span>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="booking-alert booking-alert-success">
+            <i class="bi bi-check-circle-fill"></i>
+            @TempData["Success"]
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="booking-alert booking-alert-error">
+            <i class="bi bi-exclamation-circle-fill"></i>
+            @TempData["Error"]
+        </div>
+    }
+
+    <div class="booking-details-layout">
+
+        <main class="booking-details-main">
+
+            <section class="booking-panel">
+                <div class="booking-panel-heading">
+                    <div class="booking-heading-icon">
+                        <i class="bi bi-calendar2-check"></i>
+                    </div>
+
+                    <div>
+                        <h2>Appointment Information</h2>
+                        <p>Your booking reference and schedule</p>
+                    </div>
+                </div>
+
+                <div class="booking-reference-box">
+                    <span>BOOKING REFERENCE</span>
+                    <strong>@Model.BookingReference</strong>
+                </div>
+
+                <div class="booking-information-grid">
+                    <div class="booking-information-item">
+                        <span><i class="bi bi-calendar-event"></i> Booking Date</span>
+                        <strong>@Model.BookingDate.ToString("dddd, dd MMMM yyyy")</strong>
+                    </div>
+
+                    <div class="booking-information-item">
+                        <span><i class="bi bi-clock"></i> Booking Time</span>
+                        <strong>@Model.BookingTime</strong>
+                    </div>
+
+                    <div class="booking-information-item">
+                        <span><i class="bi bi-calendar-plus"></i> Date Booked</span>
+                        <strong>@Model.CreatedDate.ToString("dd MMM yyyy")</strong>
+                    </div>
+
+                    <div class="booking-information-item">
+                        <span><i class="bi bi-credit-card"></i> Payment Status</span>
+                        <strong>@Model.PaymentStatus</strong>
+                    </div>
+                </div>
+            </section>
+
+            <section class="booking-panel">
+                <div class="booking-panel-heading">
+                    <div class="booking-heading-icon">
+                        <i class="bi bi-basket2"></i>
+                    </div>
+
+                    <div>
+                        <h2>Booked Services</h2>
+                        <p>The services included in this appointment</p>
+                    </div>
+                </div>
+
+                @if (bookingItems.Any())
+                {
+                    <div class="booking-items-list">
+                        @foreach (var item in bookingItems)
+                        {
+                            <div class="booking-item">
+                                <div class="booking-item-icon">
+                                    <i class="bi bi-stars"></i>
+                                </div>
+
+                                <div class="booking-item-description">
+                                    <strong>@item.ServiceName</strong>
+                                    <span>Quantity: @item.Quantity</span>
+                                </div>
+
+                                <div class="booking-item-price">
+                                    <span>Item total</span>
+                                    <strong>R @item.TotalPrice.ToString("N2")</strong>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="booking-total-row">
+                        <span>Booking Total</span>
+                        <strong>R @Model.Total.ToString("N2")</strong>
+                    </div>
+                }
+                else
+                {
+                    <div class="booking-no-items">
+                        No service items were found for this booking.
+                    </div>
+                }
+            </section>
+
+            @if (isConfirmed)
+            {
+                <section class="booking-actions-panel">
+                    <div class="booking-panel-heading">
+                        <div class="booking-heading-icon">
+                            <i class="bi bi-sliders"></i>
+                        </div>
+
+                        <div>
+                            <h2>Manage Your Booking</h2>
+                            <p>Need to make a change to your appointment?</p>
+                        </div>
+                    </div>
+
+                    <div class="booking-actions">
+                        <a asp-controller="Customer"
+                           asp-action="RequestReschedule"
+                           asp-route-id="@Model.Id"
+                           class="booking-action-reschedule">
+                            <i class="bi bi-calendar2-week"></i>
+                            Request Reschedule
+                        </a>
+
+                       <a asp-controller="Customer"
+   asp-action="ConfirmCancelBooking"
+   asp-route-id="@Model.Id"
+   class="booking-action-cancel">
+    <i class="bi bi-x-circle"></i>
+    Cancel Booking
+</a>
+                    </div>
+
+                    <p class="booking-action-note">
+                        Rescheduling is a request and may require confirmation from MAS Cleaners.
+                    </p>
+                </section>
+            }
+            else
+            {
+                <section class="booking-status-notice">
+                    <i class="bi bi-info-circle"></i>
+                    <div>
+                        <strong>Booking management unavailable</strong>
+                        <p>
+                            Cancel and reschedule options are available only for confirmed bookings.
+                            Your current booking status is <strong>@Model.Status</strong>.
+                        </p>
+                    </div>
+                </section>
+            }
+
+        </main>
+
+        <aside class="booking-details-sidebar">
+            <section class="booking-sidebar-card">
+                <div class="booking-sidebar-icon">
+                    <i class="bi bi-headset"></i>
+                </div>
+
+                <h2>Need assistance?</h2>
+                <p>
+                    If you have questions about this booking, contact our team for assistance.
+                </p>
+
+                <a href="tel:+27614908391" class="booking-contact-link">
+                    <i class="bi bi-telephone"></i>
+                    +27 61 490 8391
+                </a>
+
+                <a href="mailto:info@mascleaners.co.za" class="booking-contact-link">
+                    <i class="bi bi-envelope"></i>
+                    info@mascleaners.co.za
+                </a>
+            </section>
+
+            <section class="booking-sidebar-help">
+                <i class="bi bi-shield-check"></i>
+                <div>
+                    <strong>Your booking, your account</strong>
+                    <p>
+                        Your appointment details are available through your signed-in customer account.
+                    </p>
+                </div>
+            </section>
+
+            <a asp-controller="Customer"
+               asp-action="BookingHistory"
+               class="booking-history-link">
+                <i class="bi bi-arrow-left"></i>
+                Return to Booking History
+            </a>
+        </aside>
+
+    </div>
+</section>

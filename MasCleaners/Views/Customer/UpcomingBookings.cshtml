@@ -1,0 +1,140 @@
+﻿ @model IEnumerable<MasCleaners.Models.Booking>
+
+@{
+    ViewData["Title"] = "Upcoming Bookings";
+    Layout = "_Layout";
+
+    var bookings = Model?.ToList() ?? new List<MasCleaners.Models.Booking>();
+}
+
+<link rel="stylesheet" href="~/css/customer-upcoming-bookings.css" asp-append-version="true" />
+
+<section class="upcoming-page">
+    <div class="upcoming-header">
+        <div>
+            <span class="upcoming-eyebrow">YOUR BOOKINGS</span>
+            <h1>Upcoming Bookings</h1>
+            <p>View your confirmed cleaning appointments and the services you've booked.</p>
+        </div>
+
+        <a asp-controller="Cart" asp-action="Cart" class="upcoming-book-btn">
+            <i class="bi bi-plus-lg"></i>
+            Book a Cleaning
+        </a>
+    </div>
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="upcoming-alert">
+            @TempData["Error"]
+        </div>
+    }
+
+    <div class="upcoming-summary">
+        <div class="upcoming-summary-icon">
+            <i class="bi bi-calendar-check"></i>
+        </div>
+        <div>
+            <span>Confirmed upcoming bookings</span>
+            <strong>@bookings.Count</strong>
+        </div>
+    </div>
+
+    @if (bookings.Any())
+    {
+        <div class="upcoming-list">
+            @foreach (var booking in bookings)
+            {
+                <article class="upcoming-card">
+                    <div class="upcoming-card-top">
+                        <div>
+                            <span class="upcoming-reference">BOOKING REFERENCE</span>
+                            <h2>@booking.BookingReference</h2>
+                        </div>
+
+                        <span class="upcoming-status">
+                            <i class="bi bi-check-circle-fill"></i>
+                            Confirmed
+                        </span>
+                    </div>
+
+                    <div class="upcoming-details">
+                        <div class="upcoming-detail">
+                            <i class="bi bi-calendar-event"></i>
+                            <div>
+                                <span>Booking date</span>
+                                <strong>@booking.BookingDate.ToString("dd MMM yyyy")</strong>
+                            </div>
+                        </div>
+
+                        <div class="upcoming-detail">
+                            <i class="bi bi-clock"></i>
+                            <div>
+                                <span>Booking time</span>
+                                <strong>@booking.BookingTime</strong>
+                            </div>
+                        </div>
+
+                        <div class="upcoming-detail">
+                            <i class="bi bi-basket2"></i>
+                            <div>
+                                <span>Services</span>
+                                <strong>@(booking.BookingItems?.Count ?? 0) item(s)</strong>
+                            </div>
+                        </div>
+
+                        <div class="upcoming-detail">
+                            <i class="bi bi-cash-stack"></i>
+                            <div>
+                                <span>Booking total</span>
+                                <strong>R @booking.Total.ToString("N2")</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (booking.BookingItems != null && booking.BookingItems.Any())
+                    {
+                        <div class="upcoming-services">
+                            <span>Booked services</span>
+                            <div class="upcoming-service-tags">
+                                @foreach (var item in booking.BookingItems)
+                                {
+                                    <span>@item.ServiceName</span>
+                                }
+                            </div>
+                        </div>
+                    }
+
+                    <div class="upcoming-card-footer">
+                        <span class="upcoming-payment">
+                            Payment: @booking.PaymentStatus
+                        </span>
+
+                        <a asp-controller="Customer"
+                           asp-action="BookingDetails"
+                           asp-route-id="@booking.Id"
+                           class="upcoming-details-btn">
+                            View Booking
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="upcoming-empty">
+            <div class="upcoming-empty-icon">
+                <i class="bi bi-calendar2-x"></i>
+            </div>
+            <h2>No upcoming bookings</h2>
+            <p>You don't have any confirmed cleaning appointments scheduled at the moment.</p>
+
+            <a asp-controller="Cart" asp-action="Cart" class="upcoming-book-btn">
+                <i class="bi bi-calendar-plus"></i>
+                Book a Cleaning
+            </a>
+        </div>
+    }
+</section>

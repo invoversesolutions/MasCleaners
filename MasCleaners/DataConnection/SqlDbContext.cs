@@ -23,8 +23,13 @@ namespace MasCleaners.DataConnection
         public DbSet<BookingItem> BookingItems { get; set; }
 
         public DbSet<CustomerAddress> CustomerAddresses { get; set; }
+        public DbSet<Payment> Payments { get; set; }
 
+        public DbSet<VatSetting> VatSettings { get; set; }
+        public DbSet<Invoice> Invoices { get; set; }
+        public DbSet<InvoiceItem> InvoiceItems { get; set; }
 
+        public DbSet<BookingRescheduleRequest> BookingRescheduleRequests { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -165,7 +170,18 @@ namespace MasCleaners.DataConnection
                     {
                         join.HasKey("BookingId", "CustomerAddressId");
                     });
+            modelBuilder.Entity<VatSetting>(entity =>
+            {
+                entity.Property(v => v.VatRate)
+                    .HasPrecision(5, 2);
 
+                entity.HasIndex(v => v.IsActive);
+            });
+            modelBuilder.Entity<BookingRescheduleRequest>()
+    .HasOne(x => x.Booking)
+    .WithMany()
+    .HasForeignKey(x => x.BookingId)
+    .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

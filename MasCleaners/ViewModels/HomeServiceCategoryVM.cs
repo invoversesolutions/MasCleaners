@@ -14,5 +14,6 @@
         public decimal StartingPrice { get; set; }
 
         public int ServiceOptionCount { get; set; }
+       public bool IsActive { get; set; }
     }
 }

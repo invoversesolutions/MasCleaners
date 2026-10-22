@@ -1,0 +1,284 @@
+﻿ @* Views/Invoice/Details.cshtml *@
+@model MasCleaners.Models.Invoice
+
+@{
+    ViewData["Title"] = $"Invoice {Model.InvoiceNumber}";
+    Layout = "_LayoutAdmin";
+}
+
+<link rel="stylesheet" href="~/css/invoice-details.css" asp-append-version="true" />
+
+<div class="invoice-page">
+    <div class="invoice-toolbar">
+        <div>
+            <h1>Invoice Details</h1>
+            <p>Review the invoice and its recorded payment and VAT information.</p>
+        </div>
+
+        <div class="invoice-toolbar-actions">
+            <a asp-controller="Booking"
+               asp-action="Details"
+               asp-route-id="@Model.BookingId"
+               class="invoice-btn invoice-btn-secondary">
+                <i class="bi bi-arrow-left"></i>
+                Back to Booking
+            </a>
+
+            <button type="button"
+                    class="invoice-btn invoice-btn-primary"
+                    onclick="window.print()">
+                <i class="bi bi-printer"></i>
+                Print Invoice
+            </button>
+        </div>
+    </div>
+
+    <div class="invoice-document">
+        <div class="invoice-document-header">
+            <div class="invoice-brand">
+                <div class="invoice-brand-icon">
+                    <i class="bi bi-stars"></i>
+                </div>
+                <div>
+                    <h2>MAS Cleaners</h2>
+                    <p>FROM MESS to Fresh</p>
+                </div>
+            </div>
+
+            <div class="invoice-heading">
+                <span>INVOICE</span>
+                <h2>@Model.InvoiceNumber</h2>
+                <span class="invoice-status">
+                    @Model.Status
+                </span>
+            </div>
+        </div>
+
+        <div class="invoice-meta">
+            <div>
+                <span class="invoice-label">Invoice date</span>
+                <strong>@Model.InvoiceDate.ToString("dd MMMM yyyy")</strong>
+            </div>
+
+            <div>
+                <span class="invoice-label">Booking reference</span>
+                <strong>
+                    @(Model.BookingId.HasValue
+                        ? $"#{Model.BookingId.Value}"
+                        : "N/A")
+                </strong>
+            </div>
+
+            <div>
+                <span class="invoice-label">Payment status</span>
+                <strong class="payment-status">
+                    @Model.PaymentStatus
+                </strong>
+            </div>
+        </div>
+
+        <div class="invoice-parties">
+            <section>
+                <h3>From</h3>
+                <strong>MAS Cleaners</strong>
+                <p>Professional Cleaning Services</p>
+                <p>Free State, South Africa</p>
+                <p>+27 61 490 8391</p>
+                <p>info@mascleaners.co.za</p>
+
+                @if (Model.IsVatRegisteredSnapshot &&
+                     !string.IsNullOrWhiteSpace(Model.VatRegistrationNumberSnapshot))
+                {
+                    <p>
+                        <span class="invoice-label">VAT registration number</span><br />
+                        @Model.VatRegistrationNumberSnapshot
+                    </p>
+                }
+            </section>
+
+            <section>
+                <h3>Bill to</h3>
+                <strong>@Model.CustomerName</strong>
+
+                @if (!string.IsNullOrWhiteSpace(Model.CustomerEmail))
+                {
+                    <p>@Model.CustomerEmail</p>
+                }
+
+                @if (!string.IsNullOrWhiteSpace(Model.CustomerPhone))
+                {
+                    <p>@Model.CustomerPhone</p>
+                }
+
+                @if (!string.IsNullOrWhiteSpace(Model.BillingAddress))
+                {
+                    <p class="invoice-address">@Model.BillingAddress</p>
+                }
+
+                @if (!string.IsNullOrWhiteSpace(Model.CustomerVatNumber))
+                {
+                    <p>
+                        <span class="invoice-label">Customer VAT number</span><br />
+                        @Model.CustomerVatNumber
+                    </p>
+                }
+            </section>
+        </div>
+
+        <div class="invoice-items-wrapper">
+          
+<div class="invoice-items-wrapper">
+    <table class="invoice-items">
+        <thead>
+            <tr>
+                <th>Description</th>
+                <th class="text-center">Qty</th>
+                <th class="text-end">Unit price</th>
+                <th class="text-end">Discount</th>
+                <th class="text-end">Line total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.InvoiceItems != null && Model.InvoiceItems.Any())
+            {
+                foreach (var item in Model.InvoiceItems)
+                {
+                    <tr>
+                        <td data-label="Description" class="invoice-description">
+                            <strong>@item.Description</strong>
+
+                            @if (item.IsVatApplicableSnapshot)
+                            {
+                                <small class="invoice-item-tax">
+                                    Includes VAT at @item.VatRateSnapshot.ToString("0.##")%
+                                </small>
+                            }
+                        </td>
+
+                        <td data-label="Quantity" class="text-center">
+                            @item.Quantity.ToString("0.###")
+                        </td>
+
+                        <td data-label="Unit price" class="text-end">
+                            @item.UnitPriceInclusive.ToString(
+                                "C",
+                                System.Globalization.CultureInfo.GetCultureInfo("en-ZA"))
+                        </td>
+
+                        <td data-label="Discount" class="text-end">
+                            @item.DiscountAmount.ToString(
+                                "C",
+                                System.Globalization.CultureInfo.GetCultureInfo("en-ZA"))
+                        </td>
+
+                        <td data-label="Line total" class="text-end invoice-line-total">
+                            @item.LineTotal.ToString(
+                                "C",
+                                System.Globalization.CultureInfo.GetCultureInfo("en-ZA"))
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5" class="invoice-empty">
+                        No invoice items were recorded.
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+        </div>
+
+        <div class="invoice-bottom">
+            <section class="invoice-tax-information">
+                <h3>VAT information</h3>
+
+                @if (Model.IsVatRegisteredSnapshot)
+                {
+                    <p>
+                        VAT registration status at invoice creation:
+                        <strong>Registered</strong>
+                    </p>
+                    <p>
+                        VAT rate:
+                        <strong>@Model.VatRateSnapshot.ToString("0.##")%</strong>
+                    </p>
+                    <p>
+                        Prices are VAT-inclusive. VAT is extracted from the
+                        invoice total and is not added on top.
+                    </p>
+
+                    @if (Model.VatEffectiveDateSnapshot.HasValue)
+                    {
+                        <p>
+                            Effective date:
+                            <strong>
+                                @Model.VatEffectiveDateSnapshot.Value.ToString("dd MMMM yyyy")
+                            </strong>
+                        </p>
+                    }
+                }
+                else
+                {
+                    <p>
+                        VAT registration status at invoice creation:
+                        <strong>Not registered</strong>
+                    </p>
+                    <p>No VAT has been charged on this invoice.</p>
+                }
+
+                @if (!string.IsNullOrWhiteSpace(Model.Notes))
+                {
+                    <div class="invoice-notes">
+                        <h4>Notes</h4>
+                        <p>@Model.Notes</p>
+                    </div>
+                }
+            </section>
+
+            <section class="invoice-totals">
+                <div class="invoice-total-row">
+                    <span>Subtotal (excluding VAT)</span>
+                    <strong>@Model.SubtotalAmount.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("en-ZA"))</strong>
+                </div>
+
+                @if (Model.DiscountAmount > 0)
+                {
+                    <div class="invoice-total-row">
+                        <span>Discount</span>
+                        <strong>-@Model.DiscountAmount.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("en-ZA"))</strong>
+                    </div>
+                }
+
+                <div class="invoice-total-row">
+                    <span>
+                        VAT
+                        @if (Model.IsVatRegisteredSnapshot)
+                        {
+                            <small>(@Model.VatRateSnapshot.ToString("0.##")% included)</small>
+                        }
+                    </span>
+                    <strong>@Model.VatAmount.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("en-ZA"))</strong>
+                </div>
+
+                <div class="invoice-total-final">
+                    <span>Total payable</span>
+                    <strong>@Model.TotalAmount.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("en-ZA"))</strong>
+                </div>
+            </section>
+        </div>
+
+        <footer class="invoice-footer">
+            <strong>Thank you for choosing MAS Cleaners.</strong>
+            <p>FROM MESS to Fresh</p>
+            <small>
+                This invoice reflects the recorded booking and VAT configuration
+                at the time the invoice was created.
+            </small>
+        </footer>
+    </div>
+</div>

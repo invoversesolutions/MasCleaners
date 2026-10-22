@@ -1,0 +1,756 @@
+﻿
+@using System.Globalization
+@model MasCleaners.Models.Booking
+
+@{
+    ViewData["Title"] = "Booking Details";
+    Layout = "_LayoutAdmin";
+
+    var culture = CultureInfo.GetCultureInfo("en-ZA");
+
+    var customer = Model.Customer;
+    var email = customer?.ApplicationUser?.Email;
+
+    var customerName = customer == null
+        ? "Customer unavailable"
+        : $"{customer.FirstName} {customer.LastName}";
+
+    var statusClass = Model.Status.ToString()
+        .ToLowerInvariant();
+
+    var paymentClass = Model.PaymentStatus.ToString()
+        .ToLowerInvariant();
+}
+
+<link rel="stylesheet"
+      href="~/css/booking/admin-booking-details.css"
+      asp-append-version="true" />
+
+<div class="admin-booking-details">
+
+    <!-- PAGE HEADER -->
+    <header class="booking-details-header">
+        <div class="booking-details-heading">
+            <div class="booking-details-breadcrumb">
+                <a asp-controller="AdminDashboard"
+                   asp-action="Index">
+                    <i class="bi bi-house-door"></i>
+                    Dashboard
+                </a>
+
+                <i class="bi bi-chevron-right"></i>
+
+                <a asp-controller="Booking"
+                   asp-action="AdminIndexBooking">
+                    Bookings
+                </a>
+
+                <i class="bi bi-chevron-right"></i>
+
+                <span>Details</span>
+            </div>
+
+            <h1>Booking Details</h1>
+
+            <p>
+                Review the customer's booking, services,
+                schedule and payment information.
+            </p>
+        </div>
+
+        <div class="booking-details-header-actions">
+            <a asp-controller="Booking"
+               asp-action="AdminIndexBooking"
+               class="booking-details-back">
+                <i class="bi bi-arrow-left"></i>
+                <span>Back to Bookings</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- ALERTS -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="booking-details-alert success" role="alert">
+            <i class="bi bi-check-circle-fill"></i>
+            <span>@TempData["SuccessMessage"]</span>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="booking-details-alert error" role="alert">
+            <i class="bi bi-exclamation-circle-fill"></i>
+            <span>@TempData["ErrorMessage"]</span>
+        </div>
+    }
+
+    <!-- BOOKING OVERVIEW -->
+    <section class="booking-details-overview">
+
+        <div class="booking-overview-main">
+            <div class="booking-overview-icon">
+                <i class="bi bi-calendar2-check"></i>
+            </div>
+
+            <div class="booking-overview-content">
+                <span class="booking-overview-label">
+                    BOOKING REFERENCE
+                </span>
+
+                <h2>@Model.BookingReference</h2>
+
+                <p>
+                    Created on
+                    @Model.CreatedDate.ToString(
+                        "dd MMM yyyy, hh:mm tt")
+                </p>
+            </div>
+        </div>
+
+        <div class="booking-overview-statuses">
+            <div class="booking-status-group">
+                <span>Booking Status</span>
+
+                <strong class="booking-status-badge @statusClass">
+                    <span class="booking-status-dot"></span>
+                    @Model.Status
+                </strong>
+            </div>
+
+            <div class="booking-status-group">
+                <span>Payment Status</span>
+
+                <strong class="booking-status-badge @paymentClass">
+                    <span class="booking-status-dot"></span>
+                    @Model.PaymentStatus
+                </strong>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAIN CONTENT -->
+    <div class="booking-details-layout">
+
+        <div class="booking-details-primary">
+
+            <!-- CUSTOMER INFORMATION -->
+            <section class="booking-details-card">
+                <div class="booking-details-card-header">
+                    <div class="booking-details-section-icon">
+                        <i class="bi bi-person"></i>
+                    </div>
+
+                    <div>
+                        <h3>Customer Information</h3>
+                        <p>Contact details associated with this booking.</p>
+                    </div>
+                </div>
+
+                @if (customer != null)
+                {
+                    <div class="booking-customer-profile">
+                        <div class="booking-customer-avatar">
+                            <i class="bi bi-person-fill"></i>
+                        </div>
+
+                        <div>
+                            <h4>@customerName</h4>
+                            <span>
+                                @customer.CustomerType Customer
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="booking-details-info-grid">
+                        <div class="booking-info-item">
+                            <span>First Name</span>
+                            <strong>@customer.FirstName</strong>
+                        </div>
+
+                        <div class="booking-info-item">
+                            <span>Last Name</span>
+                            <strong>@customer.LastName</strong>
+                        </div>
+
+                        <div class="booking-info-item">
+                            <span>Email Address</span>
+
+                            @if (!string.IsNullOrWhiteSpace(email))
+                            {
+                                <a href="mailto:@email">@email</a>
+                            }
+                            else
+                            {
+                                <strong>Not available</strong>
+                            }
+                        </div>
+
+                        <div class="booking-info-item">
+                            <span>Phone Number</span>
+
+                            @if (!string.IsNullOrWhiteSpace(
+                                customer.PhoneNumber))
+                            {
+                                <a href="tel:@customer.PhoneNumber">
+                                    @customer.PhoneNumber
+                                </a>
+                            }
+                            else
+                            {
+                                <strong>Not available</strong>
+                            }
+                        </div>
+
+                        @if (customer.CustomerType ==
+                            MasCleaners.Models.CustomerType.Company)
+                        {
+                            <div class="booking-info-item">
+                                <span>Company Name</span>
+                                <strong>
+                                    @(customer.CompanyName ?? "Not provided")
+                                </strong>
+                            </div>
+
+                            <div class="booking-info-item">
+                                <span>VAT Number</span>
+                                <strong>
+                                    @(customer.VatNumber ?? "Not provided")
+                                </strong>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p class="booking-details-empty">
+                        Customer information is unavailable.
+                    </p>
+                }
+            </section>
+
+            <!-- SCHEDULE -->
+            <section class="booking-details-card">
+                <div class="booking-details-card-header">
+                    <div class="booking-details-section-icon">
+                        <i class="bi bi-calendar-week"></i>
+                    </div>
+
+                    <div>
+                        <h3>Schedule</h3>
+                        <p>The date and preferred starting time.</p>
+                    </div>
+                </div>
+
+                <div class="booking-schedule-grid">
+                    <div class="booking-schedule-item">
+                        <div class="booking-schedule-icon">
+                            <i class="bi bi-calendar3"></i>
+                        </div>
+
+                        <div>
+                            <span>Booking Date</span>
+                            <strong>
+                                @Model.BookingDate.ToString(
+                                    "dddd, dd MMMM yyyy")
+                            </strong>
+                        </div>
+                    </div>
+
+                    <div class="booking-schedule-item">
+                        <div class="booking-schedule-icon">
+                            <i class="bi bi-clock"></i>
+                        </div>
+
+                        <div>
+                            <span>Starting Time</span>
+                            <strong>
+                                @DateTime.Today.Add(Model.BookingTime).ToString("hh:mm tt")
+                            </strong>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- BOOKING SERVICES -->
+            <section class="booking-details-card">
+                <div class="booking-details-card-header">
+                    <div class="booking-details-section-icon">
+                        <i class="bi bi-stars"></i>
+                    </div>
+
+                    <div>
+                        <h3>Services & Items</h3>
+                        <p>
+                            @Model.BookingItems.Count service line(s)
+                            in this booking.
+                        </p>
+                    </div>
+                </div>
+
+                @if (Model.BookingItems.Any())
+                {
+                    <div class="booking-items-table-wrapper">
+                        <table class="booking-items-table">
+                            <thead>
+                                <tr>
+                                    <th>Service</th>
+                                    <th>Qty</th>
+                                    <th>Unit Price</th>
+                                    <th class="text-end">Total</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach (var item in Model.BookingItems)
+                                {
+                                    <tr>
+                                        <td>
+                                            <div class="booking-service-name">
+                                                <span class="booking-service-icon">
+                                                    <i class="bi bi-check2-circle"></i>
+                                                </span>
+
+                                                <strong>@item.ServiceName</strong>
+                                            </div>
+                                        </td>
+
+                                        <td>@item.Quantity</td>
+
+                                        <td>
+                                            @item.UnitPrice.ToString("C", culture)
+                                        </td>
+
+                                        <td class="text-end booking-item-total">
+                                            @item.TotalPrice.ToString("C", culture)
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <p class="booking-details-empty">
+                        No service items are associated with this booking.
+                    </p>
+                }
+
+                <div class="booking-pricing-summary">
+                    <div class="booking-pricing-row">
+                        <span>Subtotal</span>
+                        <strong>
+                            @Model.Subtotal.ToString("C", culture)
+                        </strong>
+                    </div>
+
+                    <div class="booking-pricing-row booking-pricing-total">
+                        <span>Booking Total</span>
+                        <strong>
+                            @Model.Total.ToString("C", culture)
+                        </strong>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SERVICE ADDRESSES -->
+            <section class="booking-details-card">
+                <div class="booking-details-card-header">
+                    <div class="booking-details-section-icon">
+                        <i class="bi bi-geo-alt"></i>
+                    </div>
+
+                    <div>
+                        <h3>Service Addresses</h3>
+                        <p>Locations associated with the booking.</p>
+                    </div>
+                </div>
+
+                @if (Model.Addresses.Any())
+                {
+                    <div class="booking-address-grid">
+                        @foreach (var address in Model.Addresses)
+                        {
+                            <article class="booking-address-item">
+                                <div class="booking-address-icon">
+                                    <i class="bi bi-geo-alt-fill"></i>
+                                </div>
+
+                                <div class="booking-address-content">
+                                    <h4>@address.AddressName</h4>
+
+                                    <p>
+                                        @address.AddressLine1
+
+                                        @if (!string.IsNullOrWhiteSpace(
+                                            address.AddressLine2))
+                                        {
+                                            <span>, @address.AddressLine2</span>
+                                        }
+
+                                        <br />
+
+                                        @address.City, @address.Province
+
+                                        @if (!string.IsNullOrWhiteSpace(
+                                            address.PostalCode))
+                                        {
+                                            <span>, @address.PostalCode</span>
+                                        }
+                                    </p>
+                                </div>
+                            </article>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p class="booking-details-empty">
+                        No service addresses are linked to this booking.
+                    </p>
+                }
+            </section>
+
+            <!-- CUSTOMER NOTES -->
+            <section class="booking-details-card">
+                <div class="booking-details-card-header">
+                    <div class="booking-details-section-icon">
+                        <i class="bi bi-chat-left-text"></i>
+                    </div>
+
+                    <div>
+                        <h3>Customer Notes</h3>
+                        <p>Additional instructions supplied with the booking.</p>
+                    </div>
+                </div>
+
+                @if (!string.IsNullOrWhiteSpace(Model.CustomerNotes))
+                {
+                    <div class="booking-customer-notes">
+                        <i class="bi bi-quote"></i>
+                        <p>@Model.CustomerNotes</p>
+                    </div>
+                }
+                else
+                {
+                    <p class="booking-details-empty">
+                        No additional customer notes were provided.
+                    </p>
+                }
+            </section>
+
+        </div>
+
+        <!-- RIGHT SIDEBAR -->
+        <aside class="booking-details-sidebar">
+
+            <section class="booking-sidebar-card booking-total-card">
+                <span class="booking-sidebar-label">BOOKING VALUE</span>
+
+                <strong class="booking-sidebar-total">
+                    @Model.Total.ToString("C", culture)
+                </strong>
+
+                <div class="booking-sidebar-divider"></div>
+
+                <div class="booking-sidebar-stat">
+                    <span>Service lines</span>
+                    <strong>@Model.BookingItems.Count</strong>
+                </div>
+
+                <div class="booking-sidebar-stat">
+                    <span>Total quantity</span>
+                    <strong>
+                        @Model.BookingItems.Sum(x => x.Quantity)
+                    </strong>
+                </div>
+
+                <div class="booking-sidebar-stat">
+                    <span>Payment</span>
+                    <strong>@Model.PaymentStatus</strong>
+                </div>
+            </section>
+
+            <section class="booking-sidebar-card">
+                <div class="booking-sidebar-heading">
+                    <i class="bi bi-info-circle"></i>
+                    <h3>Booking Record</h3>
+                </div>
+
+                <div class="booking-sidebar-stat">
+                    <span>Record ID</span>
+                    <strong>#@Model.Id</strong>
+                </div>
+
+                <div class="booking-sidebar-stat">
+                    <span>Created</span>
+                    <strong>
+                        @Model.CreatedDate.ToString("dd MMM yyyy")
+                    </strong>
+                </div>
+
+                <div class="booking-sidebar-stat">
+                    <span>Last Updated</span>
+                    <strong>
+                        @Model.UpdatedDate.ToString("dd MMM yyyy")
+                    </strong>
+                </div>
+            </section>
+
+  
+            
+<section class="booking-sidebar-help">
+    <div class="booking-sidebar-help-icon">
+        <i class="bi bi-shield-check"></i>
+    </div>
+
+    <h3>Booking Overview</h3>
+
+    <p>
+        Review the booking details before making any
+        changes to its status or payment record.
+    </p>
+</section>
+
+<!-- Booking Actions -->
+<section class="booking-sidebar-actions">
+    <div class="booking-sidebar-actions-header">
+        <div>
+            <span class="booking-sidebar-eyebrow">MANAGE BOOKING</span>
+            <h3>Booking Actions</h3>
+        </div>
+
+        <i class="bi bi-sliders"></i>
+    </div>
+
+    <div class="booking-sidebar-actions-list">
+
+
+@if (Model.Status == MasCleaners.Models.BookingStatus.Pending)
+{
+    <form asp-controller="Booking"
+          asp-action="Approve"
+          asp-route-id="@Model.Id"
+          method="post">
+        @Html.AntiForgeryToken()
+
+        <button type="submit"
+                class="booking-sidebar-action approve">
+            <i class="bi bi-check-circle"></i>
+            <span>Approve Booking</span>
+            <i class="bi bi-arrow-right action-arrow"></i>
+        </button>
+    </form>
+}
+
+@if (Model.Status != MasCleaners.Models.BookingStatus.Completed &&
+     Model.Status != MasCleaners.Models.BookingStatus.Cancelled &&
+     Model.Status != MasCleaners.Models.BookingStatus.Declined)
+{
+    <button type="button"
+            class="booking-sidebar-action reschedule"
+            data-bs-toggle="modal"
+            data-bs-target="#rescheduleBookingModal">
+        <i class="bi bi-calendar2-week"></i>
+        <span>Reschedule Booking</span>
+        <i class="bi bi-arrow-right action-arrow"></i>
+    </button>
+
+    <form asp-controller="Booking"
+          asp-action="Cancel"
+          asp-route-id="@Model.Id"
+          method="post"
+          onsubmit="return confirm('Are you sure you want to cancel this booking?');">
+        @Html.AntiForgeryToken()
+
+        <button type="submit" class="booking-sidebar-action cancel">
+            <i class="bi bi-x-circle"></i>
+            <span>Cancel Booking</span>
+            <i class="bi bi-arrow-right action-arrow"></i>
+        </button>
+    </form>
+}
+
+
+@if (Model.PaymentStatus != MasCleaners.Models.PaymentStatus.Paid &&
+     Model.Status != MasCleaners.Models.BookingStatus.Cancelled &&
+     Model.Status != MasCleaners.Models.BookingStatus.Declined)
+{
+    <button type="button"
+            class="booking-sidebar-action payment"
+            data-bs-toggle="modal"
+            data-bs-target="#addPaymentModal">
+
+        <i class="bi bi-credit-card"></i>
+        <span>Add Payment</span>
+        <i class="bi bi-arrow-right action-arrow"></i>
+
+    </button>
+}
+
+
+@if (Model.PaymentStatus == MasCleaners.Models.PaymentStatus.Paid)
+{
+    <a asp-controller="Invoice"
+       asp-action="FromBooking"
+       asp-route-bookingId="@Model.Id"
+       class="booking-sidebar-action invoice">
+
+        <i class="bi bi-receipt"></i>
+        <span>View Invoice</span>
+        <i class="bi bi-arrow-right action-arrow"></i>
+
+    </a>
+}
+
+@if (Model.Status == MasCleaners.Models.BookingStatus.Confirmed)
+{
+    <form asp-controller="Booking"
+          asp-action="Complete"
+          asp-route-id="@Model.Id"
+          method="post"
+          onsubmit="return confirm('Are you sure you want to mark this booking as completed?');">
+        @Html.AntiForgeryToken()
+
+        <button type="submit"
+                class="booking-sidebar-action complete">
+            <i class="bi bi-check2-all"></i>
+            <span>Complete Booking</span>
+            <i class="bi bi-arrow-right action-arrow"></i>
+        </button>
+    </form>
+}
+
+
+    </div>
+</section>
+
+        </aside>
+    </div>
+
+    <!-- FOOTER ACTION -->
+    <div class="booking-details-footer">
+        <a asp-controller="Booking"
+           asp-action="AdminIndexBooking"
+           class="booking-details-back">
+            <i class="bi bi-arrow-left"></i>
+            Return to Booking Management
+        </a>
+
+        <span>
+            <i class="bi bi-shield-check"></i>
+            MAS Cleaners Admin
+        </span>
+    </div>
+
+</div>
+
+@if (Model.Status != MasCleaners.Models.BookingStatus.Completed &&
+     Model.Status != MasCleaners.Models.BookingStatus.Cancelled &&
+     Model.Status != MasCleaners.Models.BookingStatus.Declined)
+{
+    <div class="modal fade"
+         id="rescheduleBookingModal"
+         tabindex="-1"
+         aria-labelledby="rescheduleBookingModalLabel"
+         aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content reschedule-modal">
+
+                <div class="modal-header">
+                    <div>
+                        <span class="booking-sidebar-eyebrow">
+                            BOOKING MANAGEMENT
+                        </span>
+                        <h5 class="modal-title"
+                            id="rescheduleBookingModalLabel">
+                            Reschedule Booking
+                        </h5>
+                        <p class="reschedule-modal-subtitle">
+                            Choose a new date and time for
+                            @Model.BookingReference.
+                        </p>
+                    </div>
+
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+
+                <form asp-controller="Booking"
+                      asp-action="Reschedule"
+                      asp-route-id="@Model.Id"
+                      method="post">
+
+                    @Html.AntiForgeryToken()
+
+                    <div class="modal-body">
+                        <div class="reschedule-field">
+                            <label for="bookingDate">
+                                <i class="bi bi-calendar3"></i>
+                                New Booking Date
+                            </label>
+
+                            <input type="date"
+                                   id="bookingDate"
+                                   name="bookingDate"
+                                   class="form-control"
+                                   value="@Model.BookingDate.ToString("yyyy-MM-dd")"
+                                   min="@DateTime.Today.ToString("yyyy-MM-dd")"
+                                   required />
+                        </div>
+
+                        <div class="reschedule-field">
+                            <label for="bookingTime">
+                                <i class="bi bi-clock"></i>
+                                New Booking Time
+                            </label>
+
+                            <input type="time"
+                                   id="bookingTime"
+                                   name="bookingTime"
+                                   class="form-control"
+                                   value="@Model.BookingTime.ToString(@"hh\:mm")"
+                                   min="07:00"
+                                   max="15:00"
+                                   required />
+
+                            <small>
+                                Available booking times are between
+                                07:00 and 15:00.
+                            </small>
+                        </div>
+
+                        <div class="reschedule-notice">
+                            <i class="bi bi-info-circle"></i>
+                            <span>
+                                The new schedule will be saved once
+                                you confirm the change.
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button"
+                                class="btn btn-light"
+                                data-bs-dismiss="modal">
+                            Keep Current Schedule
+                        </button>
+
+                        <button type="submit"
+                                class="btn btn-reschedule-save">
+                            <i class="bi bi-check2-circle"></i>
+                            Save New Schedule
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+@await Html.PartialAsync(
+    "_AddPayment",
+    (MasCleaners.ViewModels.AddPaymentVM)ViewData["AddPaymentVM"]!)

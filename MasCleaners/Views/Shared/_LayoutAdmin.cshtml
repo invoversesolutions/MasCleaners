@@ -117,7 +117,7 @@
         </a>
 
         <a asp-controller="Booking"
-           asp-action="Admin"
+           asp-action="AdminIndexBooking"
            class="admin-nav-link">
             <span class="admin-nav-icon">
                 <i class="bi bi-calendar3"></i>
@@ -157,7 +157,7 @@
                 <span>Customers</span>
             </a>
 
-            <a asp-controller="Leads"
+ @*            <a asp-controller="Leads"
                asp-action="Index"
                class="admin-nav-link">
                 <span class="admin-nav-icon">
@@ -173,7 +173,7 @@
                     <i class="bi bi-clock-history"></i>
                 </span>
                 <span>Customer Activity</span>
-            </a>
+            </a> *@
 
         </div>
 
@@ -234,7 +234,7 @@
 
         <span class="admin-nav-title">MAIN</span>
 
-        <a asp-controller="SuperDashboad"
+        <a asp-controller="SuperDashboard"
            asp-action="Index"
            class="admin-nav-link">
             <span class="admin-nav-icon">
@@ -244,7 +244,7 @@
         </a>
 
         <a asp-controller="Booking"
-           asp-action="Admin"
+           asp-action="AdminIndexBooking"
            class="admin-nav-link">
             <span class="admin-nav-icon">
                 <i class="bi bi-calendar3"></i>
@@ -257,16 +257,7 @@
 
             <span class="admin-nav-title">SUPER USER</span>
 
-            <a asp-controller="SuperUser"
-               asp-action="Index"
-               class="admin-nav-link">
-                <span class="admin-nav-icon">
-                    <i class="bi bi-speedometer2"></i>
-                </span>
-                <span>Super User Dashboard</span>
-            </a>
-
-            <a asp-controller="SuperUser"
+            <a asp-controller="SuperDashboard"
                asp-action="Users"
                class="admin-nav-link">
                 <span class="admin-nav-icon">
@@ -275,7 +266,7 @@
                 <span>User Management</span>
             </a>
 
-            <a asp-controller="SuperUser"
+            <a asp-controller="SuperDashboard"
                asp-action="Roles"
                class="admin-nav-link">
                 <span class="admin-nav-icon">
@@ -284,7 +275,7 @@
                 <span>Role Management</span>
             </a>
 
-            <a asp-controller="SuperUser"
+            <a asp-controller="SuperDashboard"
                asp-action="Settings"
                class="admin-nav-link">
                 <span class="admin-nav-icon">
@@ -292,8 +283,15 @@
                 </span>
                 <span>System Settings</span>
             </a>
-
-            <a asp-controller="SuperUser"
+            <a asp-controller="VatSettings"
+               asp-action="Index"
+               class="admin-nav-link">
+                <span class="admin-nav-icon">
+                    <i class="bi bi-receipt-cutoff"></i>
+                </span>
+                <span>VAT Settings</span>
+            </a>
+            <a asp-controller="SuperDashboard"
                asp-action="AuditLogs"
                class="admin-nav-link">
                 <span class="admin-nav-icon">
@@ -328,7 +326,7 @@
                 <span>Service Options</span>
             </a>
 
-            <a asp-controller="Customers"
+            <a asp-controller="Customer"
                asp-action="Index"
                class="admin-nav-link">
                 <span class="admin-nav-icon">
@@ -337,23 +335,7 @@
                 <span>Customers</span>
             </a>
 
-            <a asp-controller="Leads"
-               asp-action="Index"
-               class="admin-nav-link">
-                <span class="admin-nav-icon">
-                    <i class="bi bi-person-lines-fill"></i>
-                </span>
-                <span>Leads</span>
-            </a>
-
-            <a asp-controller="CustomerActivity"
-               asp-action="Index"
-               class="admin-nav-link">
-                <span class="admin-nav-icon">
-                    <i class="bi bi-clock-history"></i>
-                </span>
-                <span>Customer Activity</span>
-            </a>
+        
 
             <a asp-controller="Ads"
                asp-action="Index"

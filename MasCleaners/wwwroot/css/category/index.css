@@ -461,6 +461,88 @@
 
 
 /* =========================================================
+   CATEGORY ACTIONS
+   ========================================================= */
+
+.category-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.category-action-form {
+    display: inline-flex;
+    margin: 0;
+    padding: 0;
+}
+
+.category-action {
+    width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid transparent;
+    border-radius: 9px;
+    background: transparent;
+    text-decoration: none;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+    .category-action.view {
+        color: #2563eb;
+        background: #eff6ff;
+    }
+
+        .category-action.view:hover {
+            background: #dbeafe;
+        }
+
+    .category-action.edit {
+        color: #0f9d94;
+        background: #e8f8f6;
+    }
+
+        .category-action.edit:hover {
+            background: #d0f2ee;
+        }
+
+    .category-action.deactivate {
+        color: #b7791f;
+        background: #fffbeb;
+    }
+
+        .category-action.deactivate:hover {
+            background: #fef3c7;
+        }
+
+    .category-action.activate {
+        color: #15803d;
+        background: #f0fdf4;
+    }
+
+        .category-action.activate:hover {
+            background: #dcfce7;
+        }
+
+    .category-action.delete {
+        color: #dc2626;
+        background: #fef2f2;
+    }
+
+        .category-action.delete:hover {
+            background: #fee2e2;
+        }
+
+    .category-action:focus-visible {
+        outline: 2px solid #0f9d94;
+        outline-offset: 2px;
+    }
+
+/* =========================================================
    EMPTY STATE
 ========================================================= */
 

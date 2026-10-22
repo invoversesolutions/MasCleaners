@@ -1,0 +1,71 @@
+﻿@model MasCleaners.Models.Booking
+
+@{
+    ViewData["Title"] = "Cancel Booking";
+    Layout = "_Layout";
+}
+
+<link rel="stylesheet"
+      href="~/css/customer-booking-management.css"
+      asp-append-version="true" />
+
+<section class="booking-manage-page">
+    <div class="manage-card cancel-confirm-card">
+        <div class="cancel-icon">
+            <i class="bi bi-calendar-x"></i>
+        </div>
+
+        <span class="manage-eyebrow">BOOKING MANAGEMENT</span>
+        <h1>Cancel this booking?</h1>
+
+        <p class="manage-intro">
+            Please confirm that you want to cancel this appointment.
+        </p>
+
+        <div class="manage-booking-summary">
+            <span>Booking reference</span>
+            <strong>@Model.BookingReference</strong>
+
+            <span>Appointment date</span>
+            <strong>@Model.BookingDate.ToString("dd MMMM yyyy")</strong>
+
+            <span>Appointment time</span>
+            <strong>@Model.BookingTime</strong>
+
+            <span>Booking total</span>
+            <strong>R @Model.Total.ToString("N2")</strong>
+        </div>
+
+        <div class="cancel-warning">
+            <i class="bi bi-exclamation-triangle"></i>
+            <p>
+                Cancelling this booking changes its status.
+                If you have already paid, this action does not automatically
+                issue a refund. Please contact MAS Cleaners about your payment.
+            </p>
+        </div>
+
+        <form asp-controller="Customer"
+              asp-action="CancelBooking"
+              asp-route-id="@Model.Id"
+              method="post"
+              class="manage-form">
+
+            @Html.AntiForgeryToken()
+
+            <div class="manage-form-actions">
+                <a asp-controller="Customer"
+                   asp-action="BookingDetails"
+                   asp-route-id="@Model.Id"
+                   class="manage-secondary-btn">
+                    Keep Booking
+                </a>
+
+                <button type="submit" class="manage-danger-btn">
+                    <i class="bi bi-x-circle"></i>
+                    Yes, Cancel Booking
+                </button>
+            </div>
+        </form>
+    </div>
+</section>

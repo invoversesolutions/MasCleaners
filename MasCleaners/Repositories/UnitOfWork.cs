@@ -1,5 +1,6 @@
 ﻿using MasCleaners.DataConnection;
 using MasCleaners.Interfaces;
+using MasCleaners.Models;
 
 namespace MasCleaners.Repositories
 {
@@ -21,6 +22,12 @@ namespace MasCleaners.Repositories
 
         public IEmployee Employee { get; private set; }
 
+        public IPayment Payment { get; private set; }
+        public IVatSetting VatSetting { get; private set; }
+        public IInvoice Invoice { get; private set; }
+        public IInvoiceItem InvoiceItem { get; private set; }
+        public IBookingRescheduleRequest BookingRescheduleRequest { get; private set; }
+
 
         public UnitOfWork(SqlDbContext dbContext)
         {
@@ -34,6 +41,11 @@ namespace MasCleaners.Repositories
             BookingItem = new BookingItemRepository(_dbContext);
             CustomerAddress = new CustomerAddressRepository(_dbContext);
             Employee = new EmployeeRepository(_dbContext);
+            Payment = new PayementRepository(_dbContext);
+            VatSetting = new VatSettingRepository(_dbContext);
+            Invoice = new InvoiceRepository(_dbContext);
+            InvoiceItem = new InvoiceItemRepository(_dbContext);
+            BookingRescheduleRequest = new BookingRescheduleRequestRepository(_dbContext);
         }
         Task IUnitOfWork.CommitAsync() => _dbContext.SaveChangesAsync();
     }

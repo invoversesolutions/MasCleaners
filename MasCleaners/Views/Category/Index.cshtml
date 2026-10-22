@@ -325,39 +325,82 @@
                                 <!-- ACTIONS -->
 
                                 <td>
-
                                     <div class="category-actions">
+
                                         <!-- VIEW -->
 
                                         <a asp-action="Details"
                                            asp-route-id="@category.Id"
                                            class="category-action view"
-                                           title="View service">
+                                           title="View category"
+                                           aria-label="View category">
 
                                             <i class="bi bi-eye"></i>
-
                                         </a>
+
+                                        <!-- EDIT -->
+
                                         <a asp-action="Edit"
                                            asp-route-id="@category.Id"
                                            class="category-action edit"
-                                           title="Edit category">
+                                           title="Edit category"
+                                           aria-label="Edit category">
 
                                             <i class="bi bi-pencil"></i>
-
                                         </a>
+
+                                        <!-- ACTIVATE / DEACTIVATE -->
+                                        @if (category.IsActive)
+                                        {
+                                            <form asp-action="Deactivate"
+                                                  asp-route-id="@category.Id"
+                                                  method="post"
+                                                  class="category-action-form"
+                                                  onsubmit="return confirm('Are you sure you want to deactivate this category?');">
+
+                                                <button type="submit"
+                                                        class="category-action deactivate"
+                                                        title="Deactivate category"
+                                                        aria-label="Deactivate category">
+
+                                                    <i class="bi bi-pause-circle"></i>
+                                                </button>
+
+                                            </form>
+                                        }
+                                        else
+                                        {
+                                            <form asp-action="Activate"
+                                                  asp-route-id="@category.Id"
+                                                  method="post"
+                                                  class="category-action-form"
+                                                  onsubmit="return confirm('Are you sure you want to activate this category?');">
+
+                                                <button type="submit"
+                                                        class="category-action activate"
+                                                        title="Activate category"
+                                                        aria-label="Activate category">
+
+                                                    <i class="bi bi-play-circle"></i>
+                                                </button>
+
+                                            </form>
+                                        }
+
+                                        <!-- DELETE -->
 
                                         <a asp-action="Delete"
                                            asp-route-id="@category.Id"
                                            class="category-action delete"
-                                           title="Delete category">
+                                           title="Delete category"
+                                           aria-label="Delete category">
 
                                             <i class="bi bi-trash"></i>
-
                                         </a>
 
                                     </div>
-
                                 </td>
+
 
                             </tr>
                         }

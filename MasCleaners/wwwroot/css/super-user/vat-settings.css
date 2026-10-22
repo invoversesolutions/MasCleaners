@@ -1,0 +1,333 @@
+﻿
+.vat-settings-page {
+    width: 100%;
+    max-width: 1220px;
+    margin: 0 auto;
+    color: #092b4c;
+}
+
+.vat-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 28px;
+}
+
+.vat-eyebrow {
+    color: #0f9d94;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.4px;
+}
+
+.vat-page-header h1 {
+    margin: 8px 0;
+    font-size: clamp(25px, 3vw, 32px);
+    font-weight: 800;
+}
+
+.vat-page-header p,
+.vat-card-heading p {
+    margin: 0;
+    color: #7d8da1;
+    font-size: 14px;
+}
+
+.vat-back-button,
+.vat-cancel-button,
+.vat-save-button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 9px;
+    min-height: 44px;
+    padding: 0 17px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.vat-back-button,
+.vat-cancel-button {
+    color: #092b4c;
+    background: #fff;
+    border: 1px solid #e1e6eb;
+}
+
+.vat-settings-form {
+    display: grid;
+    gap: 20px;
+}
+
+.vat-card {
+    padding: 28px;
+    background: #fff;
+    border: 1px solid #e1e6eb;
+    border-radius: 16px;
+}
+
+.vat-card-heading {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.vat-heading-icon {
+    display: grid;
+    flex: 0 0 48px;
+    height: 48px;
+    place-items: center;
+    color: #07877f;
+    background: #e8f8f6;
+    border-radius: 13px;
+    font-size: 21px;
+}
+
+.vat-card-heading h2 {
+    margin: 0 0 7px;
+    font-size: 19px;
+    font-weight: 800;
+}
+
+.vat-status-panel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding: 19px;
+    margin-bottom: 25px;
+    background: #f6f8fa;
+    border: 1px solid #e1e6eb;
+    border-radius: 12px;
+}
+
+    .vat-status-panel strong,
+    .vat-status-panel span {
+        display: block;
+    }
+
+    .vat-status-panel strong {
+        margin-bottom: 6px;
+        font-size: 14px;
+    }
+
+    .vat-status-panel div > span {
+        color: #7d8da1;
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+.vat-switch {
+    position: relative;
+    flex: 0 0 48px;
+    width: 48px;
+    height: 27px;
+}
+
+    .vat-switch input {
+        width: 1px;
+        height: 1px;
+        opacity: 0;
+    }
+
+.vat-switch-slider {
+    position: absolute;
+    inset: 0;
+    background: #cbd3dc;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background .2s;
+}
+
+    .vat-switch-slider::before {
+        position: absolute;
+        content: "";
+        width: 19px;
+        height: 19px;
+        left: 4px;
+        top: 4px;
+        background: #fff;
+        border-radius: 50%;
+        transition: transform .2s;
+    }
+
+.vat-switch input:checked + .vat-switch-slider {
+    background: #0f9d94;
+}
+
+    .vat-switch input:checked + .vat-switch-slider::before {
+        transform: translateX(21px);
+    }
+
+.vat-switch input:focus-visible + .vat-switch-slider {
+    outline: 3px solid #0f9d94;
+    outline-offset: 3px;
+}
+
+.vat-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+}
+
+.vat-field {
+    min-width: 0;
+}
+
+.vat-field-full {
+    grid-column: 1 / -1;
+}
+
+.vat-field label {
+    display: block;
+    margin-bottom: 9px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.vat-field input,
+.vat-field textarea {
+    width: 100%;
+    min-height: 45px;
+    padding: 11px 13px;
+    color: #092b4c;
+    background: #fff;
+    border: 1px solid #dce3e9;
+    border-radius: 9px;
+    outline: none;
+}
+
+.vat-field textarea {
+    resize: vertical;
+}
+
+    .vat-field input:focus,
+    .vat-field textarea:focus {
+        border-color: #0f9d94;
+        box-shadow: 0 0 0 3px rgba(15, 157, 148, .10);
+    }
+
+.vat-rate-input {
+    position: relative;
+}
+
+    .vat-rate-input input {
+        padding-right: 38px;
+    }
+
+    .vat-rate-input > span {
+        position: absolute;
+        top: 50%;
+        right: 14px;
+        color: #7d8da1;
+        transform: translateY(-50%);
+    }
+
+.field-error,
+.vat-validation-summary {
+    display: block;
+    margin-top: 6px;
+    color: #b42318;
+    font-size: 12px;
+}
+
+    .vat-validation-summary:empty {
+        display: none;
+    }
+
+.vat-info-panel {
+    display: flex;
+    gap: 13px;
+    padding: 19px;
+    color: #526b88;
+    background: #e8f8f6;
+    border: 1px solid #ccece7;
+    border-radius: 12px;
+}
+
+    .vat-info-panel > i {
+        color: #07877f;
+        font-size: 20px;
+    }
+
+    .vat-info-panel strong {
+        display: block;
+        margin-bottom: 6px;
+        color: #092b4c;
+        font-size: 13px;
+    }
+
+    .vat-info-panel p {
+        margin: 0;
+        font-size: 13px;
+        line-height: 1.7;
+    }
+
+.vat-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.vat-save-button {
+    color: #fff;
+    background: #0f9d94;
+    border: 1px solid #0f9d94;
+}
+
+    .vat-save-button:hover {
+        background: #07877f;
+    }
+
+.vat-alert {
+    padding: 14px 17px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    font-size: 13px;
+}
+
+    .vat-alert.success {
+        color: #176448;
+        background: #e9f8f0;
+    }
+
+    .vat-alert.error {
+        color: #9e2828;
+        background: #fff0f0;
+    }
+
+@media (max-width: 680px) {
+    .vat-page-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .vat-card {
+        padding: 20px;
+    }
+
+    .vat-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .vat-field-full {
+        grid-column: auto;
+    }
+
+    .vat-status-panel {
+        align-items: flex-start;
+    }
+
+    .vat-form-actions {
+        flex-direction: column-reverse;
+    }
+
+        .vat-form-actions a,
+        .vat-form-actions button {
+            width: 100%;
+        }
+}

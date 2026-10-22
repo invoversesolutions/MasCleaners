@@ -1,0 +1,217 @@
+﻿
+@model IEnumerable<MasCleaners.Models.Booking>
+
+@{
+    ViewData["Title"] = "Booking History";
+    Layout = "_Layout";
+}
+
+<link rel="stylesheet"
+      href="~/css/customer-booking-history.css"
+      asp-append-version="true" />
+
+<div class="customer-bookings-page">
+    <header class="customer-bookings-header">
+        <div>
+            <span class="customer-bookings-eyebrow">YOUR ACCOUNT</span>
+            <h1>Booking History</h1>
+            <p>View your cleaning bookings, check their status, and review the services you requested.</p>
+        </div>
+
+        <a asp-controller="Cart"
+           asp-action="Cart"
+           class="customer-bookings-primary-btn">
+            <i class="bi bi-plus-lg"></i>
+            Book a Cleaning
+        </a>
+    </header>
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="customer-bookings-alert">
+            <i class="bi bi-exclamation-circle"></i>
+            @TempData["Error"]
+        </div>
+    }
+
+    @{
+        var bookings = Model?.ToList() ?? new List<MasCleaners.Models.Booking>();
+    }
+
+    <section class="customer-bookings-summary">
+        <div class="customer-bookings-summary-card">
+            <span class="summary-icon">
+                <i class="bi bi-calendar2-check"></i>
+            </span>
+            <div>
+                <span class="summary-label">Total bookings</span>
+                <strong>@bookings.Count</strong>
+            </div>
+        </div>
+
+        <div class="customer-bookings-summary-card">
+            <span class="summary-icon">
+                <i class="bi bi-hourglass-split"></i>
+            </span>
+            <div>
+                <span class="summary-label">Pending</span>
+                <strong>
+                    @bookings.Count(x =>
+                        string.Equals(x.Status.ToString(), "Pending",
+                            StringComparison.OrdinalIgnoreCase))
+                </strong>
+            </div>
+        </div>
+
+        <div class="customer-bookings-summary-card">
+            <span class="summary-icon">
+                <i class="bi bi-check-circle"></i>
+            </span>
+            <div>
+                <span class="summary-label">Completed</span>
+                <strong>
+                    @bookings.Count(x =>
+                        string.Equals(x.Status.ToString(), "Completed",
+                            StringComparison.OrdinalIgnoreCase))
+                </strong>
+            </div>
+        </div>
+    </section>
+
+    <section class="customer-bookings-content">
+        <div class="customer-bookings-section-heading">
+            <div>
+                <h2>Your bookings</h2>
+                <p>Most recent bookings appear first.</p>
+            </div>
+            <span class="customer-bookings-count">
+                @bookings.Count booking@(bookings.Count == 1 ? "" : "s")
+            </span>
+        </div>
+
+        @if (bookings.Count > 0)
+        {
+            <div class="customer-bookings-list">
+                @foreach (var booking in bookings)
+                {
+                    var status = booking.Status.ToString();
+                    var paymentStatus = booking.PaymentStatus.ToString();
+
+                    <article class="customer-booking-card">
+                        <div class="customer-booking-card-top">
+                            <div class="customer-booking-reference">
+                                <span class="customer-booking-icon">
+                                    <i class="bi bi-receipt"></i>
+                                </span>
+                                <div>
+                                    <span class="customer-booking-label">Booking reference</span>
+                                    <h3>@booking.BookingReference</h3>
+                                    <span class="customer-booking-created">
+                                        Created @booking.CreatedDate.ToString("dd MMM yyyy")
+                                    </span>
+                                </div>
+                            </div>
+
+                            <span class="customer-booking-status
+                                @("status-" + status.ToLowerInvariant())">
+                                @status
+                            </span>
+                        </div>
+
+                        <div class="customer-booking-card-body">
+                            <div class="customer-booking-info">
+                                <span class="customer-booking-label">
+                                    <i class="bi bi-calendar-event"></i>
+                                    Booking date
+                                </span>
+                                <strong>@booking.BookingDate.ToString("dd MMM yyyy")</strong>
+                            </div>
+
+                            <div class="customer-booking-info">
+                                <span class="customer-booking-label">
+                                    <i class="bi bi-clock"></i>
+                                    Booking time
+                                </span>
+                                <strong>@booking.BookingTime</strong>
+                            </div>
+
+                            <div class="customer-booking-info">
+                                <span class="customer-booking-label">
+                                    <i class="bi bi-list-check"></i>
+                                    Services
+                                </span>
+                                <strong>
+                                    @(booking.BookingItems?.Count ?? 0)
+                                    item(s)
+                                </strong>
+                            </div>
+
+                            <div class="customer-booking-info">
+                                <span class="customer-booking-label">
+                                    <i class="bi bi-credit-card"></i>
+                                    Payment
+                                </span>
+                                <strong class="customer-payment-status
+                                    @("payment-" + paymentStatus.ToLowerInvariant())">
+                                    @paymentStatus
+                                </strong>
+                            </div>
+                        </div>
+
+                        @if (booking.BookingItems != null &&
+                             booking.BookingItems.Any())
+                        {
+                            <div class="customer-booking-services">
+                                <span class="customer-booking-label">Booked services</span>
+                                <div class="customer-booking-service-list">
+                                    @foreach (var item in booking.BookingItems)
+                                    {
+                                        <span class="customer-booking-service">
+                                            @item.ServiceName
+                                        </span>
+                                    }
+                                </div>
+                            </div>
+                        }
+
+                        <div class="customer-booking-card-footer">
+                            <div class="customer-booking-total">
+                                <span>Total amount</span>
+                                <strong>
+                                    @booking.Total.ToString(
+                                        "C",
+                                        System.Globalization.CultureInfo.GetCultureInfo("en-ZA"))
+                                </strong>
+                            </div>
+
+                            <a asp-controller="Customer"
+                               asp-action="BookingDetails"
+                               asp-route-id="@booking.Id"
+                               class="customer-booking-view-btn">
+                                View booking
+                                <i class="bi bi-arrow-right"></i>
+                            </a>
+                        </div>
+                    </article>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="customer-bookings-empty">
+                <div class="customer-bookings-empty-icon">
+                    <i class="bi bi-calendar2-x"></i>
+                </div>
+                <h3>No bookings yet</h3>
+                <p>Your bookings will appear here once you book a cleaning service.</p>
+
+                <a asp-controller="Services"
+                   asp-action="Index"
+                   class="customer-bookings-primary-btn">
+                    Explore our services
+                    <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+        }
+    </section>
+</div>

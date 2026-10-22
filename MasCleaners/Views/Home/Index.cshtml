@@ -314,120 +314,119 @@
         <div class="row g-4"
              id="servicesGrid">
 
-            @foreach (var service in Model)
-            {
-                <div class="col-lg-4 col-md-6 service-item"
-                     data-search="@service.Name @service.Description">
 
-                    <article class="service-card">
+@foreach (var  service in Model)
+{
+    <div class="col-lg-4 col-md-6 service-item"
+         data-search="@service.Name @service.Description">
 
-                        <!-- =================================================
-                             IMAGE
-                        ================================================== -->
+        <article class="service-card @(service.IsActive ? "" : "inactive")">
 
-                        <div class="service-image-wrapper">
+            <!-- IMAGE -->
 
-                            <img src="@service.ImageUrl"
-                                 alt="@service.Name"
-                                 class="service-image" />
+            <div class="service-image-wrapper">
 
-                        </div>
+                <img src="@service.ImageUrl"
+                     alt="@service.Name"
+                     class="service-image" />
 
+                @if (!service.IsActive)
+                {
+                    <div class="service-unavailable-badge">
+                        <i class="bi bi-clock-history"></i>
+                        Coming Soon
+                    </div>
+                }
 
-                        <!-- =================================================
-                             BODY
-                        ================================================== -->
+            </div>
 
-                        <div class="service-body">
+            <!-- BODY -->
 
+            <div class="service-body">
 
-                            <!-- TITLE -->
+                <!-- TITLE -->
 
-                            <div class="service-title-row">
+                <div class="service-title-row">
 
-                                <i class="bi @(string.IsNullOrWhiteSpace(service.Icon)
-                                    ? "bi-stars"
-                                    : service.Icon) service-icon">
-                                </i>
+                    <i class="bi @(string.IsNullOrWhiteSpace(service.Icon)
+                        ? "bi-stars"
+                        : service.Icon) service-icon">
+                    </i>
 
-                                <h3>
-                                    @service.Name
-                                </h3>
-
-                            </div>
-
-
-                            <!-- DESCRIPTION -->
-
-                            @if (!string.IsNullOrWhiteSpace(service.Description))
-                            {
-                                <p>
-                                    @service.Description
-                                </p>
-                            }
-
-
-                            <div class="service-divider"></div>
-
-
-                            <!-- =================================================
-                                 FOOTER
-                            ================================================== -->
-
-                            <div class="service-footer">
-
-
-                                <!-- PRICE -->
-
-                                <div class="service-price">
-
-                                    @if (service.StartingPrice > 0)
-                                    {
-                                        <strong>
-                                            From R @service.StartingPrice.ToString("N0")
-                                        </strong>
-                                    }
-                                    else
-                                    {
-                                        <strong>
-                                            Price on Request
-                                        </strong>
-                                    }
-
-                                    <span>
-
-                                        @service.ServiceOptionCount
-
-                                        @(service.ServiceOptionCount == 1
-                                            ? "option"
-                                            : "options")
-
-                                    </span>
-
-                                </div>
-
-
-                                <!-- VIEW OPTIONS -->
-
-                                <a asp-controller="Home"
-                                   asp-action="Options"
-                                   asp-route-serviceCategoryId="@service.Id"
-                                   class="service-book-button">
-
-                                    View Options
-
-                                    <i class="bi bi-arrow-right"></i>
-
-                                </a>
-
-                            </div>
-
-                        </div>
-
-                    </article>
+                    <h3>@service.Name</h3>
 
                 </div>
-            }
+
+                <!-- DESCRIPTION -->
+
+                @if (!string.IsNullOrWhiteSpace(service.Description))
+                {
+                    <p>@service.Description</p>
+                }
+
+                <div class="service-divider"></div>
+
+                <!-- FOOTER -->
+
+                <div class="service-footer">
+
+                    <div class="service-price">
+
+                        @if (service.StartingPrice > 0)
+                        {
+                            <strong>
+                                From R @service.StartingPrice.ToString("N0")
+                            </strong>
+                        }
+                        else
+                        {
+                            <strong>Price on Request</strong>
+                        }
+
+                        <span>
+                            @service.ServiceOptionCount
+                            @(service.ServiceOptionCount == 1
+                                ? "option"
+                                : "options")
+                        </span>
+
+                    </div>
+
+                    <!-- ACTIVE / INACTIVE ACTION -->
+
+                    @if (service.IsActive)
+                    {
+                        <a asp-controller="Home"
+                           asp-action="Options"
+                           asp-route-serviceCategoryId="@service.Id"
+                           class="service-book-button">
+
+                            View Options
+                            <i class="bi bi-arrow-right"></i>
+
+                        </a>
+                    }
+                    else
+                    {
+                        <div class="service-unavailable-message">
+                            <i class="bi bi-info-circle"></i>
+
+                            <span>
+                                This service is not available as yet,
+                                but will be available for booking soon.
+                            </span>
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+
+        </article>
+
+    </div>
+}
+
 
         </div>
 

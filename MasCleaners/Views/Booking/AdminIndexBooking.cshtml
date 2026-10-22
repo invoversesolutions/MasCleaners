@@ -1,0 +1,630 @@
+﻿
+@using System.Globalization
+@using ClaimPrincipal = System.Security.Claims.ClaimsPrincipal;
+@model MasCleaners.ViewModels.Booking.AdminIndexBookingVM
+
+@{
+    ViewData["Title"] = "Booking Management";
+    Layout = "_LayoutAdmin";
+
+    var culture = CultureInfo.GetCultureInfo("en-ZA");
+
+    var statusOptions = new[]
+    {
+        "Pending", "Confirmed", "InProgress", "Completed", "Cancelled"
+    };
+
+    var paymentOptions = new[]
+    {
+        "Pending", "Paid", "Failed", "Refunded"
+    };
+
+    var customerTypeOptions = new[]
+    {
+        "Individual", "Company"
+    };
+}
+
+<link rel="stylesheet"
+      href="~/css/booking/admin-index-booking.css"
+      asp-append-version="true" />
+
+<div class="admin-bookings-page">
+
+    <!-- PAGE HEADER -->
+    <div class="admin-bookings-header">
+        <div>
+            <div class="admin-bookings-breadcrumb">
+                <i class="bi bi-house-door"></i>
+                <span>Management</span>
+                <i class="bi bi-chevron-right"></i>
+                <span>Bookings</span>
+            </div>
+
+            <h1>Booking Management</h1>
+
+            <p>
+                Search, filter and manage all MAS Cleaners bookings.
+            </p>
+        </div>
+        @if (User.IsInRole($"{StaticRoles.Role_Admin}"))
+        {
+               <div class="admin-bookings-header-actions">
+            <a asp-controller="AdminDashboard"
+               asp-action="Index"
+               class="admin-bookings-back">
+                <i class="bi bi-arrow-left"></i>
+                Dashboard
+            </a>
+        </div>
+        }
+              @if (User.IsInRole($"{StaticRoles.Role_Super}"))
+        {
+               <div class="admin-bookings-header-actions">
+            <a asp-controller="SuperDashboard"
+               asp-action="Index"
+               class="admin-bookings-back">
+                <i class="bi bi-arrow-left"></i>
+                Dashboard
+            </a>
+        </div>
+        }
+ 
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="admin-bookings-alert success" role="alert">
+            <i class="bi bi-check-circle-fill"></i>
+            <span>@TempData["SuccessMessage"]</span>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="admin-bookings-alert error" role="alert">
+            <i class="bi bi-exclamation-circle-fill"></i>
+            <span>@TempData["ErrorMessage"]</span>
+        </div>
+    }
+
+    <!-- SUMMARY -->
+    <div class="admin-bookings-summary">
+        <div class="admin-bookings-summary-card">
+            <div class="admin-bookings-summary-icon">
+                <i class="bi bi-calendar2-check"></i>
+            </div>
+            <div>
+                <span>Matching Bookings</span>
+                <strong>@Model.TotalResults</strong>
+                <small>Based on current filters</small>
+            </div>
+        </div>
+
+        <div class="admin-bookings-summary-card">
+            <div class="admin-bookings-summary-icon secondary">
+                <i class="bi bi-funnel"></i>
+            </div>
+            <div>
+                <span>Current Page</span>
+                <strong>@(Model.TotalPages == 0 ? 0 : Model.PageNumber)</strong>
+                <small>Of @Model.TotalPages pages</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- COMPACT SEARCH AND FILTERS -->
+    <section class="admin-bookings-filter-card">
+        <div class="admin-bookings-filter-header">
+            <div class="admin-bookings-filter-heading">
+                <div class="admin-bookings-filter-icon">
+                    <i class="bi bi-search"></i>
+                </div>
+                <div>
+                    <h3>Search Bookings</h3>
+                    <p>Search quickly, or open advanced filters for more options.</p>
+                </div>
+            </div>
+
+            <button type="button"
+                    class="admin-bookings-filter-toggle"
+                    id="bookingFilterToggle"
+                    aria-expanded="false"
+                    aria-controls="bookingAdvancedFilters">
+                <span>Advanced Filters</span>
+                <i class="bi bi-sliders"></i>
+            </button>
+        </div>
+
+        <form asp-controller="Booking"
+              asp-action="AdminIndexBooking"
+              method="get"
+              class="admin-bookings-filter-form">
+
+            <!-- ESSENTIAL FILTERS -->
+            <div class="booking-filter-grid booking-filter-compact-grid">
+                <div class="booking-filter-field booking-filter-wide">
+                    <label asp-for="SearchTerm">Search bookings</label>
+                    <div class="booking-input-icon">
+                        <i class="bi bi-search"></i>
+                        <input asp-for="SearchTerm"
+                               placeholder="Reference, customer, email, phone, service..."
+                               autocomplete="off" />
+                    </div>
+                </div>
+
+                <div class="booking-filter-field">
+                    <label asp-for="Status">Booking status</label>
+                    <select asp-for="Status">
+                        <option value="">All booking statuses</option>
+                        @foreach (var status in statusOptions)
+                        {
+                            <option value="@status">@status</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="booking-filter-field">
+                    <label asp-for="PaymentStatus">Payment status</label>
+                    <select asp-for="PaymentStatus">
+                        <option value="">All payment statuses</option>
+                        @foreach (var status in paymentOptions)
+                        {
+                            <option value="@status">@status</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="booking-filter-field">
+                    <label asp-for="BookingDateFrom">Booking date</label>
+                    <input asp-for="BookingDateFrom" type="date" />
+                </div>
+            </div>
+
+            <!-- ADVANCED FILTERS -->
+            <div id="bookingAdvancedFilters" class="booking-advanced-filters" hidden>
+                <div class="booking-advanced-title">
+                    <i class="bi bi-funnel"></i>
+                    <span>Advanced search options</span>
+                </div>
+
+                <div class="booking-filter-section">
+                    <h4><i class="bi bi-upc-scan"></i> Booking Identification</h4>
+                    <div class="booking-filter-grid">
+                        <div class="booking-filter-field">
+                            <label asp-for="BookingId">Booking ID</label>
+                            <input asp-for="BookingId" type="number" min="1" placeholder="e.g. 105" />
+                        </div>
+                        <div class="booking-filter-field">
+                            <label asp-for="BookingReference">Booking reference</label>
+                            <input asp-for="BookingReference" placeholder="Enter reference" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="booking-filter-section">
+                    <h4><i class="bi bi-person"></i> Customer Information</h4>
+                    <div class="booking-filter-grid">
+                        <div class="booking-filter-field">
+                            <label asp-for="CustomerName">Customer name</label>
+                            <input asp-for="CustomerName" placeholder="First or last name" />
+                        </div>
+                        <div class="booking-filter-field">
+                            <label asp-for="CustomerEmail">Email address</label>
+                            <input asp-for="CustomerEmail" type="text" placeholder="Customer email" />
+                        </div>
+                        <div class="booking-filter-field">
+                            <label asp-for="CustomerPhone">Phone number</label>
+                            <input asp-for="CustomerPhone" placeholder="Phone number" />
+                        </div>
+                        <div class="booking-filter-field">
+                            <label asp-for="CustomerType">Customer type</label>
+                            <select asp-for="CustomerType">
+                                <option value="">All customer types</option>
+                                @foreach (var type in customerTypeOptions)
+                                {
+                                    <option value="@type">@type</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="booking-filter-field">
+                            <label asp-for="CompanyName">Company name</label>
+                            <input asp-for="CompanyName" placeholder="Company name" />
+                        </div>
+                        <div class="booking-filter-field">
+                            <label asp-for="VatNumber">VAT number</label>
+                            <input asp-for="VatNumber" placeholder="VAT number" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="booking-filter-section">
+                    <h4><i class="bi bi-clipboard-check"></i> Booking Details</h4>
+                    <div class="booking-filter-grid">
+                        <div class="booking-filter-field">
+                            <label asp-for="ServiceName">Service name</label>
+                            <input asp-for="ServiceName" placeholder="Cleaning service" />
+                        </div>
+                        <div class="booking-filter-field">
+                            <label asp-for="BookingTime">Booking time</label>
+                            <input asp-for="BookingTime" placeholder="e.g. 07:00" />
+                        </div>
+                        <div class="booking-filter-field booking-filter-wide">
+                            <label asp-for="CustomerNotes">Customer notes contain</label>
+                            <input asp-for="CustomerNotes" placeholder="Search booking notes" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="booking-filter-section">
+                    <h4><i class="bi bi-calendar-range"></i> Date Range</h4>
+                    <div class="booking-filter-grid">
+                        <div class="booking-filter-field">
+                            <label asp-for="BookingDateTo">Booking date to</label>
+                            <input asp-for="BookingDateTo" type="date" />
+                        </div>
+                        <div class="booking-filter-field">
+                            <label asp-for="CreatedDateFrom">Created date from</label>
+                            <input asp-for="CreatedDateFrom" type="date" />
+                        </div>
+                        <div class="booking-filter-field">
+                            <label asp-for="CreatedDateTo">Created date to</label>
+                            <input asp-for="CreatedDateTo" type="date" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="booking-filter-section">
+                    <h4><i class="bi bi-cash-stack"></i> Booking Total</h4>
+                    <div class="booking-filter-grid">
+                        <div class="booking-filter-field">
+                            <label asp-for="MinimumTotal">Minimum total (R)</label>
+                            <input asp-for="MinimumTotal" type="number" min="0" step="0.01" placeholder="0.00" />
+                        </div>
+                        <div class="booking-filter-field">
+                            <label asp-for="MaximumTotal">Maximum total (R)</label>
+                            <input asp-for="MaximumTotal" type="number" min="0" step="0.01" placeholder="No maximum" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="booking-filter-section booking-filter-final">
+                    <h4><i class="bi bi-sort-down"></i> Results Display</h4>
+                    <div class="booking-filter-grid">
+                        <div class="booking-filter-field">
+                            <label asp-for="SortBy">Sort by</label>
+                            <select asp-for="SortBy">
+                                <option value="newest">Recently created</option>
+                                <option value="oldest">Oldest created</option>
+                                <option value="bookingdate">Booking date</option>
+                                <option value="customer">Customer name</option>
+                                <option value="total">Booking total</option>
+                                <option value="reference">Booking reference</option>
+                            </select>
+                        </div>
+                        <div class="booking-filter-field">
+                            <label asp-for="SortDirection">Sort direction</label>
+                            <select asp-for="SortDirection">
+                                <option value="desc">Descending</option>
+                                <option value="asc">Ascending</option>
+                            </select>
+                        </div>
+                        <div class="booking-filter-field">
+                            <label asp-for="PageSize">Results per page</label>
+                            <select asp-for="PageSize">
+                                <option value="15">15 results</option>
+                                <option value="25">25 results</option>
+                                <option value="50">50 results</option>
+                                <option value="100">100 results</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <input type="hidden" name="PageNumber" value="1" />
+
+            <div class="booking-filter-actions">
+                <a asp-controller="Booking"
+                   asp-action="AdminIndexBooking"
+                   class="booking-reset-button">
+                    <i class="bi bi-arrow-counterclockwise"></i>
+                    Reset Filters
+                </a>
+
+                <button type="submit" class="booking-search-button">
+                    <i class="bi bi-search"></i>
+                    Search Bookings
+                </button>
+            </div>
+        </form>
+    </section>
+
+    <!-- RESULTS -->
+    <section class="admin-bookings-results-card">
+        <div class="admin-bookings-results-header">
+            <div>
+                <span class="admin-bookings-eyebrow">BOOKING RECORDS</span>
+                <h3>Booking Results</h3>
+                <p>
+                    Showing @Model.Bookings.Count of @Model.TotalResults matching bookings.
+                </p>
+            </div>
+        </div>
+
+        @if (Model.Bookings.Any())
+        {
+            <div class="admin-bookings-table-wrapper">
+                <table class="admin-bookings-table">
+                    <thead>
+                        <tr>
+                            <th>Booking</th>
+                            <th>Customer</th>
+                            <th>Services</th>
+                            <th>Scheduled</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Payment</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var booking in Model.Bookings)
+                        {
+                            var customerName = booking.Customer == null
+                                ? "Unknown customer"
+                                : $"{booking.Customer.FirstName} {booking.Customer.LastName}".Trim();
+
+                            var bookingStatus = booking.Status.ToString();
+                            var paymentStatus = booking.PaymentStatus.ToString();
+
+                            <tr>
+                                <td>
+                                    <div class="admin-booking-reference">
+                                        <strong>@booking.BookingReference</strong>
+                                        <span>ID #@booking.Id</span>
+                                        <small>
+                                            Created @booking.CreatedDate.ToString("dd MMM yyyy")
+                                        </small>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="admin-booking-customer">
+                                        <strong>@customerName</strong>
+
+                                        <span>
+                                            @(booking.Customer?.ApplicationUser?.Email
+                                                ?? "No email available")
+                                        </span>
+
+                                        <small>
+                                            @(booking.Customer?.PhoneNumber
+                                                ?? "No phone available")
+                                        </small>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="admin-booking-services">
+                                        @foreach (var item in booking.BookingItems.Take(2))
+                                        {
+                                            <span>@item.ServiceName</span>
+                                        }
+
+                                        @if (booking.BookingItems.Count > 2)
+                                        {
+                                            <small>
+                                                +@(booking.BookingItems.Count - 2) more
+                                            </small>
+                                        }
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="admin-booking-schedule">
+                                        <strong>
+                                            @booking.BookingDate.ToString("dd MMM yyyy")
+                                        </strong>
+                                        <span>@booking.BookingTime</span>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <strong class="admin-booking-total">
+                                        @booking.Total.ToString("C", culture)
+                                    </strong>
+                                </td>
+
+                                <td>
+                                    <span class="admin-booking-status @bookingStatus.ToLowerInvariant()">
+                                        @bookingStatus
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="admin-booking-payment @paymentStatus.ToLowerInvariant()">
+                                        @paymentStatus
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <div class="admin-booking-actions">
+                                        <a asp-controller="Booking"
+                                           asp-action="Details"
+                                           asp-route-id="@booking.Id"
+                                           class="admin-booking-action view"
+                                           title="View booking"
+                                           aria-label="View booking">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+
+                                      @*   <a asp-controller="Booking"
+                                           asp-action="Edit"
+                                           asp-route-id="@booking.Id"
+                                           class="admin-booking-action edit"
+                                           title="Edit booking"
+                                           aria-label="Edit booking">
+                                            <i class="bi bi-pencil"></i>
+                                        </a> *@
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- PAGINATION -->
+            <div class="admin-bookings-pagination">
+                <div class="admin-bookings-pagination-info">
+                    @if (Model.TotalResults > 0)
+                    {
+                        var firstResult = ((Model.PageNumber - 1) * Model.PageSize) + 1;
+                        var lastResult = Math.Min(
+                            Model.PageNumber * Model.PageSize,
+                            Model.TotalResults
+                        );
+
+                        <span>
+                            Showing @firstResult–@lastResult of @Model.TotalResults
+                        </span>
+                    }
+                </div>
+
+                <div class="admin-bookings-pagination-controls">
+                    @if (Model.PageNumber > 1)
+                    {
+                        <a asp-action="AdminIndexBooking"
+                           asp-route-SearchTerm="@Model.SearchTerm"
+                           asp-route-BookingId="@Model.BookingId"
+                           asp-route-BookingReference="@Model.BookingReference"
+                           asp-route-CustomerName="@Model.CustomerName"
+                           asp-route-CustomerEmail="@Model.CustomerEmail"
+                           asp-route-CustomerPhone="@Model.CustomerPhone"
+                           asp-route-CustomerType="@Model.CustomerType"
+                           asp-route-CompanyName="@Model.CompanyName"
+                           asp-route-VatNumber="@Model.VatNumber"
+                           asp-route-ServiceName="@Model.ServiceName"
+                           asp-route-Status="@Model.Status"
+                           asp-route-PaymentStatus="@Model.PaymentStatus"
+                           asp-route-CustomerNotes="@Model.CustomerNotes"
+                           asp-route-BookingTime="@Model.BookingTime"
+                           asp-route-BookingDateFrom="@Model.BookingDateFrom?.ToString("yyyy-MM-dd")"
+                           asp-route-BookingDateTo="@Model.BookingDateTo?.ToString("yyyy-MM-dd")"
+                           asp-route-CreatedDateFrom="@Model.CreatedDateFrom?.ToString("yyyy-MM-dd")"
+                           asp-route-CreatedDateTo="@Model.CreatedDateTo?.ToString("yyyy-MM-dd")"
+                           asp-route-MinimumTotal="@Model.MinimumTotal"
+                           asp-route-MaximumTotal="@Model.MaximumTotal"
+                           asp-route-SortBy="@Model.SortBy"
+                           asp-route-SortDirection="@Model.SortDirection"
+                           asp-route-PageSize="@Model.PageSize"
+                           asp-route-PageNumber="@(Model.PageNumber - 1)"
+                           class="admin-bookings-page-button">
+                            <i class="bi bi-chevron-left"></i>
+                            Previous
+                        </a>
+                    }
+                    else
+                    {
+                        <span class="admin-bookings-page-button disabled">
+                            <i class="bi bi-chevron-left"></i>
+                            Previous
+                        </span>
+                    }
+
+                    <span class="admin-bookings-page-number">
+                        Page @Model.PageNumber of @Model.TotalPages
+                    </span>
+
+                    @if (Model.PageNumber < Model.TotalPages)
+                    {
+                        <a asp-action="AdminIndexBooking"
+                           asp-route-SearchTerm="@Model.SearchTerm"
+                           asp-route-BookingId="@Model.BookingId"
+                           asp-route-BookingReference="@Model.BookingReference"
+                           asp-route-CustomerName="@Model.CustomerName"
+                           asp-route-CustomerEmail="@Model.CustomerEmail"
+                           asp-route-CustomerPhone="@Model.CustomerPhone"
+                           asp-route-CustomerType="@Model.CustomerType"
+                           asp-route-CompanyName="@Model.CompanyName"
+                           asp-route-VatNumber="@Model.VatNumber"
+                           asp-route-ServiceName="@Model.ServiceName"
+                           asp-route-Status="@Model.Status"
+                           asp-route-PaymentStatus="@Model.PaymentStatus"
+                           asp-route-CustomerNotes="@Model.CustomerNotes"
+                           asp-route-BookingTime="@Model.BookingTime"
+                           asp-route-BookingDateFrom="@Model.BookingDateFrom?.ToString("yyyy-MM-dd")"
+                           asp-route-BookingDateTo="@Model.BookingDateTo?.ToString("yyyy-MM-dd")"
+                           asp-route-CreatedDateFrom="@Model.CreatedDateFrom?.ToString("yyyy-MM-dd")"
+                           asp-route-CreatedDateTo="@Model.CreatedDateTo?.ToString("yyyy-MM-dd")"
+                           asp-route-MinimumTotal="@Model.MinimumTotal"
+                           asp-route-MaximumTotal="@Model.MaximumTotal"
+                           asp-route-SortBy="@Model.SortBy"
+                           asp-route-SortDirection="@Model.SortDirection"
+                           asp-route-PageSize="@Model.PageSize"
+                           asp-route-PageNumber="@(Model.PageNumber + 1)"
+                           class="admin-bookings-page-button">
+                            Next
+                            <i class="bi bi-chevron-right"></i>
+                        </a>
+                    }
+                    else
+                    {
+                        <span class="admin-bookings-page-button disabled">
+                            Next
+                            <i class="bi bi-chevron-right"></i>
+                        </span>
+                    }
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="admin-bookings-empty">
+                <div class="admin-bookings-empty-icon">
+                    <i class="bi bi-calendar-x"></i>
+                </div>
+
+                <h3>No bookings found</h3>
+
+                <p>
+                    No bookings match your current search criteria.
+                    Try changing or clearing some filters.
+                </p>
+
+                <a asp-action="AdminIndexBooking" class="booking-search-button">
+                    <i class="bi bi-arrow-counterclockwise"></i>
+                    Clear All Filters
+                </a>
+            </div>
+        }
+    </section>
+
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const toggle = document.getElementById("bookingFilterToggle");
+            const panel = document.getElementById("bookingAdvancedFilters");
+
+            if (!toggle || !panel) return;
+
+            toggle.addEventListener("click", function () {
+                const isExpanded = toggle.getAttribute("aria-expanded") === "true";
+
+                toggle.setAttribute("aria-expanded", String(!isExpanded));
+                panel.hidden = isExpanded;
+
+                const icon = toggle.querySelector(".bi-sliders");
+                if (icon) {
+                    icon.classList.toggle("bi-sliders", isExpanded);
+                    icon.classList.toggle("bi-chevron-up", !isExpanded);
+                    icon.classList.toggle("bi-chevron-down", isExpanded);
+                }
+            });
+        });
+    </script>
+}

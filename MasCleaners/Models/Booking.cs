@@ -93,5 +93,7 @@ namespace MasCleaners.Models
 
         public ICollection<BookingItem> BookingItems { get; set; }
             = new List<BookingItem>();
+
+        public ICollection<Payment> Payments { get; set; } = new List<Payment>();
     }
 }

@@ -1,6 +1,7 @@
 ﻿using MasCleaners.Interfaces;
 using MasCleaners.Models;
 using MasCleaners.ViewModels;
+using MasCleaners.ViewModels.Booking;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -676,5 +677,640 @@ namespace MasCleaners.Controllers
                 return RedirectToAction("Index", "Home");
             }
         }
+
+        [Authorize(Roles = $"{StaticRoles.Role_Admin},{StaticRoles.Role_Super}")]
+        [HttpGet]
+        public async Task<IActionResult> AdminIndexBooking([FromQuery] AdminIndexBookingVM model)
+        {
+            _logger.LogInformation(
+                "Admin booking search requested. Page: {PageNumber}, Search: {SearchTerm}",
+                model.PageNumber,
+                model.SearchTerm
+            );
+
+            try
+            {
+                // Normalise pagination values.
+                model.PageNumber = Math.Max(1, model.PageNumber);
+
+                var allowedPageSizes = new[] { 15, 25, 50, 100 };
+
+                if (!allowedPageSizes.Contains(model.PageSize))
+                {
+                    model.PageSize = 15;
+                }
+
+                // Load booking records and related information.
+                var allBookings = await _unitOfWork.Booking.GetAllAsync(
+                    includeProperties: "Customer,Customer.ApplicationUser,BookingItems"
+                );
+
+                IEnumerable<MasCleaners.Models.Booking> query = allBookings;
+
+                // --------------------------------------------------
+                // GENERAL SEARCH
+                // --------------------------------------------------
+
+                if (!string.IsNullOrWhiteSpace(model.SearchTerm))
+                {
+                    var term = model.SearchTerm.Trim();
+
+                    query = query.Where(b =>
+                        b.BookingReference.Contains(
+                            term,
+                            StringComparison.OrdinalIgnoreCase
+                        )
+                        || b.Id.ToString().Contains(term)
+                        || (b.Customer != null &&
+                            (
+                                $"{b.Customer.FirstName} {b.Customer.LastName}"
+                                    .Contains(term, StringComparison.OrdinalIgnoreCase)
+                                || (b.Customer.ApplicationUser?.Email ?? "")
+                                    .Contains(term, StringComparison.OrdinalIgnoreCase)
+                                || (b.Customer.PhoneNumber ?? "")
+                                    .Contains(term, StringComparison.OrdinalIgnoreCase)
+                                || (b.Customer.CompanyName ?? "")
+                                    .Contains(term, StringComparison.OrdinalIgnoreCase)
+                                || (b.Customer.VatNumber ?? "")
+                                    .Contains(term, StringComparison.OrdinalIgnoreCase)
+                            ))
+                        || (b.CustomerNotes ?? "")
+                            .Contains(term, StringComparison.OrdinalIgnoreCase)
+                        || b.BookingItems.Any(item =>
+                            (item.ServiceName ?? "")
+                                .Contains(term, StringComparison.OrdinalIgnoreCase)
+                        )
+                        || b.Status.ToString().Contains(
+                            term, StringComparison.OrdinalIgnoreCase
+                        )
+                        || b.PaymentStatus.ToString().Contains(
+                            term, StringComparison.OrdinalIgnoreCase
+                        )
+                    );
+                }
+
+                // --------------------------------------------------
+                // BOOKING IDENTIFICATION
+                // --------------------------------------------------
+
+                if (model.BookingId.HasValue)
+                {
+                    query = query.Where(b => b.Id == model.BookingId.Value);
+                }
+
+                if (!string.IsNullOrWhiteSpace(model.BookingReference))
+                {
+                    var reference = model.BookingReference.Trim();
+
+                    query = query.Where(b =>
+                        b.BookingReference.Contains(
+                            reference,
+                            StringComparison.OrdinalIgnoreCase
+                        )
+                    );
+                }
+
+                // --------------------------------------------------
+                // CUSTOMER FILTERS
+                // --------------------------------------------------
+
+                if (!string.IsNullOrWhiteSpace(model.CustomerName))
+                {
+                    var name = model.CustomerName.Trim();
+
+                    query = query.Where(b =>
+                        b.Customer != null &&
+                        (
+                            (b.Customer.FirstName ?? "").Contains(
+                                name, StringComparison.OrdinalIgnoreCase
+                            )
+                            || (b.Customer.LastName ?? "").Contains(
+                                name, StringComparison.OrdinalIgnoreCase
+                            )
+                            || $"{b.Customer.FirstName} {b.Customer.LastName}"
+                                .Contains(name, StringComparison.OrdinalIgnoreCase)
+                        )
+                    );
+                }
+
+                if (!string.IsNullOrWhiteSpace(model.CustomerEmail))
+                {
+                    var email = model.CustomerEmail.Trim();
+
+                    query = query.Where(b =>
+                        b.Customer != null &&
+                        (b.Customer.ApplicationUser != null) &&
+                        (b.Customer.ApplicationUser.Email ?? "").Contains(
+                            email, StringComparison.OrdinalIgnoreCase
+                        )
+                    );
+                }
+
+                if (!string.IsNullOrWhiteSpace(model.CustomerPhone))
+                {
+                    var phone = model.CustomerPhone.Trim();
+
+                    query = query.Where(b =>
+                        b.Customer != null &&
+                        (b.Customer.PhoneNumber ?? "").Contains(
+                            phone, StringComparison.OrdinalIgnoreCase
+                        )
+                    );
+                }
+
+                if (!string.IsNullOrWhiteSpace(model.CustomerType))
+                {
+                    var customerType = model.CustomerType.Trim();
+
+                    query = query.Where(b =>
+                        b.Customer != null &&
+                        b.Customer.CustomerType.ToString().Equals(
+                            customerType, StringComparison.OrdinalIgnoreCase
+                        )
+                    );
+                }
+
+                if (!string.IsNullOrWhiteSpace(model.CompanyName))
+                {
+                    var company = model.CompanyName.Trim();
+
+                    query = query.Where(b =>
+                        b.Customer != null &&
+                        (b.Customer.CompanyName ?? "").Contains(
+                            company, StringComparison.OrdinalIgnoreCase
+                        )
+                    );
+                }
+
+                if (!string.IsNullOrWhiteSpace(model.VatNumber))
+                {
+                    var vatNumber = model.VatNumber.Trim();
+
+                    query = query.Where(b =>
+                        b.Customer != null &&
+                        (b.Customer.VatNumber ?? "").Contains(
+                            vatNumber, StringComparison.OrdinalIgnoreCase
+                        )
+                    );
+                }
+
+                // --------------------------------------------------
+                // BOOKING DETAIL FILTERS
+                // --------------------------------------------------
+
+                if (!string.IsNullOrWhiteSpace(model.ServiceName))
+                {
+                    var service = model.ServiceName.Trim();
+
+                    query = query.Where(b =>
+                        b.BookingItems.Any(item =>
+                            (item.ServiceName ?? "").Contains(
+                                service, StringComparison.OrdinalIgnoreCase
+                            )
+                        )
+                    );
+                }
+
+                if (!string.IsNullOrWhiteSpace(model.Status))
+                {
+                    var status = model.Status.Trim();
+
+                    query = query.Where(b =>
+                        b.Status.ToString().Equals(
+                            status, StringComparison.OrdinalIgnoreCase
+                        )
+                    );
+                }
+
+                if (!string.IsNullOrWhiteSpace(model.PaymentStatus))
+                {
+                    var paymentStatus = model.PaymentStatus.Trim();
+
+                    query = query.Where(b =>
+                        b.PaymentStatus.ToString().Equals(
+                            paymentStatus, StringComparison.OrdinalIgnoreCase
+                        )
+                    );
+                }
+
+                if (!string.IsNullOrWhiteSpace(model.CustomerNotes))
+                {
+                    var notes = model.CustomerNotes.Trim();
+
+                    query = query.Where(b =>
+                        (b.CustomerNotes ?? "").Contains(
+                            notes, StringComparison.OrdinalIgnoreCase
+                        )
+                    );
+                }
+
+                if (!string.IsNullOrWhiteSpace(model.BookingTime))
+                {
+                    var bookingTime = model.BookingTime.Trim();
+
+                    query = query.Where(b =>
+                        b.BookingTime.ToString().Contains(
+                            bookingTime, StringComparison.OrdinalIgnoreCase
+                        )
+                    );
+                }
+
+                // --------------------------------------------------
+                // BOOKING DATE FILTERS
+                // --------------------------------------------------
+
+                if (model.BookingDateFrom.HasValue)
+                {
+                    var from = model.BookingDateFrom.Value.Date;
+
+                    query = query.Where(b => b.BookingDate.Date >= from);
+                }
+
+                if (model.BookingDateTo.HasValue)
+                {
+                    var to = model.BookingDateTo.Value.Date;
+
+                    query = query.Where(b => b.BookingDate.Date <= to);
+                }
+
+                // --------------------------------------------------
+                // CREATED DATE FILTERS
+                // --------------------------------------------------
+
+                if (model.CreatedDateFrom.HasValue)
+                {
+                    var from = model.CreatedDateFrom.Value.Date;
+
+                    query = query.Where(b => b.CreatedDate.Date >= from);
+                }
+
+                if (model.CreatedDateTo.HasValue)
+                {
+                    var toExclusive = model.CreatedDateTo.Value.Date.AddDays(1);
+
+                    query = query.Where(b => b.CreatedDate < toExclusive);
+                }
+
+                // --------------------------------------------------
+                // TOTAL FILTERS
+                // --------------------------------------------------
+
+                if (model.MinimumTotal.HasValue)
+                {
+                    query = query.Where(b =>
+                        b.Total >= model.MinimumTotal.Value
+                    );
+                }
+
+                if (model.MaximumTotal.HasValue)
+                {
+                    query = query.Where(b =>
+                        b.Total <= model.MaximumTotal.Value
+                    );
+                }
+
+                // --------------------------------------------------
+                // SORTING
+                // --------------------------------------------------
+
+                var descending = !string.Equals(
+                    model.SortDirection,
+                    "asc",
+                    StringComparison.OrdinalIgnoreCase
+                );
+
+                query = model.SortBy?.ToLowerInvariant() switch
+                {
+                    "oldest" => query.OrderBy(b => b.CreatedDate),
+
+                    "bookingdate" => descending
+                        ? query.OrderByDescending(b => b.BookingDate)
+                               .ThenByDescending(b => b.BookingTime)
+                        : query.OrderBy(b => b.BookingDate)
+                               .ThenBy(b => b.BookingTime),
+
+                    "customer" => descending
+                        ? query.OrderByDescending(b => b.Customer!.LastName)
+                               .ThenByDescending(b => b.Customer!.FirstName)
+                        : query.OrderBy(b => b.Customer!.LastName)
+                               .ThenBy(b => b.Customer!.FirstName),
+
+                    "total" => descending
+                        ? query.OrderByDescending(b => b.Total)
+                        : query.OrderBy(b => b.Total),
+
+                    "reference" => descending
+                        ? query.OrderByDescending(b => b.BookingReference)
+                        : query.OrderBy(b => b.BookingReference),
+
+                    _ => descending
+                        ? query.OrderByDescending(b => b.CreatedDate)
+                        : query.OrderBy(b => b.CreatedDate)
+                };
+
+                // --------------------------------------------------
+                // PAGINATION
+                // --------------------------------------------------
+
+                model.TotalResults = query.Count();
+
+                model.TotalPages = (int)Math.Ceiling(
+                    model.TotalResults / (double)model.PageSize
+                );
+
+                if (model.TotalPages > 0 && model.PageNumber > model.TotalPages)
+                {
+                    model.PageNumber = model.TotalPages;
+                }
+
+                model.Bookings = query
+                    .Skip((model.PageNumber - 1) * model.PageSize)
+                    .Take(model.PageSize)
+                    .ToList();
+
+                _logger.LogInformation(
+                    "Admin booking search completed. Results: {ResultCount}, Page: {PageNumber}",
+                    model.TotalResults,
+                    model.PageNumber
+                );
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(
+                    ex,
+                    "Failed to load or search admin bookings."
+                );
+
+                TempData["ErrorMessage"] =
+                    "Unable to load bookings. Please try again.";
+
+                return View(new AdminIndexBookingVM());
+            }
+        }
+        // =========================================================
+        // ADMIN - BOOKING DETAILS
+        // =========================================================
+        [Authorize(Roles = $"{StaticRoles.Role_Admin},{StaticRoles.Role_Super}")]
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            try
+            {
+                _logger.LogInformation(
+                    "Loading booking details for BookingId {BookingId}.",
+                    id);
+
+                var booking = await _unitOfWork.Booking.GetAsync(
+                    x => x.Id == id,
+                    includeProperties:
+                        "Customer,Customer.ApplicationUser,BookingItems,Addresses,Payments");
+
+                if (booking == null)
+                {
+                    _logger.LogWarning(
+                        "Booking with ID {BookingId} was not found.",
+                        id);
+
+                    TempData["ErrorMessage"] =
+                        "The requested booking could not be found.";
+
+                    return RedirectToAction("AdminIndexBooking");
+                }
+
+                ViewData["AddPaymentVM"] = new AddPaymentVM
+                {
+                    BookingId = booking.Id,
+                    BookingReference = booking.BookingReference,
+                    BookingTotal = booking.Total,
+                    PaymentDate = DateTime.Today
+                };
+
+                return View(booking);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(
+                    ex,
+                    "Failed to load details for BookingId {BookingId}.",
+                    id);
+
+                TempData["ErrorMessage"] =
+                    "Unable to load booking details. Please try again.";
+
+                return RedirectToAction("AdminIndexBooking");
+            }
+        }
+
+        [Authorize(Roles = $"{StaticRoles.Role_Admin},{StaticRoles.Role_Super}")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Approve(int id)
+        {
+            try
+            {
+                _logger.LogInformation(
+                    "Admin approval requested for BookingId {BookingId}.", id);
+
+                var booking = await _unitOfWork.Booking.GetAsync(
+                    b => b.Id == id);
+
+                if (booking == null)
+                {
+                    TempData["ErrorMessage"] = "Booking could not be found.";
+                    return RedirectToAction(nameof(AdminIndexBooking));
+                }
+
+                if (booking.Status != BookingStatus.Pending)
+                {
+                    TempData["ErrorMessage"] =
+                        "Only pending bookings can be approved.";
+
+                    return RedirectToAction(nameof(Details), new { id });
+                }
+
+                booking.Status = BookingStatus.Confirmed;
+                booking.UpdatedDate = DateTime.Now;
+
+               await _unitOfWork.Booking.UpdateAsync(booking);
+                await _unitOfWork.CommitAsync();
+
+                _logger.LogInformation(
+                    "Booking {BookingId} was approved and confirmed.", id);
+
+                TempData["SuccessMessage"] =
+                    $"Booking {booking.BookingReference} has been approved.";
+
+                return RedirectToAction(nameof(Details), new { id });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex,
+                    "Failed to approve BookingId {BookingId}.", id);
+
+                TempData["ErrorMessage"] =
+                    "Unable to approve the booking. Please try again.";
+
+                return RedirectToAction(nameof(Details), new { id });
+            }
+        }
+        [Authorize(Roles = $"{StaticRoles.Role_Admin},{StaticRoles.Role_Super}")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Reschedule(
+            int id,
+            DateTime? bookingDate,
+            TimeSpan? bookingTime)
+        {
+            try
+            {
+                _logger.LogInformation(
+                    "Reschedule requested for BookingId {BookingId}.", id);
+
+                var booking = await _unitOfWork.Booking.GetAsync(
+                    b => b.Id == id);
+
+                if (booking == null)
+                {
+                    TempData["ErrorMessage"] = "Booking could not be found.";
+                    return RedirectToAction(nameof(AdminIndexBooking));
+                }
+
+                if (booking.Status == BookingStatus.Completed ||
+                    booking.Status == BookingStatus.Cancelled ||
+                    booking.Status == BookingStatus.Declined)
+                {
+                    TempData["ErrorMessage"] =
+                        "This booking can no longer be rescheduled.";
+
+                    return RedirectToAction(nameof(Details), new { id });
+                }
+
+                if (!bookingDate.HasValue || !bookingTime.HasValue)
+                {
+                    TempData["ErrorMessage"] =
+                        "Please select both a booking date and time.";
+
+                    return RedirectToAction(nameof(Details), new { id });
+                }
+
+                var newDate = bookingDate.Value.Date;
+                var newTime = bookingTime.Value;
+
+                if (newDate < DateTime.Today)
+                {
+                    TempData["ErrorMessage"] =
+                        "The booking date cannot be in the past.";
+
+                    return RedirectToAction(nameof(Details), new { id });
+                }
+
+                // MAS Cleaners booking hours: 07:00 to 15:00.
+                if (newTime < TimeSpan.FromHours(7) ||
+                    newTime > TimeSpan.FromHours(15) ||
+                    newTime.Ticks % TimeSpan.TicksPerMinute != 0)
+                {
+                    TempData["ErrorMessage"] =
+                        "Choose a valid booking time between 07:00 and 15:00.";
+
+                    return RedirectToAction(nameof(Details), new { id });
+                }
+
+                // Reject a time that has already passed today.
+                if (newDate == DateTime.Today &&
+                    newTime <= DateTime.Now.TimeOfDay)
+                {
+                    TempData["ErrorMessage"] =
+                        "Choose a future time for today's booking.";
+
+                    return RedirectToAction(nameof(Details), new { id });
+                }
+
+                var previousDate = booking.BookingDate;
+                var previousTime = booking.BookingTime;
+
+                booking.BookingDate = newDate;
+                booking.BookingTime = newTime;
+                booking.UpdatedDate = DateTime.Now;
+
+              await  _unitOfWork.Booking.UpdateAsync(booking);
+                await _unitOfWork.CommitAsync();
+
+                _logger.LogInformation(
+                    "Booking {BookingId} rescheduled from {OldDate} {OldTime} " +
+                    "to {NewDate} {NewTime}.",
+                    id, previousDate, previousTime, newDate, newTime);
+
+                TempData["SuccessMessage"] =
+                    $"Booking {booking.BookingReference} has been rescheduled.";
+
+                return RedirectToAction(nameof(Details), new { id });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex,
+                    "Failed to reschedule BookingId {BookingId}.", id);
+
+                TempData["ErrorMessage"] =
+                    "Unable to reschedule the booking. Please try again.";
+
+                return RedirectToAction(nameof(Details), new { id });
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Complete(int id)
+        {
+            try
+            {
+                _logger.LogInformation(
+                    "Booking completion requested for BookingId {BookingId}.", id);
+
+                var booking = await _unitOfWork.Booking.GetAsync(
+                    b => b.Id == id);
+
+                if (booking == null)
+                {
+                    TempData["ErrorMessage"] = "Booking could not be found.";
+                    return RedirectToAction(nameof(AdminIndexBooking));
+                }
+
+                if (booking.Status != BookingStatus.InProgress &&
+         booking.Status != BookingStatus.Confirmed)
+                {
+                    TempData["ErrorMessage"] =
+                        "Only confirmed or in-progress bookings can be completed.";
+
+                    return RedirectToAction(nameof(Details), new { id });
+                }
+
+                booking.Status = BookingStatus.Completed;
+                booking.UpdatedDate = DateTime.Now;
+
+              await  _unitOfWork.Booking.UpdateAsync(booking);
+                await _unitOfWork.CommitAsync();
+
+                _logger.LogInformation(
+                    "Booking {BookingId} marked as completed.", id);
+
+                TempData["SuccessMessage"] =
+                    $"Booking {booking.BookingReference} has been completed.";
+
+                return RedirectToAction(nameof(Details), new { id });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex,
+                    "Failed to complete BookingId {BookingId}.", id);
+
+                TempData["ErrorMessage"] =
+                    "Unable to complete the booking. Please try again.";
+
+                return RedirectToAction(nameof(Details), new { id });
+            }
+        }
+
     }
 }

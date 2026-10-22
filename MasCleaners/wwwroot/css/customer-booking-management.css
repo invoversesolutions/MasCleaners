@@ -1,0 +1,280 @@
+﻿/* =========================================================
+   MAS CLEANERS - CUSTOMER BOOKING MANAGEMENT
+   ========================================================= */
+
+.booking-manage-page {
+    width: 100%;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 32px 24px 48px;
+    color: #092b4c;
+}
+
+.manage-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 22px;
+    color: #526b88;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+    .manage-back-link:hover {
+        color: #07877f;
+    }
+
+.manage-card {
+    padding: 32px;
+    border: 1px solid #e1e6eb;
+    border-radius: 18px;
+    background: #fff;
+    box-shadow: 0 8px 28px rgba(9, 43, 76, 0.05);
+}
+
+.manage-heading-icon,
+.cancel-icon {
+    display: grid;
+    place-items: center;
+    width: 58px;
+    height: 58px;
+    margin-bottom: 22px;
+    border-radius: 16px;
+    background: #e8f8f6;
+    color: #0f9d94;
+    font-size: 26px;
+}
+
+.cancel-icon {
+    background: #fff0f0;
+    color: #b42323;
+}
+
+.manage-eyebrow {
+    display: block;
+    margin-bottom: 8px;
+    color: #0f9d94;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.4px;
+}
+
+.manage-card h1 {
+    margin: 0 0 10px;
+    font-size: clamp(25px, 4vw, 32px);
+    font-weight: 800;
+    letter-spacing: -0.6px;
+}
+
+.manage-intro {
+    margin: 0 0 24px;
+    color: #526b88;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.manage-booking-summary {
+    display: grid;
+    gap: 8px;
+    padding: 19px;
+    margin-bottom: 26px;
+    border: 1px solid #e1e6eb;
+    border-radius: 12px;
+    background: #f6f8fa;
+}
+
+    .manage-booking-summary span {
+        margin-top: 8px;
+        color: #7d8da1;
+        font-size: 11px;
+    }
+
+        .manage-booking-summary span:first-child {
+            margin-top: 0;
+        }
+
+    .manage-booking-summary strong {
+        color: #092b4c;
+        font-size: 14px;
+        font-weight: 800;
+        overflow-wrap: anywhere;
+    }
+
+.manage-form {
+    display: grid;
+    gap: 22px;
+}
+
+.manage-field {
+    display: grid;
+    gap: 9px;
+}
+
+    .manage-field label {
+        color: #092b4c;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+.manage-input {
+    width: 100%;
+    min-height: 46px;
+    padding: 12px 14px;
+    border: 1px solid #d9e1e8;
+    border-radius: 10px;
+    outline: none;
+    background: #fff;
+    color: #092b4c;
+    font: inherit;
+    font-size: 13px;
+    box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+    .manage-input:focus {
+        border-color: #0f9d94;
+        box-shadow: 0 0 0 3px rgba(15, 157, 148, 0.12);
+    }
+
+.manage-field textarea {
+    resize: vertical;
+    min-height: 110px;
+}
+
+.manage-field small {
+    color: #7d8da1;
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+.manage-field-error,
+.manage-validation-summary {
+    color: #b42323;
+    font-size: 12px;
+}
+
+    .manage-validation-summary:empty {
+        display: none;
+    }
+
+    .manage-validation-summary ul {
+        margin: 0 0 18px;
+        padding-left: 20px;
+    }
+
+.manage-notice,
+.cancel-warning {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px;
+    border: 1px solid #cde9e5;
+    border-radius: 11px;
+    background: #f3fbfa;
+}
+
+    .manage-notice > i {
+        color: #07877f;
+        font-size: 19px;
+    }
+
+    .manage-notice p,
+    .cancel-warning p {
+        margin: 0;
+        color: #526b88;
+        font-size: 12px;
+        line-height: 1.8;
+    }
+
+.cancel-warning {
+    margin-bottom: 24px;
+    border-color: #f0d7ad;
+    background: #fff9ef;
+}
+
+    .cancel-warning > i {
+        color: #a16207;
+        font-size: 20px;
+    }
+
+.manage-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 4px;
+}
+
+.manage-primary-btn,
+.manage-secondary-btn,
+.manage-danger-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    min-height: 45px;
+    padding: 12px 17px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 800;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.manage-primary-btn {
+    background: #0f9d94;
+    color: #fff;
+}
+
+    .manage-primary-btn:hover {
+        background: #07877f;
+        color: #fff;
+    }
+
+.manage-secondary-btn {
+    border-color: #e1e6eb;
+    background: #fff;
+    color: #526b88;
+}
+
+    .manage-secondary-btn:hover {
+        border-color: #b7dcd8;
+        background: #f6f8fa;
+        color: #092b4c;
+    }
+
+.manage-danger-btn {
+    background: #b42323;
+    color: #fff;
+}
+
+    .manage-danger-btn:hover {
+        background: #941d1d;
+        color: #fff;
+    }
+
+@media (max-width: 560px) {
+    .booking-manage-page {
+        padding: 22px 15px 35px;
+    }
+
+    .manage-card {
+        padding: 22px 18px;
+        border-radius: 14px;
+    }
+
+    .manage-form-actions {
+        flex-direction: column-reverse;
+    }
+
+    .manage-primary-btn,
+    .manage-secondary-btn,
+    .manage-danger-btn {
+        width: 100%;
+    }
+}
