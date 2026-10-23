@@ -85,17 +85,17 @@
                 </p>
 
                 <div class="mas-account-links">
-                    <a href="#invoices">
+                    <a asp-controller="Customer" asp-action="Invoices">
                         <span>My Invoices</span>
                         <i class="bi bi-arrow-up-right"></i>
                     </a>
 
-                    <a href="#payment-history">
+                    <a asp-controller="Customer" asp-action="PaymentHistory">
                         <span>Payment History</span>
                         <i class="bi bi-arrow-up-right"></i>
                     </a>
 
-                    <a href="#outstanding-payments">
+                    <a asp-controller="Customer" asp-action="OutstandingPayments">
                         <span>Outstanding Payments</span>
                         <i class="bi bi-arrow-up-right"></i>
                     </a>
@@ -182,15 +182,23 @@
                 </p>
 
                 <div class="mas-account-links">
-                    <a href="#saved-addresses">
-                        <span>Saved Addresses</span>
-                        <i class="bi bi-arrow-up-right"></i>
-                    </a>
+                      <a asp-controller="Customer"
+                           asp-action="Addresses">
+                            <span>
+                                <i class="bi bi-collection me-2"></i>
+                                Saved Addresses
+                            </span>
+                            <i class="bi bi-arrow-up-right"></i>
+                        </a>
 
-                    <a href="#add-address">
-                        <span>Add a New Address</span>
-                        <i class="bi bi-arrow-up-right"></i>
-                    </a>
+                        <a asp-controller="Customer"
+                           asp-action="CreateAddress">
+                            <span>
+                                <i class="bi bi-plus-circle me-2"></i>
+                                Add a New Address
+                            </span>
+                            <i class="bi bi-arrow-up-right"></i>
+                        </a>
                 </div>
             </section>
 

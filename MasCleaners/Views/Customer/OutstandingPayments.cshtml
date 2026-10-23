@@ -1,0 +1,115 @@
+﻿@model IEnumerable<MasCleaners.ViewModels.Customer.CustomerOutstandingPaymentItemVM>
+
+@{
+    ViewData["Title"] = "Outstanding Payments";
+    var culture = new System.Globalization.CultureInfo("en-ZA");
+    var totalOutstanding = Model.Sum(item => item.BalanceDue);
+}
+<link rel="stylesheet"
+      href="~/css/customer-billing.css"
+      asp-append-version="true" />
+<div class="mas-billing-page">
+
+    <div class="mas-billing-header">
+        <div>
+            <a asp-controller="Account"
+               asp-action="Profile"
+               class="mas-billing-back">
+                <i class="bi bi-arrow-left"></i>
+                My Account
+            </a>
+
+            <h1>Outstanding Payments</h1>
+            <p>Review the remaining balances on your bookings.</p>
+        </div>
+
+        <div class="mas-billing-header-icon">
+            <i class="bi bi-wallet2"></i>
+        </div>
+    </div>
+
+    <div class="mas-billing-summary mas-billing-summary-outstanding">
+        <div class="mas-billing-summary-icon">
+            <i class="bi bi-exclamation-circle"></i>
+        </div>
+
+        <div>
+            <p>Total Outstanding</p>
+            <h2>@totalOutstanding.ToString("C", culture)</h2>
+            <span>@Model.Count() booking(s) with a balance due</span>
+        </div>
+    </div>
+
+    <div class="mas-billing-card">
+        <div class="mas-billing-card-heading">
+            <div>
+                <h2>Balances Due</h2>
+                <p>Only the remaining unpaid amount is shown.</p>
+            </div>
+        </div>
+
+        @if (Model.Any())
+        {
+            <div class="mas-billing-table-wrapper">
+                <table class="mas-billing-table">
+                    <thead>
+                        <tr>
+                            <th>Booking</th>
+                            <th>Booking Status</th>
+                            <th>Total</th>
+                            <th>Amount Paid</th>
+                            <th>Balance Due</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td data-label="Booking">
+                                    <strong>@item.BookingReference</strong>
+                                </td>
+
+                                <td data-label="Booking Status">
+                                    @item.BookingStatus
+                                </td>
+
+                                <td data-label="Total" class="mas-money">
+                                    @item.BookingTotal.ToString("C", culture)
+                                </td>
+
+                                <td data-label="Amount Paid" class="mas-money">
+                                    @item.AmountPaid.ToString("C", culture)
+                                </td>
+
+                                <td data-label="Balance Due" class="mas-money mas-balance-due">
+                                    @item.BalanceDue.ToString("C", culture)
+                                </td>
+
+                                <td data-label="Action">
+                                    <a asp-controller="Customer"
+                                       asp-action="BookingDetails"
+                                       asp-route-id="@item.BookingId"
+                                       class="mas-billing-action">
+                                        View Booking
+                                        <i class="bi bi-arrow-up-right"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="mas-billing-empty">
+                <span><i class="bi bi-check2-circle"></i></span>
+                <h3>You're all caught up!</h3>
+                <p>You have no outstanding booking balances at the moment.</p>
+            </div>
+        }
+    </div>
+
+</div>

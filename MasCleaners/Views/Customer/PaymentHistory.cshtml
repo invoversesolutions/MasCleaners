@@ -1,0 +1,106 @@
+﻿@model IEnumerable<MasCleaners.ViewModels.Customer.CustomerPaymentHistoryItemVM>
+
+@{
+    ViewData["Title"] = "Payment History";
+    var culture = new System.Globalization.CultureInfo("en-ZA");
+    var totalPaid = Model.Sum(p => p.Amount);
+}
+<link rel="stylesheet"
+      href="~/css/customer-billing.css"
+      asp-append-version="true" />
+<div class="mas-billing-page">
+
+    <div class="mas-billing-header">
+        <div>
+            <a asp-controller="Account"
+               asp-action="Profile"
+               class="mas-billing-back">
+                <i class="bi bi-arrow-left"></i>
+                My Account
+            </a>
+
+            <h1>Payment History</h1>
+            <p>Review payments recorded against your bookings.</p>
+        </div>
+
+        <div class="mas-billing-header-icon">
+            <i class="bi bi-credit-card"></i>
+        </div>
+    </div>
+
+    <div class="mas-billing-summary">
+        <div class="mas-billing-summary-icon">
+            <i class="bi bi-check2-circle"></i>
+        </div>
+
+        <div>
+            <p>Total Recorded Payments</p>
+            <h2>@totalPaid.ToString("C", culture)</h2>
+            <span>@Model.Count() payment record(s)</span>
+        </div>
+    </div>
+
+    <div class="mas-billing-card">
+        <div class="mas-billing-card-heading">
+            <div>
+                <h2>Payment Records</h2>
+                <p>Payments recorded by MAS Cleaners.</p>
+            </div>
+        </div>
+
+        @if (Model.Any())
+        {
+            <div class="mas-billing-table-wrapper">
+                <table class="mas-billing-table">
+                    <thead>
+                        <tr>
+                            <th>Booking</th>
+                            <th>Payment Date</th>
+                            <th>Method</th>
+                            <th>Reference</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var payment in Model)
+                        {
+                            <tr>
+                                <td data-label="Booking">
+                                    <strong>@payment.BookingReference</strong>
+                                </td>
+
+                                <td data-label="Payment Date">
+                                    @payment.PaymentDate.ToString("dd MMM yyyy")
+                                </td>
+
+                                <td data-label="Method">
+                                    @payment.PaymentMethod
+                                </td>
+
+                                <td data-label="Reference">
+                                    @(string.IsNullOrWhiteSpace(payment.TransactionReference)
+                                        ? "—"
+                                        : payment.TransactionReference)
+                                </td>
+
+                                <td data-label="Amount" class="mas-money">
+                                    @payment.Amount.ToString("C", culture)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="mas-billing-empty">
+                <span><i class="bi bi-wallet2"></i></span>
+                <h3>No payment records yet</h3>
+                <p>Your recorded payments will appear here.</p>
+            </div>
+        }
+    </div>
+
+</div>

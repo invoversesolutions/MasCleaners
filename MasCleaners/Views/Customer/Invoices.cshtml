@@ -1,0 +1,118 @@
+﻿@model IEnumerable<MasCleaners.Models.Invoice>
+
+@{
+    ViewData["Title"] = "My Invoices";
+}
+<link rel="stylesheet"
+      href="~/css/customer-billing.css"
+      asp-append-version="true" />
+<div class="mas-billing-page">
+
+    <div class="mas-billing-header">
+        <div>
+            <a asp-controller="Account"
+               asp-action="Profile"
+               class="mas-billing-back">
+                <i class="bi bi-arrow-left"></i>
+                My Account
+            </a>
+
+            <h1>My Invoices</h1>
+            <p>View and access invoices for your cleaning bookings.</p>
+        </div>
+
+        <div class="mas-billing-header-icon">
+            <i class="bi bi-receipt"></i>
+        </div>
+    </div>
+
+    <div class="mas-billing-card">
+        <div class="mas-billing-card-heading">
+            <div>
+                <h2>Invoice Records</h2>
+                <p>Your available invoices are listed below.</p>
+            </div>
+
+            <span class="mas-billing-count">
+                @Model.Count() invoice(s)
+            </span>
+        </div>
+
+        @if (Model.Any())
+        {
+            <div class="mas-billing-table-wrapper">
+                <table class="mas-billing-table">
+                    <thead>
+                        <tr>
+                            <th>Invoice</th>
+                            <th>Issued</th>
+                            <th>Due Date</th>
+                            <th>Total</th>
+                            <th>Paid</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var invoice in Model)
+                        {
+                            <tr>
+                                <td data-label="Invoice">
+                                    <strong>@invoice.InvoiceNumber</strong>
+                                </td>
+
+                                <td data-label="Issued">
+                                    @invoice.IssuedDate.ToString()
+                                </td>
+
+                                <td data-label="Due Date">
+                                    @(invoice.DueDate?.ToString() ?? "—")
+                                </td>
+
+                                <td data-label="Total" class="mas-money">
+                                    @invoice.TotalAmount.ToString("C", new System.Globalization.CultureInfo("en-ZA"))
+                                </td>
+
+                                <td data-label="Paid" class="mas-money">
+                                    @invoice.TotalAmount.ToString("C", new System.Globalization.CultureInfo("en-ZA"))
+                                </td>
+
+                                <td data-label="Status">
+                                    <span class="mas-billing-status">
+                                        @invoice.PaymentStatus
+                                    </span>
+                                </td>
+
+                                <td data-label="Action">
+                                    <a asp-controller="Invoice"
+                                       asp-action="Details"
+                                       asp-route-id="@invoice.BookingId"
+                                       class="mas-billing-action">
+                                        View Invoice
+                                        <i class="bi bi-arrow-up-right"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="mas-billing-empty">
+                <span><i class="bi bi-receipt"></i></span>
+                <h3>No invoices yet</h3>
+                <p>Your invoices will appear here when they become available.</p>
+
+                <a asp-controller="Customer"
+                   asp-action="Index"
+                   class="mas-billing-primary-btn">
+                    Return to My Account
+                </a>
+            </div>
+        }
+    </div>
+
+</div>

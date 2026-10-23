@@ -1,0 +1,518 @@
+﻿/* =========================================================
+   MAS CLEANERS
+   CUSTOMER BILLING PAGES
+   Invoices | Payment History | Outstanding Payments
+   ========================================================= */
+
+.mas-billing-page {
+    width: 100%;
+    max-width: 1220px;
+    margin: 0 auto;
+    padding: 28px 20px 44px;
+    box-sizing: border-box;
+    color: #092b4c;
+}
+
+    .mas-billing-page *,
+    .mas-billing-page *::before,
+    .mas-billing-page *::after {
+        box-sizing: border-box;
+    }
+
+/* HEADER */
+
+.mas-billing-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 28px;
+}
+
+.mas-billing-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 15px;
+    color: #0f9d94;
+    font-size: 0.9rem;
+    font-weight: 650;
+    text-decoration: none;
+}
+
+    .mas-billing-back:hover {
+        color: #07877f;
+    }
+
+.mas-billing-header h1 {
+    margin: 0 0 8px;
+    color: #092b4c;
+    font-size: clamp(1.65rem, 3vw, 2.15rem);
+    font-weight: 750;
+    overflow-wrap: anywhere;
+}
+
+.mas-billing-header p {
+    margin: 0;
+    color: #7d8da1;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.mas-billing-header-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 64px;
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+    background: #e8f8f6;
+    color: #0f9d94;
+    font-size: 1.8rem;
+}
+
+/* SUMMARY */
+
+.mas-billing-summary {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 24px;
+    margin-bottom: 24px;
+    border: 1px solid #dcece9;
+    border-radius: 16px;
+    background: #f7fcfb;
+}
+
+.mas-billing-summary-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 52px;
+    width: 52px;
+    height: 52px;
+    border-radius: 15px;
+    background: #e0f5f1;
+    color: #07877f;
+    font-size: 1.5rem;
+}
+
+.mas-billing-summary p {
+    margin: 0 0 5px;
+    color: #526b88;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.mas-billing-summary h2 {
+    margin: 0 0 5px;
+    color: #092b4c;
+    font-size: clamp(1.45rem, 3vw, 1.9rem);
+    font-weight: 750;
+    overflow-wrap: anywhere;
+}
+
+.mas-billing-summary span {
+    color: #7d8da1;
+    font-size: 0.82rem;
+}
+
+.mas-billing-summary-outstanding {
+    border-color: #f0dfc4;
+    background: #fffaf3;
+}
+
+    .mas-billing-summary-outstanding .mas-billing-summary-icon {
+        background: #fff0d9;
+        color: #986019;
+    }
+
+/* MAIN CARD */
+
+.mas-billing-card {
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid #e1e6eb;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 8px 28px rgba(9, 43, 76, 0.04);
+}
+
+.mas-billing-card-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 24px;
+    border-bottom: 1px solid #e1e6eb;
+}
+
+    .mas-billing-card-heading h2 {
+        margin: 0 0 6px;
+        color: #092b4c;
+        font-size: 1.12rem;
+        font-weight: 750;
+    }
+
+    .mas-billing-card-heading p {
+        margin: 0;
+        color: #7d8da1;
+        font-size: 0.87rem;
+        line-height: 1.5;
+    }
+
+.mas-billing-count {
+    flex: 0 0 auto;
+    padding: 7px 11px;
+    border-radius: 20px;
+    background: #e8f8f6;
+    color: #07877f;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+/* TABLE */
+
+.mas-billing-table-wrapper {
+    width: 100%;
+    min-width: 0;
+}
+
+.mas-billing-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: auto;
+}
+
+    .mas-billing-table thead {
+        background: #f6f8fa;
+    }
+
+    .mas-billing-table th {
+        padding: 15px 16px;
+        color: #526b88;
+        font-size: 0.76rem;
+        font-weight: 750;
+        text-align: left;
+        white-space: nowrap;
+    }
+
+    .mas-billing-table td {
+        padding: 17px 16px;
+        border-top: 1px solid #edf0f3;
+        color: #526b88;
+        font-size: 0.85rem;
+        vertical-align: middle;
+        overflow-wrap: anywhere;
+    }
+
+    .mas-billing-table tbody tr {
+        transition: background-color 0.15s ease;
+    }
+
+        .mas-billing-table tbody tr:hover {
+            background: #fbfdfd;
+        }
+
+    .mas-billing-table td strong {
+        color: #092b4c;
+        font-weight: 700;
+    }
+
+    .mas-billing-table .mas-money {
+        color: #092b4c;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .mas-billing-table .mas-balance-due {
+        color: #a15c11;
+    }
+
+.mas-billing-status {
+    display: inline-block;
+    padding: 6px 10px;
+    border: 1px solid #dcece9;
+    border-radius: 20px;
+    background: #f1faf8;
+    color: #07877f;
+    font-size: 0.75rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.mas-billing-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    color: #07877f;
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+    .mas-billing-action:hover {
+        color: #092b4c;
+    }
+
+/* EMPTY STATE */
+
+.mas-billing-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 55px 24px;
+    text-align: center;
+}
+
+    .mas-billing-empty > span {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 66px;
+        height: 66px;
+        margin-bottom: 18px;
+        border-radius: 20px;
+        background: #e8f8f6;
+        color: #0f9d94;
+        font-size: 1.8rem;
+    }
+
+    .mas-billing-empty h3 {
+        margin: 0 0 9px;
+        color: #092b4c;
+        font-size: 1.12rem;
+        font-weight: 750;
+    }
+
+    .mas-billing-empty p {
+        max-width: 400px;
+        margin: 0;
+        color: #7d8da1;
+        font-size: 0.9rem;
+        line-height: 1.7;
+    }
+
+.mas-billing-primary-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 11px 18px;
+    margin-top: 20px;
+    border-radius: 10px;
+    background: #0f9d94;
+    color: #fff;
+    font-size: 0.87rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+    .mas-billing-primary-btn:hover {
+        background: #07877f;
+        color: #fff;
+    }
+
+/* TABLETS */
+
+@media (max-width: 1000px) {
+    .mas-billing-table th,
+    .mas-billing-table td {
+        padding: 13px 10px;
+        font-size: 0.8rem;
+    }
+
+    .mas-billing-action {
+        white-space: normal;
+    }
+}
+
+/* MOBILE */
+
+@media (max-width: 767px) {
+    .mas-billing-page {
+        padding: 22px 14px 32px;
+    }
+
+    .mas-billing-header {
+        margin-bottom: 22px;
+    }
+
+    .mas-billing-header-icon {
+        flex-basis: 50px;
+        width: 50px;
+        height: 50px;
+        border-radius: 14px;
+        font-size: 1.4rem;
+    }
+
+    .mas-billing-summary {
+        padding: 19px;
+    }
+
+    .mas-billing-card-heading {
+        align-items: flex-start;
+        padding: 20px;
+    }
+
+    /* Convert each table row into a stacked mobile card. */
+    .mas-billing-table,
+    .mas-billing-table tbody {
+        display: block;
+        width: 100%;
+    }
+
+        .mas-billing-table thead {
+            display: none;
+        }
+
+        .mas-billing-table tbody tr {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            gap: 0 16px;
+            padding: 8px 17px;
+            border-top: 1px solid #e1e6eb;
+        }
+
+            .mas-billing-table tbody tr:first-child {
+                border-top: 0;
+            }
+
+        .mas-billing-table td {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            min-width: 0;
+            padding: 12px 0;
+            border: 0;
+            white-space: normal;
+        }
+
+            .mas-billing-table td::before {
+                content: attr(data-label);
+                display: block;
+                margin-bottom: 6px;
+                color: #7d8da1;
+                font-size: 0.72rem;
+                font-weight: 650;
+            }
+
+            .mas-billing-table td[data-label="Invoice"],
+            .mas-billing-table td[data-label="Booking"] {
+                grid-column: 1 / -1;
+                padding-bottom: 8px;
+            }
+
+            .mas-billing-table td[data-label="Action"] {
+                grid-column: 1 / -1;
+                align-items: stretch;
+                padding-top: 9px;
+                border-top: 1px dashed #e1e6eb;
+            }
+
+                .mas-billing-table td[data-label="Action"] .mas-billing-action {
+                    justify-content: center;
+                    width: 100%;
+                    min-height: 42px;
+                    padding: 10px;
+                    border: 1px solid #dcece9;
+                    border-radius: 9px;
+                    background: #f7fcfb;
+                    white-space: normal;
+                }
+
+        .mas-billing-table .mas-money {
+            white-space: normal;
+        }
+}
+
+/* SMALL PHONES */
+
+@media (max-width: 480px) {
+    .mas-billing-page {
+        padding: 18px 10px 26px;
+    }
+
+    .mas-billing-header {
+        gap: 10px;
+    }
+
+        .mas-billing-header h1 {
+            font-size: 1.55rem;
+        }
+
+        .mas-billing-header p {
+            font-size: 0.85rem;
+        }
+
+    .mas-billing-header-icon {
+        flex-basis: 42px;
+        width: 42px;
+        height: 42px;
+        font-size: 1.2rem;
+    }
+
+    .mas-billing-summary {
+        align-items: flex-start;
+        gap: 12px;
+        padding: 16px 13px;
+        border-radius: 13px;
+    }
+
+    .mas-billing-summary-icon {
+        flex-basis: 42px;
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        font-size: 1.2rem;
+    }
+
+    .mas-billing-summary h2 {
+        font-size: 1.45rem;
+    }
+
+    .mas-billing-card {
+        border-radius: 13px;
+    }
+
+    .mas-billing-card-heading {
+        flex-direction: column;
+        gap: 10px;
+        padding: 17px 14px;
+    }
+
+    .mas-billing-table tbody tr {
+        padding: 7px 13px;
+        gap: 0 12px;
+    }
+
+    .mas-billing-table td {
+        font-size: 0.81rem;
+        overflow-wrap: anywhere;
+    }
+
+    .mas-billing-count {
+        align-self: flex-start;
+    }
+
+    .mas-billing-empty {
+        padding: 38px 17px;
+    }
+}
+
+@media (max-width: 350px) {
+    .mas-billing-table tbody tr {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .mas-billing-table td[data-label="Invoice"],
+    .mas-billing-table td[data-label="Booking"],
+    .mas-billing-table td[data-label="Action"] {
+        grid-column: auto;
+    }
+}

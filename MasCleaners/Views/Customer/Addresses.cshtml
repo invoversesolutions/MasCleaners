@@ -1,0 +1,179 @@
+﻿@model IEnumerable<MasCleaners.Models.CustomerAddress>
+
+@{
+    ViewData["Title"] = "Saved Addresses";
+}
+<link rel="stylesheet"
+      href="~/css/customer-addresses.css"
+      asp-append-version="true" />
+<div class="mas-address-page">
+
+    <div class="mas-address-header">
+        <div>
+            <span class="mas-address-eyebrow">
+                MY ACCOUNT
+            </span>
+
+            <h1>Saved Addresses</h1>
+
+            <p>
+                Manage the addresses you use when booking cleaning services.
+            </p>
+        </div>
+
+        <a asp-controller="Customer"
+           asp-action="CreateAddress"
+           class="mas-address-primary-btn">
+
+            <i class="bi bi-plus-lg"></i>
+            Add New Address
+        </a>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show"
+             role="alert">
+
+            <i class="bi bi-check-circle me-2"></i>
+            @TempData["Success"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close">
+            </button>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show"
+             role="alert">
+
+            @TempData["Error"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close">
+            </button>
+        </div>
+    }
+
+    @if (Model.Any())
+    {
+        <div class="mas-address-summary">
+            <div class="mas-address-summary-icon">
+                <i class="bi bi-geo-alt"></i>
+            </div>
+
+            <div>
+                <strong>@Model.Count() saved address@(Model.Count() == 1 ? "" : "es")</strong>
+                <p>Your saved locations are ready for your next booking.</p>
+            </div>
+        </div>
+
+        <div class="mas-address-grid">
+
+            @foreach (var address in Model)
+            {
+                <article class="mas-address-card">
+
+                    <div class="mas-address-card-top">
+
+                        <div class="mas-address-icon">
+                            <i class="bi bi-house-door"></i>
+                        </div>
+
+                        @if (address.IsDefault)
+                        {
+                            <span class="mas-address-default-badge">
+                                <i class="bi bi-check-circle-fill"></i>
+                                Default
+                            </span>
+                        }
+                    </div>
+
+                    <div class="mas-address-card-content">
+
+                        <h2>@address.AddressName</h2>
+
+                        <p class="mas-address-line">
+                            @address.AddressLine1
+                        </p>
+
+                        @if (!string.IsNullOrWhiteSpace(address.AddressLine2))
+                        {
+                            <p class="mas-address-line">
+                                @address.AddressLine2
+                            </p>
+                        }
+
+                        <p class="mas-address-location">
+                            @address.City, @address.Province
+                        </p>
+
+                        <p class="mas-address-postal">
+                            Postal Code: @address.PostalCode
+                        </p>
+
+                    </div>
+
+                    <div class="mas-address-card-footer">
+
+                        <span class="mas-address-status">
+                            <i class="bi bi-check-circle"></i>
+                            Active
+                        </span>
+
+                        <a asp-controller="Customer"
+                           asp-action="EditAddress"
+                           asp-route-id="@address.Id"
+                           class="mas-address-edit-btn">
+
+                            <i class="bi bi-pencil-square"></i>
+                            Edit
+                        </a>
+
+                    </div>
+
+                </article>
+            }
+
+        </div>
+    }
+    else
+    {
+        <div class="mas-address-empty">
+
+            <div class="mas-address-empty-icon">
+                <i class="bi bi-geo-alt"></i>
+            </div>
+
+            <h2>No saved addresses yet</h2>
+
+            <p>
+                Save your home, office, or another location to make
+                booking your next cleaning service easier.
+            </p>
+
+            <a asp-controller="Customer"
+               asp-action="CreateAddress"
+               class="mas-address-primary-btn">
+
+                <i class="bi bi-plus-lg"></i>
+                Add Your First Address
+            </a>
+
+        </div>
+    }
+
+    <div class="mas-address-back">
+        <a asp-controller="Customer" asp-action="Index">
+            <i class="bi bi-arrow-left"></i>
+            Back to My Account
+        </a>
+    </div>
+
+</div>

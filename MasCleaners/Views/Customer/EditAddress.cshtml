@@ -1,0 +1,217 @@
+﻿@model MasCleaners.ViewModels.Customer.CustomerAddressVM
+
+@{
+    ViewData["Title"] = "Edit Address";
+}
+<link rel="stylesheet"
+      href="~/css/customer-addresses.css"
+      asp-append-version="true" />
+
+<div class="mas-address-form-page">
+
+    <!-- PAGE HEADER -->
+    <div class="mas-address-form-header">
+        <div>
+            <a asp-controller="Customer"
+               asp-action="Addresses"
+               class="mas-address-back-link">
+                <i class="bi bi-arrow-left"></i>
+                Back to My Addresses
+            </a>
+
+            <h1>Edit Address</h1>
+
+            <p>
+                Update your saved address details below.
+            </p>
+        </div>
+
+        <div class="mas-address-header-icon">
+            <i class="bi bi-geo-alt"></i>
+        </div>
+    </div>
+
+    <!-- FORM CARD -->
+    <div class="mas-address-form-card">
+
+        <div class="mas-address-form-card-header">
+            <div class="mas-address-form-card-icon">
+                <i class="bi bi-pencil-square"></i>
+            </div>
+
+            <div>
+                <h2>Address Details</h2>
+                <p>Keep your address information up to date.</p>
+            </div>
+        </div>
+
+        <form asp-controller="Customer"
+              asp-action="EditAddress"
+              method="post"
+              class="mas-address-form">
+
+            @Html.AntiForgeryToken()
+
+            <input asp-for="Id" type="hidden" />
+
+            <div asp-validation-summary="ModelOnly"
+                 class="text-danger mb-3">
+            </div>
+
+            <!-- ADDRESS NAME -->
+            <div class="mb-3">
+                <label asp-for="AddressName" class="form-label">
+                    Address Name <span class="text-danger">*</span>
+                </label>
+
+                <input asp-for="AddressName"
+                       class="form-control"
+                       placeholder="e.g. Home, Work or Office"
+                       autocomplete="off" />
+
+                <span asp-validation-for="AddressName"
+                      class="text-danger">
+                </span>
+            </div>
+
+            <!-- ADDRESS LINE 1 -->
+            <div class="mb-3">
+                <label asp-for="AddressLine1" class="form-label">
+                    Address Line 1 <span class="text-danger">*</span>
+                </label>
+
+                <input asp-for="AddressLine1"
+                       class="form-control"
+                       placeholder="Street number and street name"
+                       autocomplete="address-line1" />
+
+                <span asp-validation-for="AddressLine1"
+                      class="text-danger">
+                </span>
+            </div>
+
+            <!-- ADDRESS LINE 2 -->
+            <div class="mb-3">
+                <label asp-for="AddressLine2" class="form-label">
+                    Address Line 2
+                </label>
+
+                <input asp-for="AddressLine2"
+                       class="form-control"
+                       placeholder="Complex, unit or suburb (optional)"
+                       autocomplete="address-line2" />
+
+                <span asp-validation-for="AddressLine2"
+                      class="text-danger">
+                </span>
+            </div>
+
+            <!-- CITY AND PROVINCE -->
+            <div class="mas-address-form-grid">
+
+                <div class="mb-3">
+                    <label asp-for="City" class="form-label">
+                        City <span class="text-danger">*</span>
+                    </label>
+
+                    <input asp-for="City"
+                           class="form-control"
+                           placeholder="Enter city"
+                           autocomplete="address-level2" />
+
+                    <span asp-validation-for="City"
+                          class="text-danger">
+                    </span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Province" class="form-label">
+                        Province <span class="text-danger">*</span>
+                    </label>
+
+                    <select asp-for="Province" class="form-select">
+                        <option value="">Select province</option>
+                        <option value="Eastern Cape">Eastern Cape</option>
+                        <option value="Free State">Free State</option>
+                        <option value="Gauteng">Gauteng</option>
+                        <option value="KwaZulu-Natal">KwaZulu-Natal</option>
+                        <option value="Limpopo">Limpopo</option>
+                        <option value="Mpumalanga">Mpumalanga</option>
+                        <option value="Northern Cape">Northern Cape</option>
+                        <option value="North West">North West</option>
+                        <option value="Western Cape">Western Cape</option>
+                    </select>
+
+                    <span asp-validation-for="Province"
+                          class="text-danger">
+                    </span>
+                </div>
+
+            </div>
+
+            <!-- POSTAL CODE -->
+            <div class="mb-3">
+                <label asp-for="PostalCode" class="form-label">
+                    Postal Code <span class="text-danger">*</span>
+                </label>
+
+                <input asp-for="PostalCode"
+                       class="form-control"
+                       placeholder="Enter postal code"
+                       autocomplete="postal-code"
+                       inputmode="numeric" />
+
+                <span asp-validation-for="PostalCode"
+                      class="text-danger">
+                </span>
+            </div>
+
+            <!-- DEFAULT ADDRESS -->
+            <div class="mas-address-default-option">
+                <div class="mas-address-default-icon">
+                    <i class="bi bi-house-check"></i>
+                </div>
+
+                <div class="mas-address-default-text">
+                    <label asp-for="IsDefault">
+                        Default Address
+                    </label>
+
+                    <p>
+                        Use this address as your primary saved address.
+                    </p>
+                </div>
+
+                <div class="form-check form-switch">
+                    <input asp-for="IsDefault"
+                           class="form-check-input"
+                           role="switch" />
+                </div>
+            </div>
+
+            <!-- ACTIONS -->
+            <div class="mas-address-form-actions">
+
+                <a asp-controller="Customer"
+                   asp-action="Addresses"
+                   class="btn mas-address-cancel-btn">
+                    Cancel
+                </a>
+
+                <button type="submit"
+                        class="btn mas-address-save-btn">
+                    <i class="bi bi-check2-circle"></i>
+                    Save Changes
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

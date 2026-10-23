@@ -503,6 +503,358 @@ namespace MasCleaners.Controllers
 
             return View(booking);
         }
+        [HttpGet]
+        public async Task<IActionResult> Addresses()
+        {
+            try
+            {
+                var userId = _userManager.GetUserId(User);
 
+                if (string.IsNullOrEmpty(userId))
+                {
+                    return Challenge();
+                }
+
+                var customer = await _unitOfWork.Customer
+                    .GetAsync(c => c.ApplicationUserId == userId);
+
+                if (customer == null)
+                {
+                    TempData["Error"] = "Your customer profile could not be found.";
+
+                    return RedirectToAction(nameof(Index));
+                }
+
+                var addresses = await _unitOfWork.CustomerAddress
+                    .GetAllAsync(
+                        a => a.CustomerId == customer.Id && a.IsActive);
+
+                return View(addresses
+                    .OrderByDescending(a => a.IsDefault)
+                    .ThenBy(a => a.AddressName)
+                    .ToList());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error loading saved customer addresses.");
+
+                TempData["Error"] =
+                    "We could not load your saved addresses. Please try again.";
+
+                return RedirectToAction(nameof(Index));
+            }
+        }
+        [HttpGet]
+        public IActionResult CreateAddress()
+        {
+            return View(new CustomerAddressVM());
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateAddress(CustomerAddressVM model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            try
+            {
+                var userId = _userManager.GetUserId(User);
+
+                if (string.IsNullOrEmpty(userId))
+                {
+                    return Challenge();
+                }
+
+                var customer = await _unitOfWork.Customer
+                    .GetAsync(c => c.ApplicationUserId == userId);
+
+                if (customer == null)
+                {
+                    TempData["Error"] = "Your customer profile could not be found.";
+
+                    return RedirectToAction(nameof(Index));
+                }
+
+                var existingAddresses = await _unitOfWork.CustomerAddress
+                    .GetAllAsync(a =>
+                        a.CustomerId == customer.Id &&
+                        a.IsActive);
+
+                var addresses = existingAddresses.ToList();
+
+                // The first active address becomes the default automatically.
+                var makeDefault = model.IsDefault || !addresses.Any();
+
+                if (makeDefault)
+                {
+                    foreach (var address in addresses.Where(a => a.IsDefault))
+                    {
+                        address.IsDefault = false;
+                        address.UpdatedDate = DateTime.UtcNow;
+                    }
+                }
+
+                var newAddress = new CustomerAddress
+                {
+                    CustomerId = customer.Id,
+
+                    AddressName = model.AddressName.Trim(),
+                    AddressLine1 = model.AddressLine1.Trim(),
+                    AddressLine2 = string.IsNullOrWhiteSpace(model.AddressLine2)
+                        ? null
+                        : model.AddressLine2.Trim(),
+
+                    City = model.City.Trim(),
+                    Province = model.Province.Trim(),
+                    PostalCode = model.PostalCode.Trim(),
+
+                    IsDefault = makeDefault,
+                    IsActive = true,
+
+                    CreatedDate = DateTime.UtcNow,
+                    UpdatedDate = DateTime.UtcNow
+                };
+
+                await _unitOfWork.CustomerAddress.AddAsync(newAddress);
+
+                await _unitOfWork.CommitAsync();
+
+                TempData["Success"] = "Your address has been saved successfully.";
+
+                return RedirectToAction(nameof(Addresses));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error saving a customer address.");
+
+                ModelState.AddModelError(
+                    string.Empty,
+                    "We could not save your address. Please try again.");
+
+                return View(model);
+            }
+        }
+
+        // GET: Customer/EditAddress/5
+        [HttpGet]
+        public async Task<IActionResult> EditAddress(int id)
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
+                return Challenge();
+
+            var customer = await _unitOfWork.Customer.GetAsync(
+                c => c.ApplicationUserId == user.Id);
+
+            if (customer == null)
+                return NotFound();
+
+            // Only load an active address belonging to the logged-in customer.
+            var address = await _unitOfWork.CustomerAddress.GetAsync(
+                a => a.Id == id
+                     && a.CustomerId == customer.Id
+                     && a.IsActive);
+
+            if (address == null)
+                return NotFound();
+
+            var model = new CustomerAddressVM
+            {
+                Id = address.Id,
+                AddressName = address.AddressName,
+                AddressLine1 = address.AddressLine1,
+                AddressLine2 = address.AddressLine2,
+                City = address.City,
+                Province = address.Province,
+                PostalCode = address.PostalCode,
+                IsDefault = address.IsDefault
+            };
+
+            return View(model);
+        }
+
+
+        // POST: Customer/EditAddress
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditAddress(CustomerAddressVM model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
+                return Challenge();
+
+            var customer = await _unitOfWork.Customer.GetAsync(
+                c => c.ApplicationUserId == user.Id);
+
+            if (customer == null)
+                return NotFound();
+
+            // Verify ownership again on POST.
+            var address = await _unitOfWork.CustomerAddress.GetAsync(
+                a => a.Id == model.Id
+                     && a.CustomerId == customer.Id
+                     && a.IsActive);
+
+            if (address == null)
+                return NotFound();
+
+            // If this address is becoming the default, unset the others.
+            if (model.IsDefault)
+            {
+                var otherAddresses = await _unitOfWork.CustomerAddress.GetAllAsync(
+                    a => a.CustomerId == customer.Id
+                         && a.IsActive
+                         && a.Id != address.Id);
+
+                foreach (var otherAddress in otherAddresses)
+                {
+                    if (otherAddress.IsDefault)
+                    {
+                        otherAddress.IsDefault = false;
+                       await _unitOfWork.CustomerAddress.UpdateAsync(otherAddress);
+                    }
+                }
+            }
+
+            // Update the existing entity instead of trusting customer or
+            // ownership information submitted by the browser.
+            address.AddressName = model.AddressName;
+            address.AddressLine1 = model.AddressLine1;
+            address.AddressLine2 = model.AddressLine2;
+            address.City = model.City;
+            address.Province = model.Province;
+            address.PostalCode = model.PostalCode;
+            address.IsDefault = model.IsDefault;
+
+           await _unitOfWork.CustomerAddress.UpdateAsync(address);
+
+            await _unitOfWork.CommitAsync();
+
+            TempData["success"] = "Your address has been updated successfully.";
+
+            return RedirectToAction(nameof(Addresses));
+        }
+        // =========================================================
+        // MY INVOICES
+        // =========================================================
+        [HttpGet]
+        public async Task<IActionResult> Invoices()
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
+                return Challenge();
+
+            var customer = await _unitOfWork.Customer.GetAsync(
+                c => c.ApplicationUserId == user.Id);
+
+            if (customer == null)
+                return NotFound();
+
+            var invoices = await _unitOfWork.Invoice.GetAllAsync(
+                i => i.CustomerId == customer.Id,
+                includeProperties: "Booking");
+
+            var model = invoices
+                .OrderByDescending(i => i.IssuedDate)
+                .ToList();
+
+            return View(model);
+        }
+
+
+        // =========================================================
+        // PAYMENT HISTORY
+        // =========================================================
+        [HttpGet]
+        public async Task<IActionResult> PaymentHistory()
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
+                return Challenge();
+
+            var customer = await _unitOfWork.Customer.GetAsync(
+                c => c.ApplicationUserId == user.Id);
+
+            if (customer == null)
+                return NotFound();
+
+            var bookings = await _unitOfWork.Booking.GetAllAsync(
+                b => b.CustomerId == customer.Id,
+                includeProperties: "Payments");
+
+            var model = bookings
+                .SelectMany(booking => booking.Payments.Select(payment =>
+                    new CustomerPaymentHistoryItemVM
+                    {
+                        PaymentId = payment.Id,
+                        BookingId = booking.Id,
+                        BookingReference = booking.BookingReference,
+                        Amount = payment.Amount,
+                        PaymentMethod = payment.PaymentMethod,
+                        TransactionReference = payment.TransactionReference,
+                        PaymentDate = payment.PaymentDate
+                    }))
+                .OrderByDescending(payment => payment.PaymentDate)
+                .ToList();
+
+            return View(model);
+        }
+
+
+        // =========================================================
+        // OUTSTANDING PAYMENTS
+        // =========================================================
+        [HttpGet]
+        public async Task<IActionResult> OutstandingPayments()
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
+                return Challenge();
+
+            var customer = await _unitOfWork.Customer.GetAsync(
+                c => c.ApplicationUserId == user.Id);
+
+            if (customer == null)
+                return NotFound();
+
+            var bookings = await _unitOfWork.Booking.GetAllAsync(
+                b => b.CustomerId == customer.Id
+                     && b.Status != BookingStatus.Cancelled
+                     && b.PaymentStatus != PaymentStatus.Paid,
+                includeProperties: "Payments");
+
+            var model = bookings
+                .Select(booking =>
+                {
+                    var amountPaid = booking.Payments.Sum(p => p.Amount);
+                    var balanceDue = Math.Max(0m, booking.Total - amountPaid);
+
+                    return new CustomerOutstandingPaymentItemVM
+                    {
+                        BookingId = booking.Id,
+                        BookingReference = booking.BookingReference,
+                        BookingTotal = booking.Total,
+                        AmountPaid = amountPaid,
+                        BalanceDue = balanceDue,
+                        PaymentStatus = booking.PaymentStatus,
+                        BookingStatus = booking.Status.ToString()
+                    };
+                })
+                .Where(item => item.BalanceDue > 0)
+                .OrderByDescending(item => item.BalanceDue)
+                .ToList();
+
+            return View(model);
+        }
     }
 }
