@@ -1,0 +1,150 @@
+﻿@model MasCleaners.ViewModels.Customer.CustomerSecuritySettingsVM
+<link rel="stylesheet"
+      href="~/css/customer/customer-account-settings.css"
+      asp-append-version="true" />
+@{
+    ViewData["Title"] = "Security Settings";
+}
+
+<div class="mas-account-settings-page">
+
+    <div class="mas-settings-header">
+        <div>
+            <a asp-action="Profile" asp-controller="Account"
+               class="mas-settings-back">
+                <i class="bi bi-arrow-left"></i> My Account
+            </a>
+
+            <h1>Security Settings</h1>
+            <p>Manage your account security and login credentials.</p>
+        </div>
+
+        <div class="mas-settings-header-icon">
+            <i class="bi bi-shield-lock"></i>
+        </div>
+    </div>
+
+    <div class="mas-settings-card">
+
+        <div class="mas-settings-card-heading">
+            <span><i class="bi bi-shield-check"></i></span>
+            <div>
+                <h2>Account Security</h2>
+                <p>Review the security status of your account.</p>
+            </div>
+        </div>
+
+        <div class="mas-security-list">
+
+            <div class="mas-security-item">
+                <div class="mas-security-item-icon">
+                    <i class="bi bi-envelope"></i>
+                </div>
+
+                <div class="mas-security-item-info">
+                    <h3>Email Address</h3>
+                    <p>@Model.Email</p>
+                </div>
+
+                @if (Model.EmailConfirmed)
+                {
+                    <span class="mas-security-status success">
+                        <i class="bi bi-check-circle-fill"></i>
+                        Verified
+                    </span>
+                }
+                else
+                {
+                    <span class="mas-security-status warning">
+                        <i class="bi bi-exclamation-circle-fill"></i>
+                        Unverified
+                    </span>
+                }
+            </div>
+
+            <div class="mas-security-item">
+                <div class="mas-security-item-icon">
+                    <i class="bi bi-key"></i>
+                </div>
+
+                <div class="mas-security-item-info">
+                    <h3>Password</h3>
+                    <p>
+                        @(Model.HasPassword
+                            ? "Your account has a password configured."
+                            : "Your account does not have a local password.")
+                    </p>
+                </div>
+
+                @if (Model.HasPassword)
+                {
+                    <span class="mas-security-status success">
+                        <i class="bi bi-check-circle-fill"></i>
+                        Configured
+                    </span>
+                }
+                else
+                {
+                    <span class="mas-security-status warning">
+                        <i class="bi bi-exclamation-circle-fill"></i>
+                        Not Set
+                    </span>
+                }
+            </div>
+
+            <div class="mas-security-item">
+                <div class="mas-security-item-icon">
+                    <i class="bi bi-phone"></i>
+                </div>
+
+                <div class="mas-security-item-info">
+                    <h3>Two-Factor Authentication</h3>
+                    <p>
+                        An additional verification step when signing in.
+                    </p>
+                </div>
+
+                @if (Model.TwoFactorEnabled)
+                {
+                    <span class="mas-security-status success">
+                        <i class="bi bi-check-circle-fill"></i>
+                        Enabled
+                    </span>
+                }
+                else
+                {
+                    <span class="mas-security-status neutral">
+                        Not Enabled
+                    </span>
+                }
+            </div>
+
+        </div>
+
+        <div class="mas-security-password-action">
+            <div>
+                <h3>Change Your Password</h3>
+                <p>
+                    Use a strong, unique password to help protect your account.
+                </p>
+            </div>
+
+            @if (Model.HasPassword)
+            {
+                <a asp-action="ChangePassword"
+                   asp-controller="Account"
+                   class="mas-settings-save">
+                    <i class="bi bi-key"></i>
+                    Change Password
+                </a>
+            }
+            else
+            {
+                <span class="mas-security-status warning">
+                    Password setup required
+                </span>
+            }
+        </div>
+
+    </div>
+</div>

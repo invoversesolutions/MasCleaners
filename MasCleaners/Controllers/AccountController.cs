@@ -2,6 +2,7 @@
 using MasCleaners.Models;
 using MasCleaners.Services;
 using MasCleaners.ViewModels;
+using MasCleaners.ViewModels.Customer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Identity;
@@ -430,6 +431,104 @@ namespace MasCleaners.Controllers
         public IActionResult Profile()
         {
             return View();
+        }
+        // =========================================================
+        // SECURITY SETTINGS
+        // =========================================================
+        [HttpGet]
+        public async Task<IActionResult> SecuritySettings()
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
+                return Challenge();
+
+            var model = new CustomerSecuritySettingsVM
+            {
+                Email = user.Email ?? string.Empty,
+                EmailConfirmed = user.EmailConfirmed,
+                HasPassword = await _userManager.HasPasswordAsync(user),
+                TwoFactorEnabled = user.TwoFactorEnabled
+            };
+
+            return View(model);
+        }
+        // =========================================================
+        // CHANGE PASSWORD - GET
+        // =========================================================
+        [HttpGet]
+        public async Task<IActionResult> ChangePassword()
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
+                return Challenge();
+
+            if (!await _userManager.HasPasswordAsync(user))
+            {
+                // Accounts created through external authentication
+                // may not have a local password.
+                return RedirectToAction(nameof(SecuritySettings));
+            }
+
+            return View(new CustomerChangePasswordVM());
+        }
+
+
+        // =========================================================
+        // CHANGE PASSWORD - POST
+        // =========================================================
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangePassword(
+            CustomerChangePasswordVM model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
+                return Challenge();
+
+            if (!await _userManager.HasPasswordAsync(user))
+            {
+                TempData["error"] =
+                    "Your account does not currently have a password. Please use the password setup process.";
+
+                return RedirectToAction(nameof(SecuritySettings));
+            }
+
+            var result = await _userManager.ChangePasswordAsync(
+                user,
+                model.CurrentPassword,
+                model.NewPassword);
+
+            if (!result.Succeeded)
+            {
+                foreach (var error in result.Errors)
+                {
+                    if (error.Code == "PasswordMismatch")
+                    {
+                        ModelState.AddModelError(
+                            nameof(model.CurrentPassword),
+                            "Your current password is incorrect.");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                }
+
+                return View(model);
+            }
+
+            // Refresh the sign-in cookie after the security change.
+            await _signInManager.RefreshSignInAsync(user);
+
+            TempData["success"] = "Your password has been changed successfully.";
+
+            return RedirectToAction(nameof(SecuritySettings));
         }
     }
 }

@@ -1,0 +1,566 @@
+﻿/* =========================================================
+   MAS CLEANERS
+   CUSTOMER ACCOUNT SETTINGS
+   Personal Details | Security | Change Password
+   ========================================================= */
+
+.mas-account-settings-page {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 28px 20px 45px;
+    box-sizing: border-box;
+    color: #092b4c;
+}
+
+    .mas-account-settings-page *,
+    .mas-account-settings-page *::before,
+    .mas-account-settings-page *::after {
+        box-sizing: border-box;
+    }
+
+/* HEADER */
+
+.mas-settings-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 28px;
+}
+
+.mas-settings-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    color: #0f9d94;
+    font-size: 0.9rem;
+    font-weight: 650;
+    text-decoration: none;
+}
+
+    .mas-settings-back:hover {
+        color: #07877f;
+    }
+
+.mas-settings-header h1 {
+    margin: 0 0 8px;
+    color: #092b4c;
+    font-size: clamp(1.65rem, 3vw, 2.1rem);
+    font-weight: 750;
+    overflow-wrap: anywhere;
+}
+
+.mas-settings-header p {
+    margin: 0;
+    color: #7d8da1;
+    font-size: 0.92rem;
+    line-height: 1.6;
+}
+
+.mas-settings-header-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 64px;
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+    background: #e8f8f6;
+    color: #0f9d94;
+    font-size: 1.8rem;
+}
+
+/* MAIN CARD */
+
+.mas-settings-card {
+    width: 100%;
+    padding: 30px;
+    border: 1px solid #e1e6eb;
+    border-radius: 17px;
+    background: #fff;
+    box-shadow: 0 8px 28px rgba(9, 43, 76, 0.04);
+}
+
+.mas-settings-card-heading {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding-bottom: 23px;
+    margin-bottom: 25px;
+    border-bottom: 1px solid #e1e6eb;
+}
+
+    .mas-settings-card-heading > span {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 48px;
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
+        background: #e8f8f6;
+        color: #0f9d94;
+        font-size: 1.35rem;
+    }
+
+    .mas-settings-card-heading h2 {
+        margin: 0 0 5px;
+        color: #092b4c;
+        font-size: 1.12rem;
+        font-weight: 750;
+    }
+
+    .mas-settings-card-heading p {
+        margin: 0;
+        color: #7d8da1;
+        font-size: 0.85rem;
+        line-height: 1.5;
+    }
+
+/* FORM */
+
+.mas-settings-form {
+    width: 100%;
+}
+
+.mas-settings-field {
+    margin-bottom: 21px;
+}
+
+    .mas-settings-field label {
+        display: block;
+        margin-bottom: 8px;
+        color: #092b4c;
+        font-size: 0.9rem;
+        font-weight: 650;
+    }
+
+    .mas-settings-field .form-control {
+        display: block;
+        width: 100%;
+        min-width: 0;
+        min-height: 48px;
+        padding: 12px 14px;
+        border: 1px solid #dce4eb;
+        border-radius: 10px;
+        background: #fff;
+        color: #092b4c;
+        font-size: 0.92rem;
+        box-shadow: none;
+    }
+
+        .mas-settings-field .form-control:focus {
+            border-color: #0f9d94;
+            box-shadow: 0 0 0 3px rgba(15, 157, 148, 0.12);
+        }
+
+        .mas-settings-field .form-control::placeholder {
+            color: #a0acb9;
+        }
+
+    .mas-settings-field small {
+        display: block;
+        margin-top: 7px;
+        color: #7d8da1;
+        font-size: 0.78rem;
+        line-height: 1.5;
+    }
+
+    .mas-settings-field .text-danger {
+        display: block;
+        margin-top: 6px;
+        font-size: 0.8rem;
+    }
+
+.mas-settings-form .validation-summary-errors {
+    padding: 12px 15px;
+    margin-bottom: 20px;
+    border: 1px solid #f1d0d0;
+    border-radius: 9px;
+    background: #fff6f6;
+    color: #b42318;
+    font-size: 0.85rem;
+}
+
+    .mas-settings-form .validation-summary-errors ul {
+        margin: 0;
+        padding-left: 18px;
+    }
+
+/* FORM ACTIONS */
+
+.mas-settings-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding-top: 24px;
+    margin-top: 25px;
+    border-top: 1px solid #e1e6eb;
+}
+
+.mas-settings-save,
+.mas-settings-cancel {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 46px;
+    padding: 11px 20px;
+    border-radius: 10px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+    cursor: pointer;
+}
+
+.mas-settings-save {
+    border: 1px solid #0f9d94;
+    background: #0f9d94;
+    color: #fff;
+}
+
+    .mas-settings-save:hover {
+        border-color: #07877f;
+        background: #07877f;
+        color: #fff;
+    }
+
+.mas-settings-cancel {
+    border: 1px solid #dce4eb;
+    background: #fff;
+    color: #526b88;
+}
+
+    .mas-settings-cancel:hover {
+        background: #f6f8fa;
+        color: #092b4c;
+    }
+
+/* SECURITY LIST */
+
+.mas-security-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.mas-security-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 19px 0;
+    border-bottom: 1px solid #edf0f3;
+}
+
+    .mas-security-item:first-child {
+        padding-top: 0;
+    }
+
+    .mas-security-item:last-child {
+        border-bottom: 0;
+    }
+
+.mas-security-item-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 44px;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: #f0f5f8;
+    color: #526b88;
+    font-size: 1.2rem;
+}
+
+.mas-security-item-info {
+    flex: 1;
+    min-width: 0;
+}
+
+    .mas-security-item-info h3 {
+        margin: 0 0 5px;
+        color: #092b4c;
+        font-size: 0.91rem;
+        font-weight: 700;
+    }
+
+    .mas-security-item-info p {
+        margin: 0;
+        color: #7d8da1;
+        font-size: 0.82rem;
+        line-height: 1.5;
+        overflow-wrap: anywhere;
+    }
+
+.mas-security-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    flex: 0 0 auto;
+    padding: 7px 11px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+    .mas-security-status.success {
+        background: #eaf8f1;
+        color: #16834a;
+    }
+
+    .mas-security-status.warning {
+        background: #fff5e6;
+        color: #986019;
+    }
+
+    .mas-security-status.neutral {
+        background: #f0f3f6;
+        color: #526b88;
+    }
+
+/* CHANGE PASSWORD ACTION */
+
+.mas-security-password-action {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 21px;
+    margin-top: 23px;
+    border: 1px solid #dcece9;
+    border-radius: 12px;
+    background: #f7fcfb;
+}
+
+    .mas-security-password-action > div {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .mas-security-password-action h3 {
+        margin: 0 0 6px;
+        color: #092b4c;
+        font-size: 0.95rem;
+        font-weight: 750;
+    }
+
+    .mas-security-password-action p {
+        margin: 0;
+        color: #7d8da1;
+        font-size: 0.82rem;
+        line-height: 1.6;
+    }
+
+/* PASSWORD NOTICE */
+
+.mas-password-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    padding: 15px;
+    margin-top: 5px;
+    border: 1px solid #dcece9;
+    border-radius: 10px;
+    background: #f7fcfb;
+    color: #07877f;
+}
+
+    .mas-password-notice i {
+        flex: 0 0 auto;
+        margin-top: 2px;
+        font-size: 1.05rem;
+    }
+
+    .mas-password-notice p {
+        margin: 0;
+        color: #526b88;
+        font-size: 0.82rem;
+        line-height: 1.6;
+    }
+
+/* TABLETS */
+
+@media (max-width: 767px) {
+    .mas-account-settings-page {
+        padding: 22px 15px 35px;
+    }
+
+    .mas-settings-card {
+        padding: 24px 20px;
+    }
+
+    .mas-settings-header-icon {
+        flex-basis: 52px;
+        width: 52px;
+        height: 52px;
+        font-size: 1.45rem;
+    }
+}
+
+/* MOBILE */
+
+@media (max-width: 480px) {
+    .mas-account-settings-page {
+        padding: 18px 10px 28px;
+    }
+
+    .mas-settings-header {
+        align-items: flex-start;
+        gap: 10px;
+        margin-bottom: 22px;
+    }
+
+        .mas-settings-header h1 {
+            font-size: 1.55rem;
+        }
+
+        .mas-settings-header p {
+            font-size: 0.84rem;
+        }
+
+    .mas-settings-header-icon {
+        flex-basis: 43px;
+        width: 43px;
+        height: 43px;
+        border-radius: 12px;
+        font-size: 1.2rem;
+    }
+
+    .mas-settings-card {
+        padding: 20px 15px;
+        border-radius: 14px;
+    }
+
+    .mas-settings-card-heading {
+        align-items: flex-start;
+        gap: 11px;
+        padding-bottom: 18px;
+        margin-bottom: 20px;
+    }
+
+        .mas-settings-card-heading > span {
+            flex-basis: 40px;
+            width: 40px;
+            height: 40px;
+            font-size: 1.1rem;
+        }
+
+        .mas-settings-card-heading h2 {
+            font-size: 1rem;
+        }
+
+        .mas-settings-card-heading p {
+            font-size: 0.8rem;
+        }
+
+    .mas-settings-field {
+        margin-bottom: 18px;
+    }
+
+    .mas-settings-actions {
+        flex-direction: column-reverse;
+        gap: 10px;
+    }
+
+        .mas-settings-actions > * {
+            width: 100%;
+        }
+
+    .mas-security-item {
+        flex-wrap: wrap;
+        gap: 11px;
+    }
+
+    .mas-security-item-icon {
+        flex-basis: 38px;
+        width: 38px;
+        height: 38px;
+        font-size: 1rem;
+    }
+
+    .mas-security-item-info {
+        flex: 1 1 calc(100% - 55px);
+    }
+
+    .mas-security-status {
+        margin-left: 49px;
+    }
+
+    .mas-security-password-action {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 15px;
+        padding: 16px;
+    }
+
+        .mas-security-password-action .mas-settings-save {
+            width: 100%;
+        }
+}
+
+@media (max-width: 350px) {
+    .mas-account-settings-page {
+        padding-right: 8px;
+        padding-left: 8px;
+    }
+
+    .mas-settings-card {
+        padding: 17px 12px;
+    }
+}
+/* =========================================================
+   COMPANY CUSTOMER DETAILS
+   ========================================================= */
+
+.mas-company-details-section {
+    margin-top: 32px;
+    padding-top: 26px;
+    border-top: 1px solid var(--mas-border, #e1e6eb);
+}
+
+.mas-company-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 12px;
+    border-radius: 30px;
+    background: #e8f8f6;
+    color: #07877f;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.mas-company-details-section .form-label {
+    font-weight: 600;
+    color: #092b4c;
+}
+
+.mas-company-details-section .form-control {
+    min-height: 46px;
+    border: 1px solid #e1e6eb;
+    border-radius: 10px;
+    padding: 10px 13px;
+}
+
+    .mas-company-details-section .form-control:focus {
+        border-color: #0f9d94;
+        box-shadow: 0 0 0 3px rgba(15, 157, 148, 0.12);
+    }
+
+@media (max-width: 575px) {
+    .mas-company-details-section {
+        margin-top: 24px;
+        padding-top: 20px;
+    }
+
+        .mas-company-details-section .mas-settings-card-heading {
+            align-items: flex-start;
+            flex-direction: column;
+            gap: 12px;
+        }
+}

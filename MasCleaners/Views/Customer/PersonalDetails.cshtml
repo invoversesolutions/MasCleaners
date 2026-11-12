@@ -1,0 +1,135 @@
+﻿@model MasCleaners.ViewModels.Customer.CustomerPersonalDetailsVM
+<link rel="stylesheet"
+      href="~/css/customer/customer-account-settings.css"
+      asp-append-version="true" />
+@{
+    ViewData["Title"] = "Personal Details";
+    bool isCompany = Model.CustomerType == CustomerType.Company;
+}
+
+<div class="mas-account-settings-page">
+
+    <div class="mas-settings-header">
+        <div>
+            <a asp-action="Profile" asp-controller="Account"
+               class="mas-settings-back">
+                <i class="bi bi-arrow-left"></i> My Account
+            </a>
+
+            <h1>Personal Details</h1>
+            <p>Manage the personal information associated with your account.</p>
+        </div>
+
+        <div class="mas-settings-header-icon">
+            <i class="bi bi-person"></i>
+        </div>
+    </div>
+
+    <div class="mas-settings-card">
+
+        <div class="mas-settings-card-heading">
+            <span><i class="bi bi-person-vcard"></i></span>
+            <div>
+                <h2>Contact Information</h2>
+                <p>Update your name and contact number.</p>
+            </div>
+        </div>
+
+        <form asp-action="PersonalDetails"
+              asp-controller="Customer"
+              method="post"
+              class="mas-settings-form">
+
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="ModelOnly"
+                 class="text-danger mb-3"></div>
+
+            <div class="mas-settings-field">
+                <label asp-for="FirstName"></label>
+                <input asp-for="FirstName"
+                       class="form-control"
+                       autocomplete="given-name"
+                       placeholder="Enter your first name" />
+                <span asp-validation-for="FirstName"
+                      class="text-danger"></span>
+            </div>
+
+            <div class="mas-settings-field">
+                <label asp-for="LastName"></label>
+                <input asp-for="LastName"
+                       class="form-control"
+                       autocomplete="family-name"
+                       placeholder="Enter your last name" />
+                <span asp-validation-for="LastName"
+                      class="text-danger"></span>
+            </div>
+
+            <div class="mas-settings-field">
+                <label asp-for="PhoneNumber"></label>
+                <input asp-for="PhoneNumber"
+                       class="form-control"
+                       autocomplete="tel"
+                       inputmode="tel"
+                       placeholder="Enter your phone number" />
+                <span asp-validation-for="PhoneNumber"
+                      class="text-danger"></span>
+            </div>
+            @if (isCompany)
+            {
+                <div class="mas-company-details-section">
+                    <div class="mas-settings-card-heading">
+                        <span><i class="bi bi-building"></i></span>
+                        <div>
+                            <h2>Company Information</h2>
+                            <p>Update your registered business details.</p>
+                        </div>
+                    </div>
+                    
+
+                    <div class="row g-3">
+
+                        <div class="col-md-12">
+                            <label asp-for="CompanyName"
+                                   class="form-label"></label>
+                            <input asp-for="CompanyName"
+                                   class="form-control"
+                                   placeholder="Enter company name" />
+                            <span asp-validation-for="CompanyName"
+                                  class="text-danger"></span>
+                        </div>
+
+
+                        <div class="col-md-6">
+                            <label asp-for="VatNumber"
+                                   class="form-label"></label>
+                            <input asp-for="VatNumber"
+                                   class="form-control"
+                                   placeholder="Enter VAT number" />
+                            <span asp-validation-for="VatNumber"
+                                  class="text-danger"></span>
+                        </div>
+
+                    </div>
+                </div>
+            }
+            <div class="mas-settings-actions">
+                <a asp-action="Profile"
+                   asp-controller="Account"
+                   class="mas-settings-cancel">
+                    Cancel
+                </a>
+
+                <button type="submit" class="mas-settings-save">
+                    <i class="bi bi-check2-circle"></i>
+                    Save Changes
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

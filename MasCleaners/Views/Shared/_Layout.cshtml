@@ -199,43 +199,258 @@
     </header>
 
 
-    <!-- =========================
-         MAIN CONTENT
-    ========================== -->
+ 
 
-    <main>
-        @RenderBody()
-    </main>
+<!-- =========================
+     MAIN CONTENT
+========================== -->
+
+<main class="mas-main-content">
+    @RenderBody()
+</main>
 
 
     <!-- =========================
          FOOTER
     ========================== -->
 
-    <footer class="mas-footer">
 
-        <div class="mas-footer-inner">
+<!-- =====================================================
+     MAS CLEANERS CORPORATE FOOTER
+====================================================== -->
 
-            <div>
+<footer class="mas-footer">
 
-                <strong>MAS Cleaners</strong>
+    <div class="mas-footer-main">
 
-                <p>
-                    From Mess to Fresh.
+        <div class="mas-footer-container">
+
+            <!-- COMPANY INFORMATION -->
+            <div class="mas-footer-brand">
+
+                <a asp-controller="Home"
+                   asp-action="Index"
+                   class="mas-footer-logo">
+
+                    <img src="~/images/mas-logo.jpeg"
+                         alt="MAS Cleaners Logo" />
+
+                    <div>
+                        <strong>MAS Cleaners</strong>
+                        <span>From Mess to Fresh.</span>
+                    </div>
+
+                </a>
+
+                <p class="mas-footer-description">
+                    We provide professional cleaning solutions
+                    designed to create cleaner, healthier and
+                    more welcoming spaces for homes and businesses.
                 </p>
+
+                <div class="mas-footer-established">
+                    <i class="bi bi-patch-check-fill"></i>
+                    <span>Trusted cleaning solutions since 2022</span>
+                </div>
 
             </div>
 
-            <div class="mas-footer-copy">
 
-                &copy; @DateTime.Now.Year MAS Cleaners.
-                All rights reserved.
+            <!-- QUICK LINKS -->
+            <div class="mas-footer-column">
+
+                <h4>Quick Links</h4>
+
+                <ul>
+                    <li>
+                        <a asp-controller="Home" asp-action="Index">
+                            <i class="bi bi-chevron-right"></i>
+                            Home
+                        </a>
+                    </li>
+
+                    <li>
+                        <a asp-controller="Home" asp-action="About">
+                            <i class="bi bi-chevron-right"></i>
+                            About Us
+                        </a>
+                    </li>
+
+                    <li>
+                        <a asp-controller="Home" asp-action="Contact">
+                            <i class="bi bi-chevron-right"></i>
+                            Contact Us
+                        </a>
+                    </li>
+
+                    <li>
+                        <a asp-controller="Booking" asp-action="Index">
+                            <i class="bi bi-chevron-right"></i>
+                            Book a Cleaning
+                        </a>
+                    </li>
+
+                    <li>
+                        <a asp-controller="Cart" asp-action="Cart">
+                            <i class="bi bi-chevron-right"></i>
+                            My Cart
+                        </a>
+                    </li>
+                </ul>
+
+            </div>
+
+
+            <!-- OUR SERVICES -->
+            <div class="mas-footer-column">
+
+                <h4>Our Services</h4>
+
+                <ul>
+                    <li>
+                        <a asp-controller="Home" asp-action="Index">
+                            <i class="bi bi-chevron-right"></i>
+                            Residential Cleaning
+                        </a>
+                    </li>
+
+                    <li>
+                        <a asp-controller="Home" asp-action="Index">
+                            <i class="bi bi-chevron-right"></i>
+                            Commercial Cleaning
+                        </a>
+                    </li>
+
+                    <li>
+                        <a asp-controller="Home" asp-action="Index">
+                            <i class="bi bi-chevron-right"></i>
+                            Deep Cleaning
+                        </a>
+                    </li>
+
+                    <li>
+                        <a asp-controller="Home" asp-action="Index">
+                            <i class="bi bi-chevron-right"></i>
+                            Specialised Cleaning
+                        </a>
+                    </li>
+
+                    <li>
+                        <a asp-controller="Home" asp-action="Index">
+                            <i class="bi bi-chevron-right"></i>
+                            Mobile Car Wash
+                        </a>
+                    </li>
+                </ul>
+
+            </div>
+
+
+            <!-- CONTACT INFORMATION -->
+            <div class="mas-footer-column mas-footer-contact">
+
+                <h4>Get In Touch</h4>
+
+                <p class="mas-footer-contact-intro">
+                    Need a cleaner space? Our team is ready to help.
+                </p>
+
+                <a href="tel:+27614908391" class="mas-footer-contact-item">
+                    <span class="mas-footer-contact-icon">
+                        <i class="bi bi-telephone"></i>
+                    </span>
+
+                    <span>
+                        <small>Call Us</small>
+                        +27 61 490 8391
+                    </span>
+                </a>
+
+                <a href="mailto:info@mascleaners.co.za"
+                   class="mas-footer-contact-item">
+
+                    <span class="mas-footer-contact-icon">
+                        <i class="bi bi-envelope"></i>
+                    </span>
+
+                    <span>
+                        <small>Email Us</small>
+                        info@mascleaners.co.za
+                    </span>
+                </a>
+
+                <div class="mas-footer-contact-item">
+
+                    <span class="mas-footer-contact-icon">
+                        <i class="bi bi-geo-alt"></i>
+                    </span>
+
+                    <span>
+                        <small>Service Area</small>
+                        Free State, South Africa
+                    </span>
+
+                </div>
+
+                <a asp-controller="Home"
+                   asp-action="Contact"
+                   class="mas-footer-contact-button">
+
+                    Contact Our Team
+                    <i class="bi bi-arrow-up-right"></i>
+
+                </a>
 
             </div>
 
         </div>
 
-    </footer>
+    </div>
+
+
+
+<div class="mas-footer-bottom">
+
+    <div class="mas-footer-bottom-inner">
+
+        <!-- COPYRIGHT -->
+        <div class="mas-footer-copyright">
+            &copy; @DateTime.Now.Year
+            <strong>MAS Cleaners.</strong>
+            All rights reserved.
+        </div>
+
+        <!-- LEGAL LINKS -->
+        <div class="mas-footer-legal">
+
+            <a asp-controller="Legal"
+               asp-action="PrivacyPolicy">
+                Privacy Policy
+            </a>
+
+            <span class="mas-footer-legal-divider">|</span>
+
+            <a asp-controller="Legal"
+               asp-action="TermsAndConditions">
+                Terms &amp; Conditions
+            </a>
+
+        </div>
+
+        <!-- DEVELOPER CREDIT -->
+        <div class="mas-footer-powered">
+            <span>Powered by</span>
+            <strong>InvoVerse Solutions</strong>
+        </div>
+
+    </div>
+
+</div>
+</footer>
+
+
+</footer>
+
 
 
     <!-- =========================

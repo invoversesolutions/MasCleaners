@@ -1,0 +1,172 @@
+﻿
+/* =========================================================
+   MAS CLEANERS - LEGAL PAGES
+   ========================================================= */
+
+.mas-legal-page {
+    width: min(calc(100% - 40px), 900px);
+    margin: 55px auto 80px;
+}
+
+/* HEADER */
+
+.mas-legal-header {
+    padding: 42px;
+    margin-bottom: 30px;
+    background: #f6f8fa;
+    border: 1px solid #e1e6eb;
+    border-radius: 18px;
+}
+
+.mas-legal-eyebrow {
+    display: inline-block;
+    margin-bottom: 12px;
+    color: #0f9d94;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+}
+
+.mas-legal-header h1 {
+    margin: 0 0 12px;
+    color: #092b4c;
+    font-size: clamp(28px, 4vw, 38px);
+    font-weight: 800;
+}
+
+.mas-legal-header > p {
+    max-width: 650px;
+    margin: 0 0 18px;
+    color: #526b88;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.mas-legal-updated {
+    color: #7d8da1;
+    font-size: 12px;
+}
+
+/* CONTENT */
+
+.mas-legal-content {
+    padding: 35px 40px;
+    background: #ffffff;
+    border: 1px solid #e1e6eb;
+    border-radius: 18px;
+    box-shadow: 0 8px 30px rgba(9,43,76,.04);
+}
+
+    .mas-legal-content section {
+        padding: 0 0 27px;
+        margin-bottom: 27px;
+        border-bottom: 1px solid #edf0f3;
+    }
+
+        .mas-legal-content section:last-child {
+            padding-bottom: 0;
+            margin-bottom: 0;
+            border-bottom: 0;
+        }
+
+    .mas-legal-content h2 {
+        margin: 0 0 15px;
+        color: #092b4c;
+        font-size: 19px;
+        font-weight: 750;
+    }
+
+    .mas-legal-content h3 {
+        margin: 22px 0 10px;
+        color: #092b4c;
+        font-size: 15px;
+        font-weight: 700;
+    }
+
+    .mas-legal-content p,
+    .mas-legal-content li {
+        color: #526b88;
+        font-size: 14px;
+        line-height: 1.9;
+    }
+
+    .mas-legal-content p {
+        margin-bottom: 13px;
+    }
+
+    .mas-legal-content ul {
+        padding-left: 22px;
+        margin: 12px 0 18px;
+    }
+
+    .mas-legal-content li {
+        padding-left: 4px;
+        margin-bottom: 7px;
+    }
+
+    .mas-legal-content a {
+        color: #07877f;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+        .mas-legal-content a:hover {
+            color: #0f9d94;
+            text-decoration: underline;
+        }
+
+/* CONTACT DETAILS */
+
+.mas-legal-contact {
+    margin-top: 18px;
+    padding: 20px;
+    background: #f6f8fa;
+    border: 1px solid #e1e6eb;
+    border-radius: 12px;
+}
+
+    .mas-legal-contact p {
+        margin-bottom: 9px;
+    }
+
+        .mas-legal-contact p:last-child {
+            margin-bottom: 0;
+        }
+
+/* RESPONSIVE */
+
+@media (max-width: 767px) {
+    .mas-legal-page {
+        width: min(calc(100% - 28px), 900px);
+        margin: 30px auto 50px;
+    }
+
+    .mas-legal-header {
+        padding: 28px 22px;
+        border-radius: 14px;
+    }
+
+    .mas-legal-content {
+        padding: 25px 22px;
+        border-radius: 14px;
+    }
+
+        .mas-legal-content h2 {
+            font-size: 17px;
+        }
+
+        .mas-legal-content p,
+        .mas-legal-content li {
+            font-size: 13px;
+        }
+}
+
+@media (max-width: 380px) {
+    .mas-legal-header {
+        padding: 24px 17px;
+    }
+
+    .mas-legal-content {
+        padding: 22px 17px;
+    }
+}

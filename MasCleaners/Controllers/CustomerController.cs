@@ -856,5 +856,117 @@ namespace MasCleaners.Controllers
 
             return View(model);
         }
+        // =========================================================
+        // PERSONAL DETAILS - GET
+        // =========================================================
+        [Authorize(Roles = StaticRoles.Role_Customer)]
+        [HttpGet]
+        public async Task<IActionResult> PersonalDetails()
+        {
+            try
+            {
+                var user = await _userManager.GetUserAsync(User);
+
+                if (user == null)
+                    return RedirectToAction("Login", "Account");
+
+                var customer = await _unitOfWork.Customer.GetAsync(
+                    c => c.ApplicationUserId == user.Id);
+
+                if (customer == null)
+                    return NotFound();
+
+                var model = new CustomerPersonalDetailsVM
+                {
+                    FirstName = customer.FirstName,
+                    LastName = customer.LastName,
+                    PhoneNumber = customer.PhoneNumber,
+
+                    CustomerType = customer.CustomerType,
+
+                    CompanyName = customer.CompanyName,
+                    VatNumber = customer.VatNumber
+                };
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error loading customer personal details.");
+
+                TempData["Error"] = "Unable to load your personal details. Please try again.";
+
+                return RedirectToAction("Index", "Customer");
+            }
+        }
+
+
+        [Authorize(Roles = StaticRoles.Role_Customer)]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PersonalDetails(CustomerPersonalDetailsVM model)
+        {
+            try
+            {
+                var user = await _userManager.GetUserAsync(User);
+
+                if (user == null)
+                    return RedirectToAction("Login", "Account");
+
+                var customer = await _unitOfWork.Customer.GetAsync(
+                    c => c.ApplicationUserId == user.Id);
+
+                if (customer == null)
+                    return NotFound();
+
+                // Company-specific validation
+                if (customer.CustomerType == CustomerType.Company)
+                {
+                    if (string.IsNullOrWhiteSpace(model.CompanyName))
+                    {
+                        ModelState.AddModelError(
+                            nameof(model.CompanyName),
+                            "Company name is required.");
+                    }
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    model.CustomerType = customer.CustomerType;
+                    return View(model);
+                }
+
+                // Contact person details
+                customer.FirstName = model.FirstName.Trim();
+                customer.LastName = model.LastName.Trim();
+                customer.PhoneNumber = model.PhoneNumber.Trim();
+
+                // Company details
+                if (customer.CustomerType == CustomerType.Company)
+                {
+                    customer.CompanyName = model.CompanyName?.Trim();
+               
+                    customer.VatNumber = model.VatNumber?.Trim();
+                }
+
+              await  _unitOfWork.Customer.UpdateAsync(customer);
+
+                await _unitOfWork.CommitAsync();
+
+                TempData["Success"] = "Your personal details have been updated successfully.";
+
+                return RedirectToAction(nameof(PersonalDetails));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating customer personal details.");
+
+                ModelState.AddModelError(
+                    string.Empty,
+                    "Something went wrong while updating your details. Please try again.");
+
+                return View(model);
+            }
+        }
     }
 }
